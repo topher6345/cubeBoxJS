@@ -8,12 +8,7 @@ interface ALPHAS {
   bar: number;
 }
 
-var alphas: ALPHAS = {
-  foo: 0,
-  bar: 0
-};
-
-const FRAME_PERIOD = 13;
+var alphas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 type CubePosition = [number, number, number, number];
 type RGBA = [number, number, number, number];
@@ -76,7 +71,9 @@ function draw(time: number, ctx: CanvasRenderingContext2D) {
   for (let i = 0; i < 8; i++) {
     let [r, g, b] = Scriabin[i];
     let pos: CubePosition = <CubePosition>cubes[i];
-    drawCube(pos, [r, g, b, 0.7], ctx);
+
+    alphas[i] = alphas[i] > 0 ? alphas[i] - 1 : alphas[i];
+    drawCube(pos, [r, g, b, alphas[i] / 1000], ctx);
   }
 }
 function main(time) {
@@ -86,11 +83,10 @@ function main(time) {
   return;
 }
 
-document.getElementById("foo").onclick = e => {
-  alphas.foo = 100;
-};
+for (let i = 0; i < 8; i++) {
+  document.getElementById(`foo-${i}`).onclick = e => {
+    alphas[i] = 700;
+  };
+}
 
-document.getElementById("bar").onclick = e => {
-  alphas.bar = 100;
-};
 requestAnimationFrame(main);
