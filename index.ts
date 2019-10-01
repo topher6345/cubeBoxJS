@@ -9,16 +9,60 @@ interface ALPHAS {
 }
 
 var alphas: ALPHAS = {
-  foo: 100,
-  bar: 100
+  foo: 0,
+  bar: 0
 };
 
 const FRAME_PERIOD = 13;
 
 type CubePosition = [number, number, number, number];
 type RGBA = [number, number, number, number];
+type RGB = [number, number, number];
 
-function cube(
+const Scriabin: Array<RGB> = [
+  [255, 0, 0],
+  [206, 154, 255],
+  [255, 255, 0],
+  [101, 101, 153],
+  [227, 251, 255],
+  [172, 28, 2],
+  [0, 204, 255],
+  [255, 101, 1],
+  [255, 0, 255],
+  [51, 204, 51],
+  [140, 138, 140],
+  [0, 0, 254]
+];
+
+type Cubes = [
+  CubePosition,
+  CubePosition,
+  CubePosition,
+  CubePosition,
+  CubePosition,
+  CubePosition,
+  CubePosition,
+  CubePosition
+];
+
+const cubeOrigin = [0, 0];
+const cubeSize = 50;
+
+const cubes = [
+  [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize],
+  [cubeOrigin[0] + 0, cubeOrigin[1] + 25, cubeSize, cubeSize],
+  [cubeOrigin[0] + 25, cubeOrigin[1] + 0, cubeSize, cubeSize],
+  [cubeOrigin[0] + 25, cubeOrigin[1] + 25, cubeSize, cubeSize],
+  [cubeOrigin[0] + 100, cubeOrigin[1] + 0, cubeSize, cubeSize],
+  [cubeOrigin[0] + 100, cubeOrigin[1] + 25, cubeSize, cubeSize],
+  [cubeOrigin[0] + 125, cubeOrigin[1] + 0, cubeSize, cubeSize],
+  [cubeOrigin[0] + 125, cubeOrigin[1] + 25, cubeSize, cubeSize]
+  // [cubeOrigin[0] + 300 + 0, 300 + cubeOrigin[1] + 25, cubeSize, cubeSize],
+  // [cubeOrigin[0] + 300 + 25, 300 + cubeOrigin[1] + 0, cubeSize, cubeSize],
+  // [cubeOrigin[0] + 300 + 25, 300 + cubeOrigin[1] + 25, cubeSize, cubeSize]
+];
+
+function drawCube(
   position: CubePosition,
   rgba: RGBA,
   ctx: CanvasRenderingContext2D
@@ -29,13 +73,12 @@ function cube(
 }
 
 function draw(time: number, ctx: CanvasRenderingContext2D) {
-  alphas.foo = alphas.foo > 0 ? alphas.foo - 1 : 0;
-  cube([10, 10, 100, 100], [0, 255, 0, alphas.foo / 100], ctx);
-
-  alphas.bar = alphas.bar > 0 ? alphas.bar - 1 : 0;
-  cube([50, 10, 150, 100], [255, 0, 0, alphas.bar / 100], ctx);
+  for (let i = 0; i < 8; i++) {
+    let [r, g, b] = Scriabin[i];
+    let pos: CubePosition = <CubePosition>cubes[i];
+    drawCube(pos, [r, g, b, 0.7], ctx);
+  }
 }
-var lastTime = 0;
 function main(time) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   draw(time, ctx);
