@@ -41,14 +41,14 @@ class Cube {
   draw() {
     this.alpha = this.alpha > 0 ? this.alpha - 1 : this.alpha;
 
-    const rgba = [...this.colors[this.note], this.alpha / 1000];
+    const rgba = [...this.colors[this.note], this.alpha / 100];
     ctx.fillStyle = `rgba(${rgba.join(",")})`;
     const [x, y, xw, yw] = this.position;
     ctx.fillRect(x, y, xw, yw);
   }
 
   activate() {
-    this.alpha = 1000;
+    this.alpha = 70;
     this.note = Math.floor(Math.random() * 12);
   }
 }
@@ -94,8 +94,36 @@ function main(_time) {
   return;
 }
 
-for (let i = 0; i < 8; i++) {
-  document.getElementById("foo-" + i).onclick = () => cubes[i].activate();
+function logKey(e) {
+  switch (e.code) {
+    case "KeyA":
+      cubes[0].activate();
+      break;
+    case "KeyS":
+      cubes[1].activate();
+      break;
+    case "KeyD":
+      cubes[2].activate();
+      break;
+    case "KeyF":
+      cubes[3].activate();
+      break;
+    case "KeyJ":
+      cubes[4].activate();
+      break;
+    case "KeyK":
+      cubes[5].activate();
+      break;
+    case "KeyL":
+      cubes[6].activate();
+      break;
+    case "Semicolon":
+      cubes[7].activate();
+      break;
+    default:
+      break;
+  }
 }
+document.addEventListener("keydown", logKey);
 
 requestAnimationFrame(main);
