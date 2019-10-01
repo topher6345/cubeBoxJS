@@ -28,12 +28,11 @@ function cube(
   ctx.fillRect(x, y, xw, yw);
 }
 
-function draw(time, ctx: CanvasRenderingContext2D) {
-  alphas.foo = alphas.foo - 1;
-
+function draw(time: number, ctx: CanvasRenderingContext2D) {
+  alphas.foo = alphas.foo > 0 ? alphas.foo - 1 : 0;
   cube([10, 10, 100, 100], [0, 255, 0, alphas.foo / 100], ctx);
 
-  alphas.bar = alphas.bar - 1;
+  alphas.bar = alphas.bar > 0 ? alphas.bar - 1 : 0;
   cube([50, 10, 150, 100], [255, 0, 0, alphas.bar / 100], ctx);
 }
 var lastTime = 0;
@@ -44,4 +43,11 @@ function main(time) {
   return;
 }
 
+document.getElementById("foo").onclick = e => {
+  alphas.foo = 100;
+};
+
+document.getElementById("bar").onclick = e => {
+  alphas.bar = 100;
+};
 requestAnimationFrame(main);
