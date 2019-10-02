@@ -270,7 +270,7 @@ function createKey(note, octave, freq) {
   keyElement.appendChild(labelElement);
 
   keyElement.addEventListener("mousedown", notePressed, false);
-  keyElement.addEventListener("mousedown", cubes[6].activate, false);
+  keyElement.addEventListener("mousedown", () => cubes[6].activate(), false);
   keyElement.addEventListener("mouseup", noteReleased, false);
   keyElement.addEventListener("mouseover", notePressed, false);
   keyElement.addEventListener("mouseleave", noteReleased, false);
