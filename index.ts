@@ -199,19 +199,7 @@ function createNoteTable() {
   noteFreq[8]["C"] = 4186.009044809578154;
   return noteFreq;
 }
-if (!Object.entries) {
-  Object.entries = function entries(O) {
-    return reduce(
-      keys(O),
-      (e, k) =>
-        concat(
-          e,
-          typeof k === "string" && isEnumerable(O, k) ? [[k, O[k]]] : []
-        ),
-      []
-    );
-  };
-}
+
 function setup() {
   noteFreq = createNoteTable();
 
