@@ -277,7 +277,7 @@ function createKey(note, octave, freq) {
 
   return keyElement;
 }
-function playTone(freq) {
+function playTone(freq: number) {
   let osc = audioContext.createOscillator();
   osc.connect(masterGainNode);
 
