@@ -1,6 +1,4 @@
-const canvas: HTMLCanvasElement = <HTMLCanvasElement>(
-  document.getElementById("canvas")
-);
+const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
 
 type CubePosition = [number, number, number, number];
@@ -102,20 +100,14 @@ interface Octave {
   B: number;
 }
 
-let audioContext = new AudioContext();
-let oscList: Array<OscillatorNode> = [];
-let masterGainNode: GainNode;
-let keyboard = document.querySelector(".keyboard");
-let wavePicker = <HTMLSelectElement>(
-  document.querySelector("select[name='waveform']")
+const audioContext = new AudioContext();
+const wavePicker: HTMLSelectElement = document.querySelector(
+  "select[name='waveform']"
 );
-let volumeControl = <HTMLInputElement>(
-  document.querySelector("input[name='volume']")
+const volumeControl: HTMLInputElement = document.querySelector(
+  "input[name='volume']"
 );
-let noteFreq: Octave[];
-let customWaveform: PeriodicWave;
-let sineTerms: Float32Array;
-let cosineTerms: Float32Array;
+volumeControl.addEventListener("change", changeVolume, false);
 
 function createNoteTable(): Octave[] {
   let noteFreq: Octave[] = [];
@@ -222,26 +214,24 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
-noteFreq = createNoteTable();
-
-volumeControl.addEventListener("change", changeVolume, false);
-
-masterGainNode = audioContext.createGain();
+const masterGainNode: GainNode = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
 // Create the keys; skip any that are sharp or flat; for
 // our purposes we don't need them. Each octave is inserted
 // into a <div> of class "octave".
-
-noteFreq.forEach(function(keys: Octave, idx: number) {
-  let keyList = Object.entries(keys);
-  let octaveElem = document.createElement("div");
+const noteFreq: Octave[] = createNoteTable();
+const keyboard: HTMLDivElement = document.querySelector(".keyboard");
+noteFreq.forEach((keys: Octave, index: number) => {
+  const keyList = Object.entries(keys);
+  const octaveElem: HTMLDivElement = document.createElement("div");
   octaveElem.className = "octave";
 
   keyList.forEach(function(key) {
-    if (key[0].length == 1) {
-      octaveElem.appendChild(createKey(key[0], idx.toString(), key[1]));
+    // skip any that are sharp or flat
+    if (key[0].length === 1) {
+      octaveElem.appendChild(createKey(key[0], index.toString(), key[1]));
     }
   });
 
@@ -252,17 +242,18 @@ document
   .querySelector("div[data-note='B'][data-octave='5']")
   .scrollIntoView(false);
 
-sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-cosineTerms = new Float32Array(sineTerms.length);
-customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
+const cosineTerms: Float32Array = new Float32Array(sineTerms.length);
+const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
+  cosineTerms,
+  sineTerms
+);
 
-for (let i = 0; i < 9; i++) {
-  oscList[i] = null;
-}
+const oscList: OscillatorNode[] = Array(9);
 
 function createKey(note: string, octave: string, freq: string) {
-  let keyElement: HTMLDivElement = document.createElement("div");
-  let labelElement: HTMLDivElement = document.createElement("div");
+  const keyElement: HTMLDivElement = document.createElement("div");
+  const labelElement: HTMLDivElement = document.createElement("div");
 
   keyElement.className = "key";
   keyElement.dataset["octave"] = octave;
@@ -281,10 +272,10 @@ function createKey(note: string, octave: string, freq: string) {
   return keyElement;
 }
 function playTone(freq: number): OscillatorNode {
-  let osc: OscillatorNode = audioContext.createOscillator();
+  const osc: OscillatorNode = audioContext.createOscillator();
   osc.connect(masterGainNode);
 
-  let type: string = wavePicker.options[wavePicker.selectedIndex].value;
+  const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
   if (type == "custom") {
     osc.setPeriodicWave(customWaveform);
@@ -297,24 +288,28 @@ function playTone(freq: number): OscillatorNode {
 
   return osc;
 }
+
 function notePressed(event: MouseEvent) {
   if (event.buttons & 1) {
-    let dataset = (event.target as HTMLButtonElement).dataset;
+    const dataset = (event.target as HTMLButtonElement).dataset;
 
     if (!dataset["pressed"]) {
-      oscList[dataset["octave"][dataset["note"]]] = playTone(
-        parseFloat(dataset["frequency"])
-      );
+      const { note, octave, frequency } = dataset;
+      const index = octave[note];
+      oscList[index] = playTone(parseFloat(frequency));
       dataset["pressed"] = "yes";
     }
   }
 }
+
 function noteReleased(event) {
-  let dataset = event.target.dataset;
+  const dataset = event.target.dataset;
 
   if (dataset && dataset["pressed"]) {
-    oscList[dataset["octave"][dataset["note"]]].stop();
-    oscList[dataset["octave"][dataset["note"]]] = null;
+    const { note, octave } = dataset;
+    const index = octave[note];
+    oscList[index].stop();
+    oscList[index] = null;
     delete dataset["pressed"];
   }
 }
