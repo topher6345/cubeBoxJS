@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
-    "sourceMap": true,
-    "files": ["index.ts"]
-  }
+    "lib": ["es2017", "dom"],
+    "sourceMap": true
+  },
+  "include": ["index.ts"]
 }

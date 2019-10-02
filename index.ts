@@ -102,12 +102,16 @@ interface Octave {
   B: number;
 }
 
-let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-let oscList: Array<Array<OscillatorNode>> = [];
+let audioContext = new AudioContext();
+let oscList: Array<OscillatorNode> = [];
 let masterGainNode: GainNode;
 let keyboard = document.querySelector(".keyboard");
-let wavePicker = document.querySelector("select[name='waveform']");
-let volumeControl = document.querySelector("input[name='volume']");
+let wavePicker = <HTMLSelectElement>(
+  document.querySelector("select[name='waveform']")
+);
+let volumeControl = <HTMLInputElement>(
+  document.querySelector("input[name='volume']")
+);
 let noteFreq: Array<Octave> = null;
 let customWaveform = null;
 let sineTerms = null;
@@ -223,13 +227,13 @@ function setup() {
 
   masterGainNode = <GainNode>audioContext.createGain();
   masterGainNode.connect(audioContext.destination);
-  masterGainNode.gain.value = volumeControl.value;
+  masterGainNode.gain.value = parseFloat(volumeControl.value);
 
   // Create the keys; skip any that are sharp or flat; for
   // our purposes we don't need them. Each octave is inserted
   // into a <div> of class "octave".
 
-  noteFreq.forEach(function(keys, idx) {
+  noteFreq.forEach(function(keys: Octave, idx: number) {
     let keyList = Object.entries(keys);
     let octaveElem = document.createElement("div");
     octaveElem.className = "octave";
@@ -252,13 +256,13 @@ function setup() {
   customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
 
   for (let i = 0; i < 9; i++) {
-    oscList[i] = [];
+    oscList[i] = null;
   }
 }
 
 setup();
 function createKey(note, octave, freq) {
-  let keyElement = document.createElement("div");
+  let keyElement = <HTMLDivElement>document.createElement("div");
   let labelElement = document.createElement("div");
 
   keyElement.className = "key";
@@ -286,7 +290,7 @@ function playTone(freq: number) {
   if (type == "custom") {
     osc.setPeriodicWave(customWaveform);
   } else {
-    osc.type = type;
+    osc.type = <OscillatorType>type;
   }
 
   osc.frequency.value = freq;
@@ -294,13 +298,13 @@ function playTone(freq: number) {
 
   return osc;
 }
-function notePressed(event) {
+function notePressed(event: MouseEvent) {
   if (event.buttons & 1) {
-    let dataset = event.target.dataset;
+    let dataset = (event.target as HTMLButtonElement).dataset;
 
     if (!dataset["pressed"]) {
       oscList[dataset["octave"][dataset["note"]]] = playTone(
-        dataset["frequency"]
+        parseFloat(dataset["frequency"])
       );
       dataset["pressed"] = "yes";
     }
@@ -315,18 +319,18 @@ function noteReleased(event) {
     delete dataset["pressed"];
   }
 }
-function changeVolume(event) {
-  masterGainNode.gain.value = volumeControl.value;
+function changeVolume() {
+  masterGainNode.gain.value = parseFloat(volumeControl.value);
 }
 
-function main(_time) {
+function main() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   cubes.forEach(cube => cube.draw());
   requestAnimationFrame(main);
   return;
 }
 
-function logKey(e) {
+function logKey(e: KeyboardEvent) {
   switch (e.code) {
     case "KeyA":
       cubes[0].activate();
