@@ -88,7 +88,7 @@ const cubes: Cube[] = [
 ];
 
 let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-let oscList = [];
+let oscList: Array<Array<OscillatorNode>> = [];
 let masterGainNode = null;
 let keyboard = document.querySelector(".keyboard");
 let wavePicker = document.querySelector("select[name='waveform']");
@@ -278,7 +278,7 @@ function createKey(note, octave, freq) {
   return keyElement;
 }
 function playTone(freq: number) {
-  let osc = audioContext.createOscillator();
+  let osc = <OscillatorNode>audioContext.createOscillator();
   osc.connect(masterGainNode);
 
   let type = wavePicker.options[wavePicker.selectedIndex].value;
