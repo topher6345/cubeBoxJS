@@ -119,7 +119,9 @@ let cosineTerms: Float32Array;
 
 function createNoteTable(): Octave[] {
   let noteFreq: Octave[] = [];
-  for (let i = 0; i < 9; i++) {
+
+  const size = 9;
+  for (let i = 0; i < size; i++) {
     noteFreq[i] = {} as Octave;
   }
 
@@ -220,47 +222,44 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
-function setup() {
-  noteFreq = createNoteTable();
+noteFreq = createNoteTable();
 
-  volumeControl.addEventListener("change", changeVolume, false);
+volumeControl.addEventListener("change", changeVolume, false);
 
-  masterGainNode = audioContext.createGain();
-  masterGainNode.connect(audioContext.destination);
-  masterGainNode.gain.value = parseFloat(volumeControl.value);
+masterGainNode = audioContext.createGain();
+masterGainNode.connect(audioContext.destination);
+masterGainNode.gain.value = parseFloat(volumeControl.value);
 
-  // Create the keys; skip any that are sharp or flat; for
-  // our purposes we don't need them. Each octave is inserted
-  // into a <div> of class "octave".
+// Create the keys; skip any that are sharp or flat; for
+// our purposes we don't need them. Each octave is inserted
+// into a <div> of class "octave".
 
-  noteFreq.forEach(function(keys: Octave, idx: number) {
-    let keyList = Object.entries(keys);
-    let octaveElem = document.createElement("div");
-    octaveElem.className = "octave";
+noteFreq.forEach(function(keys: Octave, idx: number) {
+  let keyList = Object.entries(keys);
+  let octaveElem = document.createElement("div");
+  octaveElem.className = "octave";
 
-    keyList.forEach(function(key) {
-      if (key[0].length == 1) {
-        octaveElem.appendChild(createKey(key[0], idx.toString(), key[1]));
-      }
-    });
-
-    keyboard.appendChild(octaveElem);
+  keyList.forEach(function(key) {
+    if (key[0].length == 1) {
+      octaveElem.appendChild(createKey(key[0], idx.toString(), key[1]));
+    }
   });
 
-  document
-    .querySelector("div[data-note='B'][data-octave='5']")
-    .scrollIntoView(false);
+  keyboard.appendChild(octaveElem);
+});
 
-  sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-  cosineTerms = new Float32Array(sineTerms.length);
-  customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+document
+  .querySelector("div[data-note='B'][data-octave='5']")
+  .scrollIntoView(false);
 
-  for (let i = 0; i < 9; i++) {
-    oscList[i] = null;
-  }
+sineTerms = new Float32Array([0, 0, 1, 0, 1]);
+cosineTerms = new Float32Array(sineTerms.length);
+customWaveform = audioContext.createPeriodicWave(cosineTerms, sineTerms);
+
+for (let i = 0; i < 9; i++) {
+  oscList[i] = null;
 }
 
-setup();
 function createKey(note: string, octave: string, freq: string) {
   let keyElement: HTMLDivElement = document.createElement("div");
   let labelElement: HTMLDivElement = document.createElement("div");
