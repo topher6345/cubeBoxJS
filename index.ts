@@ -112,15 +112,15 @@ let wavePicker = <HTMLSelectElement>(
 let volumeControl = <HTMLInputElement>(
   document.querySelector("input[name='volume']")
 );
-let noteFreq: Array<Octave> = null;
-let customWaveform = null;
-let sineTerms = null;
-let cosineTerms = null;
+let noteFreq: Octave[];
+let customWaveform: PeriodicWave;
+let sineTerms: Float32Array;
+let cosineTerms: Float32Array;
 
-function createNoteTable(): Array<Octave> {
-  let noteFreq = [];
+function createNoteTable(): Octave[] {
+  let noteFreq: Octave[] = [];
   for (let i = 0; i < 9; i++) {
-    noteFreq[i] = [];
+    noteFreq[i] = {} as Octave;
   }
 
   noteFreq[0]["A"] = 27.5;
@@ -221,11 +221,11 @@ function createNoteTable(): Array<Octave> {
 }
 
 function setup() {
-  noteFreq = <Array<Octave>>createNoteTable();
+  noteFreq = createNoteTable();
 
   volumeControl.addEventListener("change", changeVolume, false);
 
-  masterGainNode = <GainNode>audioContext.createGain();
+  masterGainNode = audioContext.createGain();
   masterGainNode.connect(audioContext.destination);
   masterGainNode.gain.value = parseFloat(volumeControl.value);
 
@@ -262,8 +262,8 @@ function setup() {
 
 setup();
 function createKey(note: string, octave: string, freq: string) {
-  let keyElement = <HTMLDivElement>document.createElement("div");
-  let labelElement = <HTMLDivElement>document.createElement("div");
+  let keyElement: HTMLDivElement = document.createElement("div");
+  let labelElement: HTMLDivElement = document.createElement("div");
 
   keyElement.className = "key";
   keyElement.dataset["octave"] = octave;
@@ -281,11 +281,11 @@ function createKey(note: string, octave: string, freq: string) {
 
   return keyElement;
 }
-function playTone(freq: number) {
-  let osc = <OscillatorNode>audioContext.createOscillator();
+function playTone(freq: number): OscillatorNode {
+  let osc: OscillatorNode = audioContext.createOscillator();
   osc.connect(masterGainNode);
 
-  let type = wavePicker.options[wavePicker.selectedIndex].value;
+  let type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
   if (type == "custom") {
     osc.setPeriodicWave(customWaveform);
