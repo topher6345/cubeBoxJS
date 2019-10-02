@@ -97,7 +97,23 @@ let noteFreq = null;
 let customWaveform = null;
 let sineTerms = null;
 let cosineTerms = null;
-function createNoteTable() {
+
+interface Octave {
+  C: number;
+  "C#": number;
+  D: number;
+  "D#": number;
+  E: number;
+  F: number;
+  "F#": number;
+  G: number;
+  "G#": number;
+  A: number;
+  "A#": number;
+  B: number;
+}
+
+function createNoteTable(): Array<Octave> {
   let noteFreq = [];
   for (let i = 0; i < 9; i++) {
     noteFreq[i] = [];
