@@ -240,7 +240,7 @@ function setup() {
 
     keyList.forEach(function(key) {
       if (key[0].length == 1) {
-        octaveElem.appendChild(createKey(key[0], idx, key[1]));
+        octaveElem.appendChild(createKey(key[0], idx.toString(), key[1]));
       }
     });
 
@@ -261,9 +261,9 @@ function setup() {
 }
 
 setup();
-function createKey(note, octave, freq) {
+function createKey(note: string, octave: string, freq: string) {
   let keyElement = <HTMLDivElement>document.createElement("div");
-  let labelElement = document.createElement("div");
+  let labelElement = <HTMLDivElement>document.createElement("div");
 
   keyElement.className = "key";
   keyElement.dataset["octave"] = octave;
