@@ -87,17 +87,6 @@ const cubes: Cube[] = [
   )
 ];
 
-let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-let oscList: Array<Array<OscillatorNode>> = [];
-let masterGainNode = null;
-let keyboard = document.querySelector(".keyboard");
-let wavePicker = document.querySelector("select[name='waveform']");
-let volumeControl = document.querySelector("input[name='volume']");
-let noteFreq = null;
-let customWaveform = null;
-let sineTerms = null;
-let cosineTerms = null;
-
 interface Octave {
   C: number;
   "C#": number;
@@ -112,6 +101,17 @@ interface Octave {
   "A#": number;
   B: number;
 }
+
+let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let oscList: Array<Array<OscillatorNode>> = [];
+let masterGainNode: GainNode;
+let keyboard = document.querySelector(".keyboard");
+let wavePicker = document.querySelector("select[name='waveform']");
+let volumeControl = document.querySelector("input[name='volume']");
+let noteFreq: Array<Octave> = null;
+let customWaveform = null;
+let sineTerms = null;
+let cosineTerms = null;
 
 function createNoteTable(): Array<Octave> {
   let noteFreq = [];
@@ -217,11 +217,11 @@ function createNoteTable(): Array<Octave> {
 }
 
 function setup() {
-  noteFreq = createNoteTable();
+  noteFreq = <Array<Octave>>createNoteTable();
 
   volumeControl.addEventListener("change", changeVolume, false);
 
-  masterGainNode = audioContext.createGain();
+  masterGainNode = <GainNode>audioContext.createGain();
   masterGainNode.connect(audioContext.destination);
   masterGainNode.gain.value = volumeControl.value;
 
