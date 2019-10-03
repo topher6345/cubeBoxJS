@@ -277,13 +277,15 @@ function createKey(note: string, octave: string, freq: string) {
 let sweepLength = 1;
 function playTone(freq: number): OscillatorNode {
   const osc: OscillatorNode = audioContext.createOscillator();
-  const sweepEnvNode = audioContext.createGain();
+  const ADSRNode = audioContext.createGain();
   const biquadFilter = audioContext.createBiquadFilter();
   biquadFilter.type = "lowpass";
-  biquadFilter.frequency.setValueAtTime(100, audioContext.currentTime);
+  biquadFilter.frequency.setValueAtTime(12000, audioContext.currentTime);
+  biquadFilter.Q.value = 0.001;
+
   osc.connect(biquadFilter);
-  biquadFilter.connect(sweepEnvNode);
-  sweepEnvNode.connect(masterGainNode);
+  biquadFilter.connect(ADSRNode);
+  ADSRNode.connect(masterGainNode);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -293,18 +295,17 @@ function playTone(freq: number): OscillatorNode {
     osc.type = <OscillatorType>type;
   }
 
-  osc.frequency.value = freq;
-  sweepEnvNode.gain.cancelScheduledValues(audioContext.currentTime);
-  sweepEnvNode.gain.setValueAtTime(0, audioContext.currentTime);
+  ADSRNode.gain.cancelScheduledValues(audioContext.currentTime);
+  ADSRNode.gain.setValueAtTime(0, audioContext.currentTime);
   // set our attack
-  sweepEnvNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
+  ADSRNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
 
-  sweepEnvNode.gain.linearRampToValueAtTime(
+  ADSRNode.gain.linearRampToValueAtTime(
     0,
     audioContext.currentTime + sweepLength - 0.1
   );
 
-  sweepEnvNode.connect(audioContext.destination);
+  osc.frequency.value = freq;
   osc.start();
   osc.stop(audioContext.currentTime + sweepLength + 3);
 
@@ -330,10 +331,7 @@ function noteReleased(event) {
   if (dataset && dataset["pressed"]) {
     const { note, octave } = dataset;
     const index = octave[note];
-    // sweepEnv.gain.linearRampToValueAtTime(
-    //   0,
-    //   audioContext.currentTime + sweepLength - 0.1
-    // );
+
     oscList[index].stop();
     oscList[index] = null;
     delete dataset["pressed"];
