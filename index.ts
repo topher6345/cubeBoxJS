@@ -45,9 +45,9 @@ class Cube {
     ctx.fillRect(x, y, xw, yw);
   }
 
-  activate() {
+  activate(note: string) {
     this.alpha = 70;
-    this.note = Math.floor(Math.random() * 12);
+    this.note = noteArray.indexOf(note);
   }
 }
 
@@ -224,6 +224,7 @@ masterGainNode.gain.value = parseFloat(volumeControl.value);
 // our purposes we don't need them. Each octave is inserted
 // into a <div> of class "octave".
 const noteFreq: Octave[] = createNoteTable();
+const noteArray: string[] = Object.keys(noteFreq[1]);
 const keyboard: HTMLDivElement = document.querySelector(".keyboard");
 noteFreq.forEach((keys: Octave, index: number) => {
   const keyList = Object.entries(keys);
@@ -268,7 +269,12 @@ function createKey(note: string, octave: string, freq: string) {
   keyElement.appendChild(labelElement);
 
   keyElement.addEventListener("mousedown", notePressed, false);
-  keyElement.addEventListener("mousedown", () => cubes[6].activate(), false);
+  // debugger;
+  keyElement.addEventListener(
+    "mousedown",
+    () => cubes[6].activate(note),
+    false
+  );
   keyElement.addEventListener("mouseup", noteReleased, false);
   keyElement.addEventListener("mouseover", notePressed, false);
   // keyElement.addEventListener("mouseleave", noteReleased, false);
@@ -380,35 +386,35 @@ function main() {
 }
 
 function logKey(e: KeyboardEvent) {
-  switch (e.code) {
-    case "KeyA":
-      cubes[0].activate();
-      notePressed;
-      break;
-    case "KeyS":
-      cubes[1].activate();
-      break;
-    case "KeyD":
-      cubes[2].activate();
-      break;
-    case "KeyF":
-      cubes[3].activate();
-      break;
-    case "KeyJ":
-      cubes[4].activate();
-      break;
-    case "KeyK":
-      cubes[5].activate();
-      break;
-    case "KeyL":
-      cubes[6].activate();
-      break;
-    case "Semicolon":
-      cubes[7].activate();
-      break;
-    default:
-      break;
-  }
+  // switch (e.code) {
+  //   case "KeyA":
+  //     cubes[0].activate();
+  //     notePressed;
+  //     break;
+  //   case "KeyS":
+  //     cubes[1].activate();
+  //     break;
+  //   case "KeyD":
+  //     cubes[2].activate();
+  //     break;
+  //   case "KeyF":
+  //     cubes[3].activate();
+  //     break;
+  //   case "KeyJ":
+  //     cubes[4].activate();
+  //     break;
+  //   case "KeyK":
+  //     cubes[5].activate();
+  //     break;
+  //   case "KeyL":
+  //     cubes[6].activate();
+  //     break;
+  //   case "Semicolon":
+  //     cubes[7].activate();
+  //     break;
+  //   default:
+  //     break;
+  // }
 }
 document.addEventListener("keydown", logKey);
 
