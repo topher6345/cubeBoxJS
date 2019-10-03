@@ -274,14 +274,30 @@ function createKey(note: string, octave: string, freq: string) {
   return keyElement;
 }
 
-let sweepLength = 1;
+let sweepLength = 10;
 function playTone(freq: number, detune: number): OscillatorNode {
   const osc: OscillatorNode = audioContext.createOscillator();
+  const sine = audioContext.createOscillator();
+  sine.type = "sine";
+  sine.frequency.value = 0.1;
+  sine.start();
+
+  const sineGain = audioContext.createGain();
+  sineGain.gain.value = 20;
   const ADSRNode = audioContext.createGain();
   const biquadFilter = audioContext.createBiquadFilter();
   biquadFilter.type = "lowpass";
   biquadFilter.frequency.setValueAtTime(12000, audioContext.currentTime);
-  biquadFilter.Q.value = 0.001;
+  biquadFilter.Q.value = 0.01;
+
+  biquadFilter.frequency.exponentialRampToValueAtTime(
+    1000,
+    audioContext.currentTime + 0.1
+  );
+
+  //connect the dots
+  sine.connect(sineGain);
+  sineGain.connect(osc.frequency);
 
   osc.connect(biquadFilter);
   biquadFilter.connect(ADSRNode);
@@ -321,7 +337,7 @@ function notePressed(event: MouseEvent) {
       const { note, octave, frequency } = dataset;
       const index = octave[note];
       oscList[index] = [
-        playTone(parseFloat(frequency), 0),
+        playTone(parseFloat(frequency), -1),
         playTone(parseFloat(frequency), 1)
       ];
       dataset["pressed"] = "yes";
@@ -336,7 +352,9 @@ function noteReleased(event) {
     const { note, octave } = dataset;
     const index = octave[note];
 
-    oscList[index].forEach(o => o.stop());
+    oscList[index].forEach(o => {
+      o.stop(audioContext.currentTime + 0.5);
+    });
     oscList[index] = oscList[index].map(() => null);
     delete dataset["pressed"];
   }
