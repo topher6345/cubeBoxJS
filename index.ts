@@ -214,9 +214,38 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
-const masterGainNode: GainNode = audioContext.createGain();
+var convolver = audioContext.createConvolver();
+// grab audio track via XHR for convolver node
 
+let soundSource, concertHallBuffer;
+
+const ajaxRequest = new XMLHttpRequest();
+ajaxRequest.open("GET", "concert-crowd.ogg", true);
+ajaxRequest.responseType = "arraybuffer";
+
+ajaxRequest.onload = function() {
+  const audioData = ajaxRequest.response;
+  audioContext.decodeAudioData(
+    audioData,
+    function(buffer) {
+      concertHallBuffer = buffer;
+      soundSource = audioContext.createBufferSource();
+      soundSource.buffer = concertHallBuffer;
+    },
+    function(e) {
+      console.log(e);
+    }
+  );
+};
+
+ajaxRequest.send();
+
+convolver.buffer = concertHallBuffer;
+
+const masterGainNode: GainNode = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
+convolver.connect(masterGainNode);
+
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
 // Create the keys; skip any that are sharp or flat; for
@@ -258,12 +287,11 @@ let cubeIndex = 0;
 function createKey(note: string, octave: string, freq: string) {
   const keyElement: HTMLDivElement = document.createElement("div");
   const labelElement: HTMLDivElement = document.createElement("div");
-  const flashCube = event => {
+  const flashCube = (event: MouseEvent) => {
     if (event.buttons & 1) {
       console.log(cubeIndex);
       cubes[cubeIndex].activate(note);
-      cubeIndex += 1;
-      cubeIndex = cubeIndex % 8;
+      cubeIndex = Math.round(Math.random() * 8) % 8;
     }
   };
   keyElement.className = "key";
@@ -313,6 +341,7 @@ function playTone(
   osc.connect(ADSRNode);
   ADSRNode.connect(biquadFilter);
   biquadFilter.connect(masterGainNode);
+  biquadFilter.connect(convolver);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -362,7 +391,7 @@ function noteReleased(event) {
   if (dataset && dataset["pressed"]) {
     const { note, octave } = dataset;
     const index = octave[note];
-    const decayTime = 0.2;
+    const decayTime = 2;
     const expZero = 0.00000001;
 
     oscList[index].forEach(o => {
