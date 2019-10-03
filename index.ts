@@ -251,7 +251,7 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
   sineTerms
 );
 
-const oscList: OscillatorNode[][] = Array(9);
+const oscList: [OscillatorNode, GainNode][][] = Array(9).map(() => []);
 
 function createKey(note: string, octave: string, freq: string) {
   const keyElement: HTMLDivElement = document.createElement("div");
@@ -275,7 +275,7 @@ function createKey(note: string, octave: string, freq: string) {
 }
 
 let sweepLength = 10;
-function playTone(freq: number, detune: number): OscillatorNode {
+function playTone(freq: number, detune: number): [OscillatorNode, GainNode] {
   const osc: OscillatorNode = audioContext.createOscillator();
   const sine = audioContext.createOscillator();
   sine.type = "sine";
@@ -326,7 +326,7 @@ function playTone(freq: number, detune: number): OscillatorNode {
   osc.start();
   osc.stop(audioContext.currentTime + sweepLength + 3);
 
-  return osc;
+  return [osc, ADSRNode];
 }
 
 function notePressed(event: MouseEvent) {
@@ -353,7 +353,8 @@ function noteReleased(event) {
     const index = octave[note];
 
     oscList[index].forEach(o => {
-      o.stop(audioContext.currentTime + 0.5);
+      o[1].gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+      o[0].stop(audioContext.currentTime + 0.5);
     });
     oscList[index] = oscList[index].map(() => null);
     delete dataset["pressed"];
