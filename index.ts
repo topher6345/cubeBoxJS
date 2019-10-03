@@ -100,7 +100,7 @@ interface Octave {
   B: number;
 }
 
-const audioContext = new AudioContext();
+const audioContext: AudioContext = new AudioContext();
 const wavePicker: HTMLSelectElement = document.querySelector(
   "select[name='waveform']"
 );
@@ -215,6 +215,8 @@ function createNoteTable(): Octave[] {
 }
 
 const masterGainNode: GainNode = audioContext.createGain();
+
+const sweepEnv = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
@@ -267,13 +269,21 @@ function createKey(note: string, octave: string, freq: string) {
   keyElement.addEventListener("mousedown", () => cubes[6].activate(), false);
   keyElement.addEventListener("mouseup", noteReleased, false);
   keyElement.addEventListener("mouseover", notePressed, false);
-  keyElement.addEventListener("mouseleave", noteReleased, false);
+  // keyElement.addEventListener("mouseleave", noteReleased, false);
 
   return keyElement;
 }
+
+let sweepLength = 1;
 function playTone(freq: number): OscillatorNode {
   const osc: OscillatorNode = audioContext.createOscillator();
-  osc.connect(masterGainNode);
+  const sweepEnvNode = audioContext.createGain();
+  const biquadFilter = audioContext.createBiquadFilter();
+  biquadFilter.type = "lowpass";
+  biquadFilter.frequency.setValueAtTime(100, audioContext.currentTime);
+  osc.connect(biquadFilter);
+  biquadFilter.connect(sweepEnvNode);
+  sweepEnvNode.connect(masterGainNode);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -284,7 +294,19 @@ function playTone(freq: number): OscillatorNode {
   }
 
   osc.frequency.value = freq;
+  sweepEnvNode.gain.cancelScheduledValues(audioContext.currentTime);
+  sweepEnvNode.gain.setValueAtTime(0, audioContext.currentTime);
+  // set our attack
+  sweepEnvNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
+
+  sweepEnvNode.gain.linearRampToValueAtTime(
+    0,
+    audioContext.currentTime + sweepLength - 0.1
+  );
+
+  sweepEnvNode.connect(audioContext.destination);
   osc.start();
+  osc.stop(audioContext.currentTime + sweepLength + 3);
 
   return osc;
 }
@@ -308,6 +330,10 @@ function noteReleased(event) {
   if (dataset && dataset["pressed"]) {
     const { note, octave } = dataset;
     const index = octave[note];
+    // sweepEnv.gain.linearRampToValueAtTime(
+    //   0,
+    //   audioContext.currentTime + sweepLength - 0.1
+    // );
     oscList[index].stop();
     oscList[index] = null;
     delete dataset["pressed"];
