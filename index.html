@@ -12,14 +12,13 @@
       }
 
       canvas {
-        height: 750px;
-        width: 1400px;
+        height: 600px;
+        width: 100%;
       }
 
       .container {
         overflow-x: scroll;
         overflow-y: hidden;
-        width: 660px;
         height: 110px;
         white-space: nowrap;
         margin: 10px;
@@ -91,16 +90,20 @@
         left: 0;
         display: table-cell;
         vertical-align: middle;
-        background-color: white;
       }
 
       .left span {
         color: black;
       }
 
+      .left div {
+        background-color: white;
+      }
+
       .left span,
       .left input {
         vertical-align: middle;
+        background-color: white;
       }
 
       .right {
@@ -121,37 +124,24 @@
     </style>
   </head>
   <body>
-    <button id="foo-0">foo</button>
-    <button id="foo-1">foo</button>
-    <button id="foo-2">foo</button>
-    <button id="foo-3">foo</button>
-    <button id="foo-4">foo</button>
-    <button id="foo-5">foo</button>
-    <button id="foo-6">foo</button>
-    <button id="foo-7">foo</button>
-    <button id="foo-8">foo</button>
-    <canvas id="canvas"></canvas>
-    <!-- Learn about this code on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Simple_synth -->
-
-    <div class="container">
-      <div class="keyboard"></div>
-    </div>
     <div class="settingsBar">
       <div class="left">
-        <span>Volume: </span>
-        <input
-          type="range"
-          min="0.0"
-          max="1.0"
-          step="0.01"
-          value="0.5"
-          list="volumes"
-          name="volume"
-        />
-        <datalist id="volumes">
-          <option value="0.0" label="Mute"> </option>
-          <option value="1.0" label="100%"> </option>
-        </datalist>
+        <div>
+          <span>Volume: </span>
+          <input
+            type="range"
+            min="0.0"
+            max="1.0"
+            step="0.01"
+            value="0.5"
+            list="volumes"
+            name="volume"
+          />
+          <datalist id="volumes">
+            <option value="0.0" label="Mute"> </option>
+            <option value="1.0" label="100%"> </option>
+          </datalist>
+        </div>
       </div>
       <div class="right">
         <span>Current waveform: </span>
@@ -164,6 +154,11 @@
         </select>
       </div>
     </div>
+    <canvas id="canvas"></canvas>
+    <div class="container">
+      <div class="keyboard"></div>
+    </div>
+
     <script src="index.js"></script>
   </body>
 </html>

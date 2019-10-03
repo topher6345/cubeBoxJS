@@ -52,7 +52,7 @@ class Cube {
 }
 
 const cubeOrigin: [number, number] = [0, 0];
-const cubeSize: number = 150;
+const cubeSize: number = 75;
 
 const cubes: Cube[] = [
   new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
@@ -216,7 +216,6 @@ function createNoteTable(): Octave[] {
 
 const masterGainNode: GainNode = audioContext.createGain();
 
-const sweepEnv = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
@@ -280,7 +279,7 @@ function createKey(note: string, octave: string, freq: string) {
   keyElement.addEventListener("mouseup", noteReleased, false);
   keyElement.addEventListener("mouseover", notePressed, false);
   keyElement.addEventListener("mouseover", flashCube, false);
-  // keyElement.addEventListener("mouseleave", noteReleased, false);
+  keyElement.addEventListener("mouseleave", noteReleased, false);
 
   return keyElement;
 }
@@ -364,16 +363,30 @@ function noteReleased(event) {
     const { note, octave } = dataset;
     const index = octave[note];
     const decayTime = 0.2;
+    const expZero = 0.00000001;
 
     oscList[index].forEach(o => {
       o[1].gain.exponentialRampToValueAtTime(
-        0.00000001,
+        expZero,
         audioContext.currentTime + decayTime
       );
       o[0].stop(audioContext.currentTime + decayTime);
       o[2].stop(audioContext.currentTime + decayTime);
     });
-    oscList[index] = oscList[index].map(() => null);
+
+    setTimeout(() => {
+      oscList[index].forEach(o => {
+        o[0].stop();
+        o[2].stop();
+      });
+      // I guess this null's the last reference and
+      // the Oscillators can be garbage collected?
+      oscList[index] = oscList[index].map(() => null);
+      // Have to put this on a delay so that the Oscillator
+      // isn't GC'd before the note drops completely
+      // out and makes a loud pop (Yuck!)
+    }, decayTime);
+
     delete dataset["pressed"];
   }
 }
