@@ -255,11 +255,18 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
 const oscList: [OscillatorNode, GainNode, OscillatorNode][][] = Array(9).map(
   () => []
 );
-
+let cubeIndex = 0;
 function createKey(note: string, octave: string, freq: string) {
   const keyElement: HTMLDivElement = document.createElement("div");
   const labelElement: HTMLDivElement = document.createElement("div");
-
+  const flashCube = event => {
+    if (event.buttons & 1) {
+      console.log(cubeIndex);
+      cubes[cubeIndex].activate(note);
+      cubeIndex += 1;
+      cubeIndex = cubeIndex % 8;
+    }
+  };
   keyElement.className = "key";
   keyElement.dataset["octave"] = octave;
   keyElement.dataset["note"] = note;
@@ -269,14 +276,10 @@ function createKey(note: string, octave: string, freq: string) {
   keyElement.appendChild(labelElement);
 
   keyElement.addEventListener("mousedown", notePressed, false);
-  // debugger;
-  keyElement.addEventListener(
-    "mousedown",
-    () => cubes[6].activate(note),
-    false
-  );
+  keyElement.addEventListener("mousedown", flashCube, false);
   keyElement.addEventListener("mouseup", noteReleased, false);
   keyElement.addEventListener("mouseover", notePressed, false);
+  keyElement.addEventListener("mouseover", flashCube, false);
   // keyElement.addEventListener("mouseleave", noteReleased, false);
 
   return keyElement;
@@ -384,38 +387,5 @@ function main() {
   requestAnimationFrame(main);
   return;
 }
-
-function logKey(e: KeyboardEvent) {
-  // switch (e.code) {
-  //   case "KeyA":
-  //     cubes[0].activate();
-  //     notePressed;
-  //     break;
-  //   case "KeyS":
-  //     cubes[1].activate();
-  //     break;
-  //   case "KeyD":
-  //     cubes[2].activate();
-  //     break;
-  //   case "KeyF":
-  //     cubes[3].activate();
-  //     break;
-  //   case "KeyJ":
-  //     cubes[4].activate();
-  //     break;
-  //   case "KeyK":
-  //     cubes[5].activate();
-  //     break;
-  //   case "KeyL":
-  //     cubes[6].activate();
-  //     break;
-  //   case "Semicolon":
-  //     cubes[7].activate();
-  //     break;
-  //   default:
-  //     break;
-  // }
-}
-document.addEventListener("keydown", logKey);
 
 requestAnimationFrame(main);
