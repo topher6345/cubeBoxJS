@@ -251,7 +251,7 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
   sineTerms
 );
 
-const oscList: OscillatorNode[] = Array(9);
+const oscList: OscillatorNode[][] = Array(9);
 
 function createKey(note: string, octave: string, freq: string) {
   const keyElement: HTMLDivElement = document.createElement("div");
@@ -275,7 +275,7 @@ function createKey(note: string, octave: string, freq: string) {
 }
 
 let sweepLength = 1;
-function playTone(freq: number): OscillatorNode {
+function playTone(freq: number, detune: number): OscillatorNode {
   const osc: OscillatorNode = audioContext.createOscillator();
   const ADSRNode = audioContext.createGain();
   const biquadFilter = audioContext.createBiquadFilter();
@@ -306,6 +306,7 @@ function playTone(freq: number): OscillatorNode {
   );
 
   osc.frequency.value = freq;
+  osc.detune.setValueAtTime(detune, audioContext.currentTime);
   osc.start();
   osc.stop(audioContext.currentTime + sweepLength + 3);
 
@@ -319,7 +320,10 @@ function notePressed(event: MouseEvent) {
     if (!dataset["pressed"]) {
       const { note, octave, frequency } = dataset;
       const index = octave[note];
-      oscList[index] = playTone(parseFloat(frequency));
+      oscList[index] = [
+        playTone(parseFloat(frequency), 0),
+        playTone(parseFloat(frequency), 1)
+      ];
       dataset["pressed"] = "yes";
     }
   }
@@ -332,8 +336,8 @@ function noteReleased(event) {
     const { note, octave } = dataset;
     const index = octave[note];
 
-    oscList[index].stop();
-    oscList[index] = null;
+    oscList[index].forEach(o => o.stop());
+    oscList[index] = oscList[index].map(() => null);
     delete dataset["pressed"];
   }
 }
