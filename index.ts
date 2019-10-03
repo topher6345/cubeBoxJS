@@ -251,7 +251,9 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
   sineTerms
 );
 
-const oscList: [OscillatorNode, GainNode][][] = Array(9).map(() => []);
+const oscList: [OscillatorNode, GainNode, OscillatorNode][][] = Array(9).map(
+  () => []
+);
 
 function createKey(note: string, octave: string, freq: string) {
   const keyElement: HTMLDivElement = document.createElement("div");
@@ -275,15 +277,17 @@ function createKey(note: string, octave: string, freq: string) {
 }
 
 let sweepLength = 10;
-function playTone(freq: number, detune: number): [OscillatorNode, GainNode] {
+function playTone(
+  freq: number,
+  detune: number
+): [OscillatorNode, GainNode, OscillatorNode] {
   const osc: OscillatorNode = audioContext.createOscillator();
   const sine = audioContext.createOscillator();
   sine.type = "sine";
-  sine.frequency.value = 0.1;
-  sine.start();
+  sine.frequency.value = 0.01;
 
   const sineGain = audioContext.createGain();
-  sineGain.gain.value = 20;
+  sineGain.gain.value = 3;
   const ADSRNode = audioContext.createGain();
   const biquadFilter = audioContext.createBiquadFilter();
   biquadFilter.type = "lowpass";
@@ -298,10 +302,9 @@ function playTone(freq: number, detune: number): [OscillatorNode, GainNode] {
   //connect the dots
   sine.connect(sineGain);
   sineGain.connect(osc.frequency);
-
-  osc.connect(biquadFilter);
-  biquadFilter.connect(ADSRNode);
-  ADSRNode.connect(masterGainNode);
+  osc.connect(ADSRNode);
+  ADSRNode.connect(biquadFilter);
+  biquadFilter.connect(masterGainNode);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -317,16 +320,16 @@ function playTone(freq: number, detune: number): [OscillatorNode, GainNode] {
   ADSRNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
 
   ADSRNode.gain.linearRampToValueAtTime(
-    0,
+    0.2,
     audioContext.currentTime + sweepLength - 0.1
   );
 
   osc.frequency.value = freq;
   osc.detune.setValueAtTime(detune, audioContext.currentTime);
+  sine.start();
   osc.start();
-  osc.stop(audioContext.currentTime + sweepLength + 3);
 
-  return [osc, ADSRNode];
+  return [osc, ADSRNode, sine];
 }
 
 function notePressed(event: MouseEvent) {
@@ -351,10 +354,15 @@ function noteReleased(event) {
   if (dataset && dataset["pressed"]) {
     const { note, octave } = dataset;
     const index = octave[note];
+    const decayTime = 0.2;
 
     oscList[index].forEach(o => {
-      o[1].gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-      o[0].stop(audioContext.currentTime + 0.5);
+      o[1].gain.exponentialRampToValueAtTime(
+        0.00000001,
+        audioContext.currentTime + decayTime
+      );
+      o[0].stop(audioContext.currentTime + decayTime);
+      o[2].stop(audioContext.currentTime + decayTime);
     });
     oscList[index] = oscList[index].map(() => null);
     delete dataset["pressed"];
