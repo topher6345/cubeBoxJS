@@ -267,30 +267,33 @@ function createNoteTable(): Octave[] {
 const convolver = audioContext.createConvolver();
 // grab audio track via XHR for convolver node
 
-let soundSource, concertHallBuffer;
+function fetchBuffer(filename: string) {
+  let soundSource, concertHallBuffer;
 
-const ajaxRequest = new XMLHttpRequest();
-ajaxRequest.open("GET", "concert-crowd.ogg", true);
-ajaxRequest.responseType = "arraybuffer";
+  const ajaxRequest = new XMLHttpRequest();
+  ajaxRequest.open("GET", filename, true);
+  ajaxRequest.responseType = "arraybuffer";
 
-ajaxRequest.onload = function() {
-  const audioData = ajaxRequest.response;
-  audioContext.decodeAudioData(
-    audioData,
-    function(buffer) {
-      concertHallBuffer = buffer;
-      soundSource = audioContext.createBufferSource();
-      soundSource.buffer = concertHallBuffer;
-    },
-    function(e) {
-      console.log(e);
-    }
-  );
-};
+  ajaxRequest.onload = function() {
+    const audioData = ajaxRequest.response;
+    audioContext.decodeAudioData(
+      audioData,
+      function(buffer) {
+        concertHallBuffer = buffer;
+        soundSource = audioContext.createBufferSource();
+        soundSource.buffer = concertHallBuffer;
+      },
+      function(e) {
+        console.log(e);
+      }
+    );
+  };
 
-ajaxRequest.send();
+  ajaxRequest.send();
 
-convolver.buffer = concertHallBuffer;
+  return concertHallBuffer;
+}
+convolver.buffer = fetchBuffer("concert-crowd.ogg");
 
 const masterGainNode: GainNode = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
@@ -326,21 +329,30 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
 let cubeIndex = 0;
 const sweepLength = 10;
 function playTone(freq: number, detune: number, delay: number) {
+  const expZero = 0.00000001;
+  const lfoFreq = 0.01;
   const osc: OscillatorNode = audioContext.createOscillator();
   const sine = audioContext.createOscillator();
   sine.type = "sine";
-  sine.frequency.value = 0.01;
+  sine.frequency.value = lfoFreq;
 
   const sineGain = audioContext.createGain();
   sineGain.gain.value = 3;
   const ADSRNode = audioContext.createGain();
   const biquadFilter = audioContext.createBiquadFilter();
+  const biquadFilterQValue = 0.01;
+  const biquadFilterInitCutoffFreq = 12000;
+  const biquadFilterADSRS = 1000;
+
   biquadFilter.type = "lowpass";
-  biquadFilter.frequency.setValueAtTime(12000, audioContext.currentTime);
-  biquadFilter.Q.value = 0.01;
+  biquadFilter.frequency.setValueAtTime(
+    biquadFilterInitCutoffFreq,
+    audioContext.currentTime
+  );
+  biquadFilter.Q.value = biquadFilterQValue;
 
   biquadFilter.frequency.exponentialRampToValueAtTime(
-    1000,
+    biquadFilterADSRS,
     audioContext.currentTime + delay + 1
   );
 
@@ -374,7 +386,6 @@ function playTone(freq: number, detune: number, delay: number) {
   osc.detune.setValueAtTime(detune, audioContext.currentTime + delay);
   sine.start(audioContext.currentTime + delay);
   osc.start(audioContext.currentTime + delay);
-  const expZero = 0.00000001;
 
   ADSRNode.gain.exponentialRampToValueAtTime(
     expZero,
