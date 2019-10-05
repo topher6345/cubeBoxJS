@@ -84,7 +84,7 @@ class Cube {
 const cubeOrigin: [number, number] = [33, 33];
 const cubeSize: number = 66;
 
-const cubes: Cube[] = [
+const CUBES: Cube[] = [
   new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
   new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
   new Cube(ctx, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
@@ -311,7 +311,6 @@ function changeMasterFilter() {
 }
 
 masterBiquadFilter.connect(masterGainNode);
-
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
 // Create the keys; skip any that are sharp or flat; for
@@ -427,7 +426,7 @@ function main(now: number) {
       if (scaleDegree) {
         const colorIndex = Scales[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, 0);
-        cubes[index].play(colorIndex);
+        CUBES[index].play(colorIndex);
       }
     });
 
@@ -436,14 +435,14 @@ function main(now: number) {
       if (scaleDegree) {
         const colorIndex = Scales[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, index * 0.4);
-        setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
+        setTimeout(() => CUBES[index + 4].play(colorIndex), index * 1000 * 0.4);
       }
     });
     then = now;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  cubes.forEach(cube => cube.draw());
+  CUBES.forEach(cube => cube.draw());
   requestAnimationFrame(main);
   return;
 }
