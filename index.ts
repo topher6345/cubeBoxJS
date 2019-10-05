@@ -131,14 +131,15 @@ const audioContext: AudioContext = new AudioContext();
 const wavePicker: HTMLSelectElement = document.querySelector(
   "select[name='waveform']"
 );
-
-const scalePicker: HTMLSelectElement = document.querySelector(
-  "select[name='scale']"
-);
 const volumeControl: HTMLInputElement = document.querySelector(
   "input[name='volume']"
 );
 volumeControl.addEventListener("change", changeVolume, false);
+
+const filterControl: HTMLInputElement = document.querySelector(
+  "input[name='filter']"
+);
+filterControl.addEventListener("change", changeMasterFilter, false);
 
 function createNoteTable(): Octave[] {
   let noteFreq: Octave[] = [];
@@ -245,7 +246,7 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
-var convolver = audioContext.createConvolver();
+const convolver = audioContext.createConvolver();
 // grab audio track via XHR for convolver node
 
 let soundSource, concertHallBuffer;
@@ -275,7 +276,20 @@ convolver.buffer = concertHallBuffer;
 
 const masterGainNode: GainNode = audioContext.createGain();
 masterGainNode.connect(audioContext.destination);
-convolver.connect(masterGainNode);
+
+const masterBiquadFilter = audioContext.createBiquadFilter();
+masterBiquadFilter.type = "lowpass";
+masterBiquadFilter.frequency.setValueAtTime(12000, audioContext.currentTime);
+masterBiquadFilter.Q.value = 0.01;
+
+function changeMasterFilter() {
+  masterBiquadFilter.frequency.setValueAtTime(
+    parseFloat(filterControl.value),
+    audioContext.currentTime
+  );
+}
+
+masterBiquadFilter.connect(masterGainNode);
 
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
@@ -291,32 +305,9 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
   sineTerms
 );
 
-const oscList: [OscillatorNode, GainNode, OscillatorNode][][] = Array(9).map(
-  () => []
-);
+const oscList: [OscillatorNode, GainNode, OscillatorNode][][] = Array(9);
 let cubeIndex = 0;
-function createKey(note: string, octave: string, freq: string) {
-  const keyElement: HTMLDivElement = document.createElement("div");
-  const labelElement: HTMLDivElement = document.createElement("div");
-  const flashCube = (event: MouseEvent) => {
-    if (event.buttons & 1) {
-      console.log(cubeIndex);
-      cubes[cubeIndex].activate(note);
-      cubeIndex = Math.round(Math.random() * 8) % 8;
-    }
-  };
-  keyElement.className = "key";
-  keyElement.dataset["octave"] = octave;
-  keyElement.dataset["note"] = note;
-  keyElement.dataset["frequency"] = freq;
-
-  labelElement.innerHTML = note + "<sub>" + octave + "</sub>";
-  keyElement.appendChild(labelElement);
-
-  return keyElement;
-}
-
-let sweepLength = 10;
+const sweepLength = 10;
 function playTone(freq: number, detune: number, delay: number) {
   const osc: OscillatorNode = audioContext.createOscillator();
   const sine = audioContext.createOscillator();
@@ -332,7 +323,7 @@ function playTone(freq: number, detune: number, delay: number) {
   biquadFilter.Q.value = 0.01;
 
   biquadFilter.frequency.exponentialRampToValueAtTime(
-    100,
+    1000,
     audioContext.currentTime + delay + 1
   );
 
@@ -341,8 +332,8 @@ function playTone(freq: number, detune: number, delay: number) {
   sineGain.connect(osc.frequency);
   osc.connect(ADSRNode);
   ADSRNode.connect(biquadFilter);
-  biquadFilter.connect(masterGainNode);
-  biquadFilter.connect(convolver);
+
+  biquadFilter.connect(masterBiquadFilter);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -403,14 +394,14 @@ function main(now: number) {
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
 
-      const colorIndex = Scales[scalePicker.value][scaleDegree];
+      const colorIndex = Scales["Lydian"][scaleDegree];
       notePressed(colorIndex, globalRoot, 0);
       cubes[index].play(colorIndex);
     });
 
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales[scalePicker.value][scaleDegree];
+      const colorIndex = Scales["Lydian"][scaleDegree];
       notePressed(colorIndex, globalRoot, index * 0.4);
       setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
     });
