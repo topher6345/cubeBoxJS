@@ -13,7 +13,7 @@ interface Scale {
   Mixolydian: Degrees;
 }
 
-const Scales: Scale = {
+const SCALES: Scale = {
   Ionian: [0, 2, 4, 5, 7, 9, 11],
   Lydian: [0, 2, 4, 6, 7, 9, 11],
   Locrian: [0, 1, 3, 5, 6, 8, 10],
@@ -24,7 +24,7 @@ const Scales: Scale = {
 };
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+const CTX: CanvasRenderingContext2D = canvas.getContext("2d");
 
 type CubePosition = [number, number, number, number];
 type RGB = [number, number, number];
@@ -65,9 +65,9 @@ class Cube {
     this.alpha = this.alpha > 0 ? this.alpha - 1 : this.alpha;
 
     const rgba = [...this.colors[this.note], this.alpha / 100];
-    ctx.fillStyle = `rgba(${rgba.join(",")})`;
+    CTX.fillStyle = `rgba(${rgba.join(",")})`;
     const [x, y, xw, yw] = this.position;
-    ctx.fillRect(x, y, xw, yw);
+    CTX.fillRect(x, y, xw, yw);
   }
 
   activate(note: string) {
@@ -85,31 +85,31 @@ const cubeOrigin: [number, number] = [33, 33];
 const cubeSize: number = 66;
 
 const CUBES: Cube[] = [
-  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
-  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
-  new Cube(ctx, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
+  new Cube(CTX, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
+  new Cube(CTX, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
+  new Cube(CTX, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
   new Cube(
-    ctx,
+    CTX,
     [cubeOrigin[0] + 33, cubeOrigin[1] + 33, cubeSize, cubeSize],
     3
   ),
   new Cube(
-    ctx,
+    CTX,
     [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
     4
   ),
   new Cube(
-    ctx,
+    CTX,
     [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
     5
   ),
   new Cube(
-    ctx,
+    CTX,
     [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
     6
   ),
   new Cube(
-    ctx,
+    CTX,
     [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
     7
   )
@@ -131,7 +131,7 @@ interface Octave {
   B: number;
 }
 
-const audioContext: AudioContext = new AudioContext();
+const AUDIO_CONTEXT: AudioContext = new AudioContext();
 const wavePicker: HTMLSelectElement = document.querySelector(
   "select[name='waveform']"
 );
@@ -264,7 +264,7 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
-const convolver = audioContext.createConvolver();
+const convolver = AUDIO_CONTEXT.createConvolver();
 // grab audio track via XHR for convolver node
 
 function fetchBuffer(filename: string) {
@@ -276,11 +276,11 @@ function fetchBuffer(filename: string) {
 
   ajaxRequest.onload = function() {
     const audioData = ajaxRequest.response;
-    audioContext.decodeAudioData(
+    AUDIO_CONTEXT.decodeAudioData(
       audioData,
       function(buffer) {
         concertHallBuffer = buffer;
-        soundSource = audioContext.createBufferSource();
+        soundSource = AUDIO_CONTEXT.createBufferSource();
         soundSource.buffer = concertHallBuffer;
       },
       function(e) {
@@ -295,18 +295,18 @@ function fetchBuffer(filename: string) {
 }
 convolver.buffer = fetchBuffer("concert-crowd.ogg");
 
-const masterGainNode: GainNode = audioContext.createGain();
-masterGainNode.connect(audioContext.destination);
+const masterGainNode: GainNode = AUDIO_CONTEXT.createGain();
+masterGainNode.connect(AUDIO_CONTEXT.destination);
 
-const masterBiquadFilter = audioContext.createBiquadFilter();
+const masterBiquadFilter = AUDIO_CONTEXT.createBiquadFilter();
 masterBiquadFilter.type = "lowpass";
-masterBiquadFilter.frequency.setValueAtTime(12000, audioContext.currentTime);
+masterBiquadFilter.frequency.setValueAtTime(12000, AUDIO_CONTEXT.currentTime);
 masterBiquadFilter.Q.value = 0.01;
 
 function changeMasterFilter() {
   masterBiquadFilter.frequency.setValueAtTime(
     parseFloat(filterControl.value),
-    audioContext.currentTime
+    AUDIO_CONTEXT.currentTime
   );
 }
 
@@ -320,7 +320,7 @@ const noteFreq: Octave[] = createNoteTable();
 const noteArray: string[] = Object.keys(noteFreq[1]);
 const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
 const cosineTerms: Float32Array = new Float32Array(sineTerms.length);
-const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
+const customWaveform: PeriodicWave = AUDIO_CONTEXT.createPeriodicWave(
   cosineTerms,
   sineTerms
 );
@@ -330,15 +330,15 @@ const sweepLength = 10;
 function playTone(freq: number, detune: number, delay: number) {
   const expZero = 0.00000001;
   const lfoFreq = 0.01;
-  const osc: OscillatorNode = audioContext.createOscillator();
-  const sine = audioContext.createOscillator();
+  const osc: OscillatorNode = AUDIO_CONTEXT.createOscillator();
+  const sine = AUDIO_CONTEXT.createOscillator();
   sine.type = "sine";
   sine.frequency.value = lfoFreq;
 
-  const sineGain = audioContext.createGain();
+  const sineGain = AUDIO_CONTEXT.createGain();
   sineGain.gain.value = 3;
-  const ADSRNode = audioContext.createGain();
-  const biquadFilter = audioContext.createBiquadFilter();
+  const ADSRNode = AUDIO_CONTEXT.createGain();
+  const biquadFilter = AUDIO_CONTEXT.createBiquadFilter();
   const biquadFilterQValue = 0.01;
   const biquadFilterInitCutoffFreq = 12000;
   const biquadFilterADSRS = 1000;
@@ -346,13 +346,13 @@ function playTone(freq: number, detune: number, delay: number) {
   biquadFilter.type = "lowpass";
   biquadFilter.frequency.setValueAtTime(
     biquadFilterInitCutoffFreq,
-    audioContext.currentTime
+    AUDIO_CONTEXT.currentTime
   );
   biquadFilter.Q.value = biquadFilterQValue;
 
   biquadFilter.frequency.exponentialRampToValueAtTime(
     biquadFilterADSRS,
-    audioContext.currentTime + delay + 1
+    AUDIO_CONTEXT.currentTime + delay + 1
   );
 
   // sine -> sineGain
@@ -374,24 +374,24 @@ function playTone(freq: number, detune: number, delay: number) {
     osc.type = <OscillatorType>type;
   }
 
-  ADSRNode.gain.cancelScheduledValues(audioContext.currentTime + delay);
-  ADSRNode.gain.setValueAtTime(0, audioContext.currentTime + delay);
+  ADSRNode.gain.cancelScheduledValues(AUDIO_CONTEXT.currentTime + delay);
+  ADSRNode.gain.setValueAtTime(0, AUDIO_CONTEXT.currentTime + delay);
   ADSRNode.gain.linearRampToValueAtTime(
     1,
-    audioContext.currentTime + delay + 0.1
+    AUDIO_CONTEXT.currentTime + delay + 0.1
   );
 
   osc.frequency.value = freq;
-  osc.detune.setValueAtTime(detune, audioContext.currentTime + delay);
-  sine.start(audioContext.currentTime + delay);
-  osc.start(audioContext.currentTime + delay);
+  osc.detune.setValueAtTime(detune, AUDIO_CONTEXT.currentTime + delay);
+  sine.start(AUDIO_CONTEXT.currentTime + delay);
+  osc.start(AUDIO_CONTEXT.currentTime + delay);
 
   ADSRNode.gain.exponentialRampToValueAtTime(
     expZero,
-    audioContext.currentTime + delay + decayTime + 0.2
+    AUDIO_CONTEXT.currentTime + delay + decayTime + 0.2
   );
-  osc.stop(audioContext.currentTime + decayTime + delay);
-  sine.stop(audioContext.currentTime + decayTime + delay);
+  osc.stop(AUDIO_CONTEXT.currentTime + decayTime + delay);
+  sine.stop(AUDIO_CONTEXT.currentTime + decayTime + delay);
 }
 
 function notePressed(note: number, octave: number, delay: number) {
@@ -424,7 +424,7 @@ function main(now: number) {
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
       if (scaleDegree) {
-        const colorIndex = Scales[scalePicker.value][scaleDegree];
+        const colorIndex = SCALES[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, 0);
         CUBES[index].play(colorIndex);
       }
@@ -433,7 +433,7 @@ function main(now: number) {
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
       if (scaleDegree) {
-        const colorIndex = Scales[scalePicker.value][scaleDegree];
+        const colorIndex = SCALES[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, index * 0.4);
         setTimeout(() => CUBES[index + 4].play(colorIndex), index * 1000 * 0.4);
       }
@@ -441,7 +441,7 @@ function main(now: number) {
     then = now;
   }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  CTX.clearRect(0, 0, canvas.width, canvas.height);
   CUBES.forEach(cube => cube.draw());
   requestAnimationFrame(main);
   return;
