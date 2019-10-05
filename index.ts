@@ -131,6 +131,10 @@ const audioContext: AudioContext = new AudioContext();
 const wavePicker: HTMLSelectElement = document.querySelector(
   "select[name='waveform']"
 );
+
+const scalePicker: HTMLSelectElement = document.querySelector(
+  "select[name='scale']"
+);
 const volumeControl: HTMLInputElement = document.querySelector(
   "input[name='volume']"
 );
@@ -313,10 +317,7 @@ function createKey(note: string, octave: string, freq: string) {
 }
 
 let sweepLength = 10;
-function playTone(
-  freq: number,
-  detune: number
-): [OscillatorNode, GainNode, OscillatorNode] {
+function playTone(freq: number, detune: number, delay: number) {
   const osc: OscillatorNode = audioContext.createOscillator();
   const sine = audioContext.createOscillator();
   sine.type = "sine";
@@ -331,8 +332,8 @@ function playTone(
   biquadFilter.Q.value = 0.01;
 
   biquadFilter.frequency.exponentialRampToValueAtTime(
-    1000,
-    audioContext.currentTime + 0.1
+    100,
+    audioContext.currentTime + delay + 1
   );
 
   //connect the dots
@@ -351,78 +352,50 @@ function playTone(
     osc.type = <OscillatorType>type;
   }
 
-  ADSRNode.gain.cancelScheduledValues(audioContext.currentTime);
-  ADSRNode.gain.setValueAtTime(0, audioContext.currentTime);
-  // set our attack
-  ADSRNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
-
+  ADSRNode.gain.cancelScheduledValues(audioContext.currentTime + delay);
+  ADSRNode.gain.setValueAtTime(0, audioContext.currentTime + delay);
   ADSRNode.gain.linearRampToValueAtTime(
-    0.2,
-    audioContext.currentTime + sweepLength - 0.1
+    1,
+    audioContext.currentTime + delay + 0.1
   );
 
   osc.frequency.value = freq;
-  osc.detune.setValueAtTime(detune, audioContext.currentTime);
-  sine.start();
-  osc.start();
-
-  return [osc, ADSRNode, sine];
-}
-
-function notePressed(note: number, octave: number) {
-  const stringNote = Object.keys(noteFreq[octave])[note];
-
-  const index = octave[note];
-  const frequency = noteFreq[octave][stringNote];
+  osc.detune.setValueAtTime(detune, audioContext.currentTime + delay);
+  sine.start(audioContext.currentTime + delay);
+  osc.start(audioContext.currentTime + delay);
   const expZero = 0.00000001;
 
-  oscList[index] = [
-    playTone(parseFloat(frequency), -1),
-    playTone(parseFloat(frequency), 1)
-  ];
+  ADSRNode.gain.exponentialRampToValueAtTime(
+    expZero,
+    audioContext.currentTime + delay + decayTime + 0.2
+  );
+  osc.stop(audioContext.currentTime + decayTime + delay);
+  sine.stop(audioContext.currentTime + decayTime + delay);
+}
 
-  oscList[index].forEach(o => {
-    o[1].gain.exponentialRampToValueAtTime(
-      expZero,
-      audioContext.currentTime + decayTime
-    );
-    o[0].stop(audioContext.currentTime + decayTime);
-    o[2].stop(audioContext.currentTime + decayTime);
-  });
+function notePressed(note: number, octave: number, delay: number) {
+  const stringNote = Object.keys(noteFreq[octave])[note];
+  const frequency = noteFreq[octave][stringNote];
 
-  setTimeout(() => {
-    oscList[index].forEach(o => {
-      o[0].stop();
-      o[2].stop();
-    });
-    // I guess this null's the last reference and
-    // the Oscillators can be garbage collected?
-    // oscList[index] = oscList[index].map(() => null);
-    // Have to put this on a delay so that the Oscillator
-    // isn't GC'd before the note drops completely
-    // out and makes a loud pop (Yuck!)
-  }, decayTime);
+  playTone(parseFloat(frequency), -15, delay);
+  playTone(parseFloat(frequency), 15, delay);
 }
 
 function changeVolume() {
   masterGainNode.gain.value = parseFloat(volumeControl.value);
 }
 
-let then = null;
 const decayTime = 4;
-
 let chordSpeed = decayTime * 1000; //ms
 let swipeSpeed = decayTime * 1000; //ms
-
 let chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
-
 let swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
-
 let swipeLengths = urnJB(4);
-
 let globalRoot = 3;
 
-function main(now) {
+let then: number = null;
+
+function main(now: number) {
   if (!then) then = now;
 
   // Every chordSpeed milliseconds
@@ -430,22 +403,18 @@ function main(now) {
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
 
-      const colorIndex = Scales["Lydian"][scaleDegree];
-      notePressed(colorIndex, globalRoot);
+      const colorIndex = Scales[scalePicker.value][scaleDegree];
+      notePressed(colorIndex, globalRoot, 0);
       cubes[index].play(colorIndex);
     });
-    then = now;
-    // }
-    // Every swipeSpeed milliseconds
-    // if (!then || now - then > swipeSpeed) {
+
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales["Lydian"][scaleDegree];
-      // setTimeout(() => {
-      //   cubes[index + 4].play(colorIndex);
-      //   notePressed(colorIndex, globalRoot - 2);
-      // }, index * 1000);
+      const colorIndex = Scales[scalePicker.value][scaleDegree];
+      notePressed(colorIndex, globalRoot, index * 0.4);
+      setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
     });
+    then = now;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
