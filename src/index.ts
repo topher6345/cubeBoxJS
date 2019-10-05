@@ -124,14 +124,18 @@ interface Octave {
   B: number;
 }
 
-const AUDIO_CONTEXT: AudioContext = new AudioContext();
 const wavePicker: HTMLSelectElement = document.querySelector(
   "select[name='waveform']"
 );
+
 const volumeControl: HTMLInputElement = document.querySelector(
   "input[name='volume']"
 );
 volumeControl.addEventListener("change", changeVolume, false);
+
+function changeVolume() {
+  masterGainNode.gain.value = parseFloat(volumeControl.value);
+}
 
 const filterControl: HTMLInputElement = document.querySelector(
   "input[name='filter']"
@@ -141,16 +145,14 @@ filterControl.addEventListener("change", changeMasterFilter, false);
 const masterControl: HTMLInputElement = document.querySelector(
   "input[name='masterClock']"
 );
+masterControl.addEventListener("change", changeMasterControl, false);
+function changeMasterControl() {
+  masterControlState = masterControl.checked;
+}
 
 const scalePicker: HTMLSelectElement = document.querySelector(
   "select[name='scale']"
 );
-
-masterControl.addEventListener("change", changeMasterControl, false);
-
-function changeMasterControl() {
-  masterControlState = masterControl.checked;
-}
 
 function createNoteTable(): Octave[] {
   let noteFreq: Octave[] = [];
@@ -257,9 +259,10 @@ function createNoteTable(): Octave[] {
   return noteFreq;
 }
 
+const AUDIO_CONTEXT: AudioContext = new AudioContext();
 const convolver = AUDIO_CONTEXT.createConvolver();
 // grab audio track via XHR for convolver node
-convolver.buffer = fetchBuffer("concert-crowd.ogg", AUDIO_CONTEXT);
+convolver.buffer = fetchBuffer("media/concert-crowd.ogg", AUDIO_CONTEXT);
 
 const masterGainNode: GainNode = AUDIO_CONTEXT.createGain();
 masterGainNode.connect(AUDIO_CONTEXT.destination);
@@ -364,10 +367,6 @@ function notePressed(note: number, octave: number, delay: number) {
 
   playTone(frequency, -5, delay);
   playTone(frequency, 5, delay);
-}
-
-function changeVolume() {
-  masterGainNode.gain.value = parseFloat(volumeControl.value);
 }
 
 const decayTime = 4;
