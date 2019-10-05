@@ -1,3 +1,4 @@
+const CubeBox: any = {};
 let masterControlState = true;
 
 import { SCALES } from "./scales";
@@ -6,49 +7,89 @@ import fetchBuffer from "./fetch-buffer";
 import Cube from "./cube";
 import { createNoteTable, Octave } from "./note-table";
 
-const CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
-const CTX: CanvasRenderingContext2D = CANVAS.getContext("2d");
-const CUBE_ORIGIN: [number, number] = [33, 33];
-const CUBE_SIZE: number = 66;
-const CUBES: Cube[] = [
+CubeBox.CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
+CubeBox.CTX = <CanvasRenderingContext2D>CubeBox.CANVAS.getContext("2d");
+CubeBox.CUBE_ORIGIN = <[number, number]>[33, 33];
+CubeBox.CUBE_SIZE = <number>66;
+CubeBox.CUBES = <Cube[]>[
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 0, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 0,
+      CubeBox.CUBE_ORIGIN[1] + 0,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     0
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 0, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 0,
+      CubeBox.CUBE_ORIGIN[1] + 33,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     1
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 33, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 33,
+      CubeBox.CUBE_ORIGIN[1] + 0,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     2
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 33, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 33,
+      CubeBox.CUBE_ORIGIN[1] + 33,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     3
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 66 + 66, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 66 + 66,
+      CubeBox.CUBE_ORIGIN[1] + 0,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     4
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 66 + 66, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 66 + 66,
+      CubeBox.CUBE_ORIGIN[1] + 33,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     5
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 99 + 66, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 99 + 66,
+      CubeBox.CUBE_ORIGIN[1] + 0,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     6
   ),
   new Cube(
-    CTX,
-    [CUBE_ORIGIN[0] + 99 + 66, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
+    CubeBox.CTX,
+    [
+      CubeBox.CUBE_ORIGIN[0] + 99 + 66,
+      CubeBox.CUBE_ORIGIN[1] + 33,
+      CubeBox.CUBE_SIZE,
+      CubeBox.CUBE_SIZE
+    ],
     7
   )
 ];
@@ -60,18 +101,24 @@ const wavePicker: HTMLSelectElement = document.querySelector(
 const volumeControl: HTMLInputElement = document.querySelector(
   "input[name='volume']"
 );
-volumeControl.addEventListener("change", changeVolume, false);
-function changeVolume() {
-  masterGainNode.gain.value = parseFloat(volumeControl.value);
-}
+volumeControl.addEventListener(
+  "change",
+  () => {
+    MASTER_GAIN_NODE.gain.value = parseFloat(volumeControl.value);
+  },
+  false
+);
 
 const masterControl: HTMLInputElement = document.querySelector(
   "input[name='masterClock']"
 );
-masterControl.addEventListener("change", changeMasterControl, false);
-function changeMasterControl() {
-  masterControlState = masterControl.checked;
-}
+masterControl.addEventListener(
+  "change",
+  () => {
+    masterControlState = masterControl.checked;
+  },
+  false
+);
 
 const scalePicker: HTMLSelectElement = document.querySelector(
   "select[name='scale']"
@@ -82,27 +129,30 @@ const convolver = AUDIO_CONTEXT.createConvolver();
 // grab audio track via XHR for convolver node
 convolver.buffer = fetchBuffer("media/concert-crowd.ogg", AUDIO_CONTEXT);
 
-const masterGainNode: GainNode = AUDIO_CONTEXT.createGain();
-masterGainNode.connect(AUDIO_CONTEXT.destination);
+const MASTER_GAIN_NODE: GainNode = AUDIO_CONTEXT.createGain();
+MASTER_GAIN_NODE.connect(AUDIO_CONTEXT.destination);
 
-const masterBiquadFilter = AUDIO_CONTEXT.createBiquadFilter();
-masterBiquadFilter.type = "lowpass";
-masterBiquadFilter.frequency.setValueAtTime(12000, AUDIO_CONTEXT.currentTime);
-masterBiquadFilter.Q.value = 0.01;
+const MASTER_BIQUAD_FILTER = AUDIO_CONTEXT.createBiquadFilter();
+MASTER_BIQUAD_FILTER.type = "lowpass";
+MASTER_BIQUAD_FILTER.frequency.setValueAtTime(12000, AUDIO_CONTEXT.currentTime);
+MASTER_BIQUAD_FILTER.Q.value = 0.01;
 
 const filterControl: HTMLInputElement = document.querySelector(
   "input[name='filter']"
 );
-filterControl.addEventListener("change", changeMasterFilter, false);
-function changeMasterFilter() {
-  masterBiquadFilter.frequency.setValueAtTime(
-    parseFloat(filterControl.value),
-    AUDIO_CONTEXT.currentTime
-  );
-}
+filterControl.addEventListener(
+  "change",
+  () => {
+    MASTER_BIQUAD_FILTER.frequency.setValueAtTime(
+      parseFloat(filterControl.value),
+      AUDIO_CONTEXT.currentTime
+    );
+  },
+  false
+);
 
-masterBiquadFilter.connect(masterGainNode);
-masterGainNode.gain.value = parseFloat(volumeControl.value);
+MASTER_BIQUAD_FILTER.connect(MASTER_GAIN_NODE);
+MASTER_GAIN_NODE.gain.value = parseFloat(volumeControl.value);
 
 const NOTE_FREQUENCIES: Octave[] = createNoteTable();
 const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
@@ -144,12 +194,12 @@ function playTone(freq: number, detune: number, delay: number) {
   //            |
   //          frequency
   //            |
-  //           osc -> ADSRNode -> biquatFilter -> masterBiquadFilter
+  //           osc -> ADSRNode -> biquatFilter -> MASTER_BIQUAD_FILTER
   sine.connect(sineGain);
   sineGain.connect(osc.frequency);
   osc.connect(ADSRNode);
   ADSRNode.connect(biquadFilter);
-  biquadFilter.connect(masterBiquadFilter);
+  biquadFilter.connect(MASTER_BIQUAD_FILTER);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
 
@@ -205,7 +255,7 @@ function main(now: number) {
       if (scaleDegree) {
         const colorIndex = SCALES[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, 0);
-        CUBES[index].play(colorIndex);
+        CubeBox.CUBES[index].play(colorIndex);
       }
     });
 
@@ -214,14 +264,17 @@ function main(now: number) {
       if (scaleDegree) {
         const colorIndex = SCALES[scalePicker.value][scaleDegree];
         notePressed(colorIndex, globalRoot, index * 0.4);
-        setTimeout(() => CUBES[index + 4].play(colorIndex), index * 1000 * 0.4);
+        setTimeout(
+          () => CubeBox.CUBES[index + 4].play(colorIndex),
+          index * 1000 * 0.4
+        );
       }
     });
     then = now;
   }
 
-  CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
-  CUBES.forEach(cube => cube.draw());
+  CubeBox.CTX.clearRect(0, 0, CubeBox.CANVAS.width, CubeBox.CANVAS.height);
+  (<Cube[]>CubeBox.CUBES).forEach(cube => cube.draw());
   requestAnimationFrame(main);
   return;
 }
