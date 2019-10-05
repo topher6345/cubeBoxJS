@@ -1,3 +1,5 @@
+let masterControlState = true;
+
 type Degrees = [number, number, number, number, number, number, number];
 
 interface Scale {
@@ -140,6 +142,20 @@ const filterControl: HTMLInputElement = document.querySelector(
   "input[name='filter']"
 );
 filterControl.addEventListener("change", changeMasterFilter, false);
+
+const masterControl: HTMLInputElement = document.querySelector(
+  "input[name='masterClock']"
+);
+
+const scalePicker: HTMLSelectElement = document.querySelector(
+  "select[name='scale']"
+);
+
+masterControl.addEventListener("change", changeMasterControl, false);
+
+function changeMasterControl() {
+  masterControlState = masterControl.checked;
+}
 
 function createNoteTable(): Octave[] {
   let noteFreq: Octave[] = [];
@@ -390,18 +406,18 @@ function main(now: number) {
   if (!then) then = now;
 
   // Every chordSpeed milliseconds
-  if (!then || now - then > chordSpeed) {
+  if ((!then || now - then > chordSpeed) && masterControlState) {
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
 
-      const colorIndex = Scales["Lydian"][scaleDegree];
+      const colorIndex = Scales[scalePicker.value][scaleDegree];
       notePressed(colorIndex, globalRoot, 0);
       cubes[index].play(colorIndex);
     });
 
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales["Lydian"][scaleDegree];
+      const colorIndex = Scales[scalePicker.value][scaleDegree];
       notePressed(colorIndex, globalRoot, index * 0.4);
       setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
     });

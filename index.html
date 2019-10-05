@@ -141,17 +141,17 @@
             <option value="0.0" label="Mute"> </option>
             <option value="1.0" label="100%"> </option>
           </datalist>
-        </div>
-        <div>
+
           <span>Master Filter: </span>
           <input
             type="range"
-            min="100"
+            min="40"
             max="10000"
             step="10"
             value="1000"
             name="filter"
           />
+          <input type="checkbox" name="masterClock" />
         </div>
       </div>
       <div class="right">
@@ -166,7 +166,7 @@
         <span>Current scale: </span>
         <select name="scale">
           <option value="Ionian">Ionian</option>
-          <option value="Lydian">Lydian</option>
+          <option value="Lydian" selected>Lydian</option>
           <option value="Locrian">Locrian</option>
           <option value="Phrygian">Phrygian</option>
           <option value="Aeolean">Aeolean</option>
