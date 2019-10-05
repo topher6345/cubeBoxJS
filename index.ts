@@ -71,6 +71,11 @@ class Cube {
     this.alpha = 70;
     this.note = noteArray.indexOf(note);
   }
+
+  play(degree: number) {
+    this.alpha = 70;
+    this.note = degree;
+  }
 }
 
 const cubeOrigin: [number, number] = [0, 0];
@@ -454,9 +459,10 @@ function main(now) {
   if (!then) then = now;
   if (now - then > chordSpeed) {
     then = now;
-    voices.forEach(voice => {
-      debugger;
-      console.log(Scales["Ionian"][voice.next().value]);
+    voices.forEach((voice, index) => {
+      const scaleDegree = voice.next().value;
+      const colorIndex = Scales["Ionian"][scaleDegree];
+      cubes[index].play(colorIndex);
     });
   }
 
