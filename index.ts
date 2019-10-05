@@ -3,6 +3,7 @@ let masterControlState = true;
 type Degrees = [number, number, number, number, number, number, number];
 
 interface Scale {
+  [key: string]: Degrees;
   Ionian: Degrees;
   Lydian: Degrees;
   Locrian: Degrees;
@@ -115,6 +116,7 @@ const cubes: Cube[] = [
 ];
 
 interface Octave {
+  [key: string]: number;
   C: number;
   "C#": number;
   D: number;
@@ -342,12 +344,15 @@ function playTone(freq: number, detune: number, delay: number) {
     audioContext.currentTime + delay + 1
   );
 
-  //connect the dots
+  // sine -> sineGain
+  //            |
+  //          frequency
+  //            |
+  //           osc -> ADSRNode -> biquatFilter -> masterBiquadFilter
   sine.connect(sineGain);
   sineGain.connect(osc.frequency);
   osc.connect(ADSRNode);
   ADSRNode.connect(biquadFilter);
-
   biquadFilter.connect(masterBiquadFilter);
 
   const type: string = wavePicker.options[wavePicker.selectedIndex].value;
@@ -380,11 +385,11 @@ function playTone(freq: number, detune: number, delay: number) {
 }
 
 function notePressed(note: number, octave: number, delay: number) {
-  const stringNote = Object.keys(noteFreq[octave])[note];
-  const frequency = noteFreq[octave][stringNote];
+  const stringNote: string = Object.keys(noteFreq[octave])[note];
+  const frequency = noteFreq[octave][stringNote.toString()];
 
-  playTone(parseFloat(frequency), -5, delay);
-  playTone(parseFloat(frequency), 5, delay);
+  playTone(frequency, -5, delay);
+  playTone(frequency, 5, delay);
 }
 
 function changeVolume() {
@@ -408,17 +413,20 @@ function main(now: number) {
   if ((!then || now - then > chordSpeed) && masterControlState) {
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-
-      const colorIndex = Scales[scalePicker.value][scaleDegree];
-      notePressed(colorIndex, globalRoot, 0);
-      cubes[index].play(colorIndex);
+      if (scaleDegree) {
+        const colorIndex = Scales[scalePicker.value][scaleDegree];
+        notePressed(colorIndex, globalRoot, 0);
+        cubes[index].play(colorIndex);
+      }
     });
 
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales[scalePicker.value][scaleDegree];
-      notePressed(colorIndex, globalRoot, index * 0.4);
-      setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
+      if (scaleDegree) {
+        const colorIndex = Scales[scalePicker.value][scaleDegree];
+        notePressed(colorIndex, globalRoot, index * 0.4);
+        setTimeout(() => cubes[index + 4].play(colorIndex), index * 1000 * 0.4);
+      }
     });
     then = now;
   }
@@ -431,7 +439,7 @@ function main(now: number) {
 
 requestAnimationFrame(main);
 
-function* urnJB(length) {
+function* urnJB(length: number) {
   let array = randArray(length);
   let i = 0;
   while (true) {
@@ -444,8 +452,8 @@ function* urnJB(length) {
   }
 }
 
-function randArray(length) {
-  let array = [];
+function randArray(length: number) {
+  let array: number[] = [];
 
   for (let i = 0; i < length; i++) {
     array[i] = i;
