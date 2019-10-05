@@ -321,7 +321,6 @@ const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
   sineTerms
 );
 
-const oscList: [OscillatorNode, GainNode, OscillatorNode][][] = Array(9);
 let cubeIndex = 0;
 const sweepLength = 10;
 function playTone(freq: number, detune: number, delay: number) {
@@ -384,8 +383,8 @@ function notePressed(note: number, octave: number, delay: number) {
   const stringNote = Object.keys(noteFreq[octave])[note];
   const frequency = noteFreq[octave][stringNote];
 
-  playTone(parseFloat(frequency), -15, delay);
-  playTone(parseFloat(frequency), 15, delay);
+  playTone(parseFloat(frequency), -5, delay);
+  playTone(parseFloat(frequency), 5, delay);
 }
 
 function changeVolume() {
