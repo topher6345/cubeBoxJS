@@ -452,8 +452,13 @@ function changeVolume() {
 
 let then = null;
 let chordSpeed = 2 * 1000; //ms
+let swipeSpeed = 2 * 1000; //ms
 
-let voices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
+let chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
+
+let swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
+
+let swipeLengths = urnJB(4);
 
 function main(now) {
   if (!then) then = now;
@@ -461,10 +466,21 @@ function main(now) {
   // Every chordSpeed milliseconds
   if (!then || now - then > chordSpeed) {
     then = now;
-    voices.forEach((voice, index) => {
+    chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
       const colorIndex = Scales["Ionian"][scaleDegree];
       cubes[index].play(colorIndex);
+    });
+  }
+
+  // Every swipeSpeed milliseconds
+  if (!then || now - then > swipeSpeed) {
+    swipeVoices.forEach((voice, index) => {
+      const scaleDegree = voice.next().value;
+      const colorIndex = Scales["Ionian"][scaleDegree];
+      setTimeout(() => {
+        cubes[index + 4].play(colorIndex);
+      }, (swipeSpeed / 4) * swipeLengths.next().value);
     });
   }
 
