@@ -137,11 +137,6 @@ function changeVolume() {
   masterGainNode.gain.value = parseFloat(volumeControl.value);
 }
 
-const filterControl: HTMLInputElement = document.querySelector(
-  "input[name='filter']"
-);
-filterControl.addEventListener("change", changeMasterFilter, false);
-
 const masterControl: HTMLInputElement = document.querySelector(
   "input[name='masterClock']"
 );
@@ -272,6 +267,10 @@ masterBiquadFilter.type = "lowpass";
 masterBiquadFilter.frequency.setValueAtTime(12000, AUDIO_CONTEXT.currentTime);
 masterBiquadFilter.Q.value = 0.01;
 
+const filterControl: HTMLInputElement = document.querySelector(
+  "input[name='filter']"
+);
+filterControl.addEventListener("change", changeMasterFilter, false);
 function changeMasterFilter() {
   masterBiquadFilter.frequency.setValueAtTime(
     parseFloat(filterControl.value),
