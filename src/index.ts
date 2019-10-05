@@ -104,9 +104,6 @@ function changeMasterFilter() {
 masterBiquadFilter.connect(masterGainNode);
 masterGainNode.gain.value = parseFloat(volumeControl.value);
 
-// Create the keys; skip any that are sharp or flat; for
-// our purposes we don't need them. Each octave is inserted
-// into a <div> of class "octave".
 const NOTE_FREQUENCIES: Octave[] = createNoteTable();
 const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
 const cosineTerms: Float32Array = new Float32Array(sineTerms.length);
