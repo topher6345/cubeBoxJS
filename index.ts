@@ -451,13 +451,15 @@ function changeVolume() {
 }
 
 let then = null;
-let chordSpeed = 2 * 1000;
+let chordSpeed = 2 * 1000; //ms
 
 let voices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 
 function main(now) {
   if (!then) then = now;
-  if (now - then > chordSpeed) {
+
+  // Every chordSpeed milliseconds
+  if (!then || now - then > chordSpeed) {
     then = now;
     voices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
