@@ -23,8 +23,8 @@ const SCALES: Scale = {
   Mixolydian: [0, 2, 4, 5, 7, 9, 10]
 };
 
-const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-const CTX: CanvasRenderingContext2D = canvas.getContext("2d");
+const CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
+const CTX: CanvasRenderingContext2D = CANVAS.getContext("2d");
 
 type CubePosition = [number, number, number, number];
 type RGB = [number, number, number];
@@ -441,7 +441,7 @@ function main(now: number) {
     then = now;
   }
 
-  CTX.clearRect(0, 0, canvas.width, canvas.height);
+  CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
   CUBES.forEach(cube => cube.draw());
   requestAnimationFrame(main);
   return;
