@@ -7,5 +7,5 @@
     "sourceMap": true,
     "outDir": "build"
   },
-  "include": ["index.ts"]
+  "include": ["index.ts", "scales.ts"]
 }
