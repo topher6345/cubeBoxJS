@@ -1,7 +1,8 @@
 let masterControlState = true;
 
 import { SCALES } from "./scales";
-import { urnJB, randArray } from "./random";
+import { urnJB } from "./random";
+import fetchBuffer from "./fetch-buffer";
 
 const CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
 const CTX: CanvasRenderingContext2D = CANVAS.getContext("2d");
@@ -258,34 +259,7 @@ function createNoteTable(): Octave[] {
 
 const convolver = AUDIO_CONTEXT.createConvolver();
 // grab audio track via XHR for convolver node
-
-function fetchBuffer(filename: string) {
-  let soundSource, concertHallBuffer;
-
-  const ajaxRequest = new XMLHttpRequest();
-  ajaxRequest.open("GET", filename, true);
-  ajaxRequest.responseType = "arraybuffer";
-
-  ajaxRequest.onload = function() {
-    const audioData = ajaxRequest.response;
-    AUDIO_CONTEXT.decodeAudioData(
-      audioData,
-      function(buffer) {
-        concertHallBuffer = buffer;
-        soundSource = AUDIO_CONTEXT.createBufferSource();
-        soundSource.buffer = concertHallBuffer;
-      },
-      function(e) {
-        console.log(e);
-      }
-    );
-  };
-
-  ajaxRequest.send();
-
-  return concertHallBuffer;
-}
-convolver.buffer = fetchBuffer("concert-crowd.ogg");
+convolver.buffer = fetchBuffer("concert-crowd.ogg", AUDIO_CONTEXT);
 
 const masterGainNode: GainNode = AUDIO_CONTEXT.createGain();
 masterGainNode.connect(AUDIO_CONTEXT.destination);
@@ -317,8 +291,6 @@ const customWaveform: PeriodicWave = AUDIO_CONTEXT.createPeriodicWave(
   sineTerms
 );
 
-let cubeIndex = 0;
-const sweepLength = 10;
 function playTone(freq: number, detune: number, delay: number) {
   const expZero = 0.00000001;
   const lfoFreq = 0.01;
