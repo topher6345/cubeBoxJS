@@ -280,26 +280,6 @@ masterGainNode.gain.value = parseFloat(volumeControl.value);
 // into a <div> of class "octave".
 const noteFreq: Octave[] = createNoteTable();
 const noteArray: string[] = Object.keys(noteFreq[1]);
-const keyboard: HTMLDivElement = document.querySelector(".keyboard");
-noteFreq.forEach((keys: Octave, index: number) => {
-  const keyList = Object.entries(keys);
-  const octaveElem: HTMLDivElement = document.createElement("div");
-  octaveElem.className = "octave";
-
-  keyList.forEach(function(key) {
-    // skip any that are sharp or flat
-    if (key[0].length === 1) {
-      octaveElem.appendChild(createKey(key[0], index.toString(), key[1]));
-    }
-  });
-
-  keyboard.appendChild(octaveElem);
-});
-
-document
-  .querySelector("div[data-note='B'][data-octave='5']")
-  .scrollIntoView(false);
-
 const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
 const cosineTerms: Float32Array = new Float32Array(sineTerms.length);
 const customWaveform: PeriodicWave = audioContext.createPeriodicWave(
@@ -328,13 +308,6 @@ function createKey(note: string, octave: string, freq: string) {
 
   labelElement.innerHTML = note + "<sub>" + octave + "</sub>";
   keyElement.appendChild(labelElement);
-
-  keyElement.addEventListener("mousedown", notePressed, false);
-  keyElement.addEventListener("mousedown", flashCube, false);
-  keyElement.addEventListener("mouseup", noteReleased, false);
-  keyElement.addEventListener("mouseover", notePressed, false);
-  keyElement.addEventListener("mouseover", flashCube, false);
-  keyElement.addEventListener("mouseleave", noteReleased, false);
 
   return keyElement;
 }
@@ -396,63 +369,50 @@ function playTone(
   return [osc, ADSRNode, sine];
 }
 
-function notePressed(event: MouseEvent) {
-  if (event.buttons & 1) {
-    const dataset = (event.target as HTMLButtonElement).dataset;
+function notePressed(note: number, octave: number) {
+  const stringNote = Object.keys(noteFreq[octave])[note];
 
-    if (!dataset["pressed"]) {
-      const { note, octave, frequency } = dataset;
-      const index = octave[note];
-      oscList[index] = [
-        playTone(parseFloat(frequency), -1),
-        playTone(parseFloat(frequency), 1)
-      ];
-      dataset["pressed"] = "yes";
-    }
-  }
-}
+  const index = octave[note];
+  const frequency = noteFreq[octave][stringNote];
+  const expZero = 0.00000001;
 
-function noteReleased(event) {
-  const dataset = event.target.dataset;
+  oscList[index] = [
+    playTone(parseFloat(frequency), -1),
+    playTone(parseFloat(frequency), 1)
+  ];
 
-  if (dataset && dataset["pressed"]) {
-    const { note, octave } = dataset;
-    const index = octave[note];
-    const decayTime = 2;
-    const expZero = 0.00000001;
+  oscList[index].forEach(o => {
+    o[1].gain.exponentialRampToValueAtTime(
+      expZero,
+      audioContext.currentTime + decayTime
+    );
+    o[0].stop(audioContext.currentTime + decayTime);
+    o[2].stop(audioContext.currentTime + decayTime);
+  });
 
+  setTimeout(() => {
     oscList[index].forEach(o => {
-      o[1].gain.exponentialRampToValueAtTime(
-        expZero,
-        audioContext.currentTime + decayTime
-      );
-      o[0].stop(audioContext.currentTime + decayTime);
-      o[2].stop(audioContext.currentTime + decayTime);
+      o[0].stop();
+      o[2].stop();
     });
-
-    setTimeout(() => {
-      oscList[index].forEach(o => {
-        o[0].stop();
-        o[2].stop();
-      });
-      // I guess this null's the last reference and
-      // the Oscillators can be garbage collected?
-      oscList[index] = oscList[index].map(() => null);
-      // Have to put this on a delay so that the Oscillator
-      // isn't GC'd before the note drops completely
-      // out and makes a loud pop (Yuck!)
-    }, decayTime);
-
-    delete dataset["pressed"];
-  }
+    // I guess this null's the last reference and
+    // the Oscillators can be garbage collected?
+    // oscList[index] = oscList[index].map(() => null);
+    // Have to put this on a delay so that the Oscillator
+    // isn't GC'd before the note drops completely
+    // out and makes a loud pop (Yuck!)
+  }, decayTime);
 }
+
 function changeVolume() {
   masterGainNode.gain.value = parseFloat(volumeControl.value);
 }
 
 let then = null;
-let chordSpeed = 2 * 1000; //ms
-let swipeSpeed = 2 * 1000; //ms
+const decayTime = 4;
+
+let chordSpeed = decayTime * 1000; //ms
+let swipeSpeed = decayTime * 1000; //ms
 
 let chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 
@@ -460,27 +420,31 @@ let swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 
 let swipeLengths = urnJB(4);
 
+let globalRoot = 3;
+
 function main(now) {
   if (!then) then = now;
 
   // Every chordSpeed milliseconds
   if (!then || now - then > chordSpeed) {
-    then = now;
     chordVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales["Ionian"][scaleDegree];
+
+      const colorIndex = Scales["Lydian"][scaleDegree];
+      notePressed(colorIndex, globalRoot);
       cubes[index].play(colorIndex);
     });
-  }
-
-  // Every swipeSpeed milliseconds
-  if (!then || now - then > swipeSpeed) {
+    then = now;
+    // }
+    // Every swipeSpeed milliseconds
+    // if (!then || now - then > swipeSpeed) {
     swipeVoices.forEach((voice, index) => {
       const scaleDegree = voice.next().value;
-      const colorIndex = Scales["Ionian"][scaleDegree];
-      setTimeout(() => {
-        cubes[index + 4].play(colorIndex);
-      }, (swipeSpeed / 4) * swipeLengths.next().value);
+      const colorIndex = Scales["Lydian"][scaleDegree];
+      // setTimeout(() => {
+      //   cubes[index + 4].play(colorIndex);
+      //   notePressed(colorIndex, globalRoot - 2);
+      // }, index * 1000);
     });
   }
 
