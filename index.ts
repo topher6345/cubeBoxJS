@@ -81,36 +81,48 @@ class Cube {
   }
 }
 
-const cubeOrigin: [number, number] = [33, 33];
-const cubeSize: number = 66;
+const CUBE_ORIGIN: [number, number] = [33, 33];
+const CUBE_SIZE: number = 66;
 
 const CUBES: Cube[] = [
-  new Cube(CTX, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
-  new Cube(CTX, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
-  new Cube(CTX, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
   new Cube(
     CTX,
-    [cubeOrigin[0] + 33, cubeOrigin[1] + 33, cubeSize, cubeSize],
+    [CUBE_ORIGIN[0] + 0, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    0
+  ),
+  new Cube(
+    CTX,
+    [CUBE_ORIGIN[0] + 0, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
+    1
+  ),
+  new Cube(
+    CTX,
+    [CUBE_ORIGIN[0] + 33, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
+    2
+  ),
+  new Cube(
+    CTX,
+    [CUBE_ORIGIN[0] + 33, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
     3
   ),
   new Cube(
     CTX,
-    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
+    [CUBE_ORIGIN[0] + 66 + 66, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
     4
   ),
   new Cube(
     CTX,
-    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
+    [CUBE_ORIGIN[0] + 66 + 66, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
     5
   ),
   new Cube(
     CTX,
-    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
+    [CUBE_ORIGIN[0] + 99 + 66, CUBE_ORIGIN[1] + 0, CUBE_SIZE, CUBE_SIZE],
     6
   ),
   new Cube(
     CTX,
-    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
+    [CUBE_ORIGIN[0] + 99 + 66, CUBE_ORIGIN[1] + 33, CUBE_SIZE, CUBE_SIZE],
     7
   )
 ];
