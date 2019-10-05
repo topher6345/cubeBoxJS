@@ -1,6 +1,7 @@
 let masterControlState = true;
 
 import { SCALES } from "./scales";
+import { urnJB, randArray } from "./random";
 
 const CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
 const CTX: CanvasRenderingContext2D = CANVAS.getContext("2d");
@@ -399,10 +400,8 @@ function changeVolume() {
 
 const decayTime = 4;
 let chordSpeed = decayTime * 1000; //ms
-let swipeSpeed = decayTime * 1000; //ms
 let chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 let swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
-let swipeLengths = urnJB(4);
 let globalRoot = 3;
 
 let then: number = null;
@@ -439,34 +438,3 @@ function main(now: number) {
 }
 
 requestAnimationFrame(main);
-
-function* urnJB(length: number) {
-  let array = randArray(length);
-  let i = 0;
-  while (true) {
-    yield array[i];
-    i = i + 1;
-    if (i === length) {
-      array = randArray(length);
-      i = 0;
-    }
-  }
-}
-
-function randArray(length: number) {
-  let array: number[] = [];
-
-  for (let i = 0; i < length; i++) {
-    array[i] = i;
-  }
-
-  // Fisher-Yates shuffling algorithm
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * i);
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-
-  return array;
-}
