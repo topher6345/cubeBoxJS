@@ -6,16 +6,15 @@ import fetchBuffer from "./fetch-buffer";
 import Cube from "./cube";
 import { createNoteTable, Octave } from "./note-table";
 import CubeBox from "./cube-box";
+import CompositionEngine from "./composition-engine";
 
 const AudioEngine: any = {};
 AudioEngine.AUDIO_CONTEXT = new AudioContext();
-
 AudioEngine.convolver = AudioEngine.AUDIO_CONTEXT.createConvolver();
 AudioEngine.convolver.buffer = fetchBuffer(
   "media/concert-crowd.ogg",
   AudioEngine.AUDIO_CONTEXT
 );
-
 AudioEngine.MASTER_GAIN_NODE = <GainNode>AudioEngine.AUDIO_CONTEXT.createGain();
 AudioEngine.MASTER_GAIN_NODE.connect(AudioEngine.AUDIO_CONTEXT.destination);
 AudioEngine.MASTER_BIQUAD_FILTER = AudioEngine.AUDIO_CONTEXT.createBiquadFilter();
@@ -134,24 +133,6 @@ AudioEngine.notePressed = function(
   AudioEngine.playTone(frequency, -5, delay);
   AudioEngine.playTone(frequency, 5, delay);
 };
-
-const CompositionEngine: any = {};
-CompositionEngine.NOTE_FREQUENCIES = <Octave[]>createNoteTable();
-CompositionEngine.decayTime = 4;
-CompositionEngine.chordSpeed = CompositionEngine.decayTime * 1000; //ms
-CompositionEngine.chordVoices = <Array<Generator>>[
-  urnJB(7),
-  urnJB(7),
-  urnJB(7),
-  urnJB(7)
-];
-CompositionEngine.swipeVoices = <Array<Generator>>[
-  urnJB(7),
-  urnJB(7),
-  urnJB(7),
-  urnJB(7)
-];
-CompositionEngine.globalRoot = 3;
 
 const UI: any = {};
 UI.wavePicker = <HTMLSelectElement>(
