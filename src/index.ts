@@ -231,7 +231,6 @@ masterGainNode.gain.value = parseFloat(volumeControl.value);
 // our purposes we don't need them. Each octave is inserted
 // into a <div> of class "octave".
 const noteFreq: Octave[] = createNoteTable();
-const noteArray: string[] = Object.keys(noteFreq[1]);
 const sineTerms: Float32Array = new Float32Array([0, 0, 1, 0, 1]);
 const cosineTerms: Float32Array = new Float32Array(sineTerms.length);
 const customWaveform: PeriodicWave = AUDIO_CONTEXT.createPeriodicWave(
