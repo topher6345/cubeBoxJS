@@ -3,6 +3,7 @@ let masterControlState = true;
 import { SCALES } from "./scales";
 import cubeBox from "./cube-box";
 import CompositionEngine from "./composition-engine";
+const compositionEngine = new CompositionEngine("square");
 
 class AudioEngine {
   ctx: AudioContext;
@@ -32,7 +33,13 @@ class AudioEngine {
     );
   }
 
-  playTone(freq: number, detune: number, delay: number, decayTime: number) {
+  playTone(
+    freq: number,
+    detune: number,
+    delay: number,
+    decayTime: number,
+    oscialltorType: string
+  ) {
     const expZero = 0.00000001;
     const lfoFreq = 0.01;
     const osc: OscillatorNode = this.ctx.createOscillator();
@@ -72,8 +79,8 @@ class AudioEngine {
     ADSRNode.connect(biquadFilter);
     biquadFilter.connect(this.masterFilter);
 
-    const oscialltorType: string =
-      UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
+    // const oscialltorType: string =
+    // UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
 
     if (oscialltorType == "custom") {
       osc.setPeriodicWave(this.customWaveform);
@@ -101,11 +108,20 @@ class AudioEngine {
 
 const audioEngine = new AudioEngine();
 
-CompositionEngine.audioEngine = audioEngine;
+compositionEngine.audioEngine = audioEngine;
 
 const UI: any = {};
 UI.wavePicker = <HTMLSelectElement>(
   document.querySelector("select[name='waveform']")
+);
+
+UI.wavePicker.addEventListener(
+  "change",
+  () => {
+    compositionEngine.oscialltorType =
+      UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
+  },
+  false
 );
 
 UI.volumeControl = <HTMLInputElement>(
@@ -154,30 +170,30 @@ function main(now: number) {
 
   // Every chordSpeed milliseconds
   if (
-    (!then || now - then > CompositionEngine.chordSpeed) &&
+    (!then || now - then > compositionEngine.chordSpeed) &&
     masterControlState
   ) {
-    CompositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
+    compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
       const scaleDegree = voice.next().value;
       if (scaleDegree) {
         const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
-        CompositionEngine.notePressed(
+        compositionEngine.notePressed(
           colorIndex,
-          CompositionEngine.globalRoot,
+          compositionEngine.globalRoot,
           0
         );
         cubeBox.play(index, colorIndex);
       }
     });
 
-    CompositionEngine.swipeVoices.forEach((voice: Generator, index: number) => {
+    compositionEngine.swipeVoices.forEach((voice: Generator, index: number) => {
       const scaleDegree = voice.next().value;
       const swipeFrequency = 0.4;
       if (scaleDegree) {
         const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
-        CompositionEngine.notePressed(
+        compositionEngine.notePressed(
           colorIndex,
-          CompositionEngine.globalRoot,
+          compositionEngine.globalRoot,
           index * swipeFrequency
         );
         setTimeout(
