@@ -1,10 +1,6 @@
 let masterControlState = true;
 
 import { SCALES } from "./scales";
-import { urnJB } from "./random";
-import fetchBuffer from "./fetch-buffer";
-import Cube from "./cube";
-import { createNoteTable, Octave } from "./note-table";
 import CubeBox from "./cube-box";
 import CompositionEngine from "./composition-engine";
 
