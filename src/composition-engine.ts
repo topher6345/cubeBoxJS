@@ -1,5 +1,5 @@
 import { urnJB } from "./random";
-import { createNoteTable, Octave } from "./note-table";
+import { noteFreq, Octave } from "./note-table";
 
 class CompositionEngine {
   NOTE_FREQUENCIES: Octave[];
@@ -11,21 +11,11 @@ class CompositionEngine {
   audioEngine: any;
 
   constructor() {
-    this.NOTE_FREQUENCIES = <Octave[]>createNoteTable();
+    this.NOTE_FREQUENCIES = noteFreq;
     this.decayTime = 4;
     this.chordSpeed = this.decayTime * 1000; //ms
-    this.chordVoices = <Array<Generator>>[
-      urnJB(7),
-      urnJB(7),
-      urnJB(7),
-      urnJB(7)
-    ];
-    this.swipeVoices = <Array<Generator>>[
-      urnJB(7),
-      urnJB(7),
-      urnJB(7),
-      urnJB(7)
-    ];
+    this.chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
+    this.swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
     this.globalRoot = 3;
   }
 
