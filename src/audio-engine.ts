@@ -58,6 +58,11 @@ export default class AudioEngine {
     const expZero = 0.00000001;
     const lfoFreq = 0.01; // TODO: hook this up to UI
     const osc: OscillatorNode = this.ctx.createOscillator();
+    if (oscialltorType == "custom") {
+      osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
+    } else {
+      osc.type = <OscillatorType>oscialltorType;
+    }
     const sine = this.ctx.createOscillator();
     sine.type = "sine";
     sine.frequency.value = lfoFreq;
@@ -93,15 +98,6 @@ export default class AudioEngine {
     osc.connect(ADSRNode);
     ADSRNode.connect(biquadFilter);
     biquadFilter.connect(this.masterFilter);
-
-    // const oscialltorType: string =
-    // UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
-
-    if (oscialltorType == "custom") {
-      osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
-    } else {
-      osc.type = <OscillatorType>oscialltorType;
-    }
 
     ADSRNode.gain.cancelScheduledValues(currentTime + delay);
     ADSRNode.gain.setValueAtTime(0, currentTime + delay);

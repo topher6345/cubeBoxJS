@@ -21,7 +21,7 @@ ui.wavePicker.addEventListener(
 ui.volumeControl.addEventListener(
   "change",
   () => {
-    audioEngine.masterGain.gain.value = parseFloat(ui.volumeControl.value);
+    audioEngine.masterGain.gain.value = parseFloat(ui.volumeControl.value); // TODO: make exponential
   },
   false
 );
@@ -37,9 +37,9 @@ ui.masterControl.addEventListener(
 ui.filterControl.addEventListener(
   "change",
   () => {
-    const value = parseFloat(ui.filterControl.value);
+    const frequency = parseFloat(ui.filterControl.value); // TODO: make exponential
     audioEngine.masterFilter.frequency.setValueAtTime(
-      value,
+      frequency,
       audioEngine.currentTime()
     );
   },
