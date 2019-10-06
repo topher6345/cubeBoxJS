@@ -23,8 +23,8 @@ class CompositionEngine {
     const stringNote: string = Object.keys(this.NOTE_FREQUENCIES[octave])[note];
     const frequency = this.NOTE_FREQUENCIES[octave][stringNote.toString()];
 
-    this.audioEngine.playTone(frequency, -5, delay);
-    this.audioEngine.playTone(frequency, 5, delay);
+    this.audioEngine.playTone(frequency, -5, delay, this.decayTime);
+    this.audioEngine.playTone(frequency, 5, delay, this.decayTime);
   }
 }
 

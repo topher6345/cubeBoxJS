@@ -32,7 +32,7 @@ class AudioEngine {
     );
   }
 
-  playTone(freq: number, detune: number, delay: number) {
+  playTone(freq: number, detune: number, delay: number, decayTime: number) {
     const expZero = 0.00000001;
     const lfoFreq = 0.01;
     const osc: OscillatorNode = this.ctx.createOscillator();
@@ -48,7 +48,6 @@ class AudioEngine {
     const biquadFilterInitCutoffFreq = 12000;
     const filterEnvelopeSustain = 1000;
     const currentTime = this.ctx.currentTime;
-    const decayTime = CompositionEngine.decayTime;
 
     biquadFilter.type = "lowpass";
     biquadFilter.frequency.setValueAtTime(
