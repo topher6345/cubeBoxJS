@@ -55,7 +55,7 @@ UI.filterControl.addEventListener(
   () => {
     audioEngine.masterFilter.frequency.setValueAtTime(
       parseFloat(UI.filterControl.value),
-      audioEngine.ctx.currentTime
+      audioEngine.currentTime()
     );
   },
   false

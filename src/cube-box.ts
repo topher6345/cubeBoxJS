@@ -1,11 +1,11 @@
 import Cube from "./cube";
 
 class CubeBox {
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  cubeOrigin: [number, number];
-  cubeSize: number;
-  cubes: Cube[];
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private cubeOrigin: [number, number];
+  private cubeSize: number;
+  private cubes: Cube[];
 
   constructor() {
     this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
@@ -96,7 +96,7 @@ class CubeBox {
     ];
   }
 
-  clearRect() {
+  private clearRect() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 

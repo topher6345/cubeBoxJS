@@ -2,11 +2,11 @@ type CubePosition = [number, number, number, number];
 type RGB = [number, number, number];
 
 export default class Cube {
-  ctx: CanvasRenderingContext2D;
-  position: CubePosition;
-  alpha: number;
-  colors: Array<RGB>;
-  note: number;
+  private ctx: CanvasRenderingContext2D;
+  private position: CubePosition;
+  private alpha: number;
+  private colors: Array<RGB>;
+  private note: number;
 
   constructor(
     ctx: CanvasRenderingContext2D,

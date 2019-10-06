@@ -1,10 +1,11 @@
 class AudioEngine {
-  ctx: AudioContext;
-  masterGain: GainNode;
-  masterFilter: BiquadFilterNode;
-  sineTerms: Float32Array;
-  cosineTerms: Float32Array;
-  customWaveform: PeriodicWave;
+  private ctx: AudioContext;
+  public masterGain: GainNode;
+  public masterFilter: BiquadFilterNode;
+
+  private sineTerms: Float32Array;
+  private cosineTerms: Float32Array;
+  private customWaveform: PeriodicWave;
 
   constructor() {
     this.ctx = new AudioContext();
@@ -24,6 +25,10 @@ class AudioEngine {
     this.customWaveform = <PeriodicWave>(
       this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
     );
+  }
+
+  currentTime(): number {
+    return this.ctx.currentTime;
   }
 
   playTone(
