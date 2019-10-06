@@ -2,25 +2,13 @@ let masterControlState = true;
 
 import { SCALES } from "./scales";
 import cubeBox from "./cube-box";
+import UI from "./ui";
 import AudioEngine from "./audio-engine";
 import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
 
-class UI {
-  wavePicker: HTMLSelectElement;
-  volumeControl: HTMLInputElement;
-  masterControl: HTMLInputElement;
-  scalePicker: HTMLSelectElement;
-  filterControl: HTMLInputElement;
-}
-
 const ui = new UI();
-
-ui.wavePicker = <HTMLSelectElement>(
-  document.querySelector("select[name='waveform']")
-);
-
 ui.wavePicker.addEventListener(
   "change",
   () => {
@@ -30,9 +18,6 @@ ui.wavePicker.addEventListener(
   false
 );
 
-ui.volumeControl = <HTMLInputElement>(
-  document.querySelector("input[name='volume']")
-);
 ui.volumeControl.addEventListener(
   "change",
   () => {
@@ -41,9 +26,6 @@ ui.volumeControl.addEventListener(
   false
 );
 
-ui.masterControl = <HTMLInputElement>(
-  document.querySelector("input[name='masterClock']")
-);
 ui.masterControl.addEventListener(
   "change",
   () => {
@@ -52,13 +34,6 @@ ui.masterControl.addEventListener(
   false
 );
 
-ui.scalePicker = <HTMLSelectElement>(
-  document.querySelector("select[name='scale']")
-);
-
-ui.filterControl = <HTMLInputElement>(
-  document.querySelector("input[name='filter']")
-);
 ui.filterControl.addEventListener(
   "change",
   () => {
