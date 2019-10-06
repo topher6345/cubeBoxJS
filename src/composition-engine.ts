@@ -1,7 +1,6 @@
 import { urnJB } from "./random";
 import { noteFreq, Octave } from "./note-table";
 import AudioEngine from "./audio-engine";
-import { SCALES } from "./scales";
 
 class CompositionEngine {
   NOTE_FREQUENCIES: Octave[];

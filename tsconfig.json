@@ -4,8 +4,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "lib": ["es2017", "dom"],
-    "sourceMap": true,
-    "outDir": "build"
+    "sourceMap": true
   },
   "include": ["src/*.ts"]
 }
