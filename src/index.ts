@@ -8,6 +8,7 @@ import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
 const ui = new UI();
+
 ui.wavePicker.addEventListener(
   "change",
   () => {
@@ -44,6 +45,38 @@ ui.filterControl.addEventListener(
   false
 );
 
+function play() {
+  compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
+    const scaleDegree = voice.next().value;
+    if (scaleDegree) {
+      const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
+      compositionEngine.notePressed(
+        colorIndex,
+        compositionEngine.globalRoot,
+        0
+      );
+      cubeBox.play(index, colorIndex);
+    }
+  });
+
+  compositionEngine.swipeVoices.forEach((voice: Generator, index: number) => {
+    const scaleDegree = voice.next().value;
+    const swipeFrequency = 0.4;
+    if (scaleDegree) {
+      const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
+      compositionEngine.notePressed(
+        colorIndex,
+        compositionEngine.globalRoot,
+        index * swipeFrequency
+      );
+      setTimeout(
+        () => cubeBox.play(index + 4, colorIndex),
+        index * swipeFrequency * 1000
+      );
+    }
+  });
+}
+
 let then: number = null;
 function main(now: number) {
   if (!then) then = now;
@@ -53,35 +86,7 @@ function main(now: number) {
     (!then || now - then > compositionEngine.chordSpeed) &&
     masterControlState
   ) {
-    compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
-      const scaleDegree = voice.next().value;
-      if (scaleDegree) {
-        const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
-        compositionEngine.notePressed(
-          colorIndex,
-          compositionEngine.globalRoot,
-          0
-        );
-        cubeBox.play(index, colorIndex);
-      }
-    });
-
-    compositionEngine.swipeVoices.forEach((voice: Generator, index: number) => {
-      const scaleDegree = voice.next().value;
-      const swipeFrequency = 0.4;
-      if (scaleDegree) {
-        const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
-        compositionEngine.notePressed(
-          colorIndex,
-          compositionEngine.globalRoot,
-          index * swipeFrequency
-        );
-        setTimeout(
-          () => cubeBox.play(index + 4, colorIndex),
-          index * swipeFrequency * 1000
-        );
-      }
-    });
+    play();
     then = now;
   }
   cubeBox.draw();

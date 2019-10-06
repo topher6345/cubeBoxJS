@@ -1,5 +1,5 @@
-import { urnJB } from "./random";
-import { noteFreq, Octave } from "./note-table";
+import { urnJB } from "./composition-engine/random";
+import { noteFreq, Octave } from "./composition-engine/note-table";
 import AudioEngine from "./audio-engine";
 
 class CompositionEngine {
