@@ -6,11 +6,6 @@ import CompositionEngine from "./composition-engine";
 
 const AudioEngine: any = {};
 AudioEngine.AUDIO_CONTEXT = new AudioContext();
-AudioEngine.convolver = AudioEngine.AUDIO_CONTEXT.createConvolver();
-AudioEngine.convolver.buffer = fetchBuffer(
-  "media/concert-crowd.ogg",
-  AudioEngine.AUDIO_CONTEXT
-);
 AudioEngine.MASTER_GAIN_NODE = <GainNode>AudioEngine.AUDIO_CONTEXT.createGain();
 AudioEngine.MASTER_GAIN_NODE.connect(AudioEngine.AUDIO_CONTEXT.destination);
 AudioEngine.MASTER_BIQUAD_FILTER = AudioEngine.AUDIO_CONTEXT.createBiquadFilter();
