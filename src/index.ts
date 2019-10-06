@@ -72,13 +72,13 @@ class AudioEngine {
     ADSRNode.connect(biquadFilter);
     biquadFilter.connect(this.masterFilter);
 
-    const type: string =
+    const oscialltorType: string =
       UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
 
-    if (type == "custom") {
+    if (oscialltorType == "custom") {
       osc.setPeriodicWave(this.customWaveform);
     } else {
-      osc.type = <OscillatorType>type;
+      osc.type = <OscillatorType>oscialltorType;
     }
 
     ADSRNode.gain.cancelScheduledValues(currentTime + delay);
