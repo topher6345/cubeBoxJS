@@ -18,10 +18,14 @@ AudioEngine.masterFilter.Q.value = 0.01;
 
 AudioEngine.masterFilter.connect(AudioEngine.masterGain);
 
+AudioEngine.sineTerms = new Float32Array([0, 0, 1, 0, 1]);
+AudioEngine.cosineTerms = new Float32Array(AudioEngine.sineTerms.length);
+AudioEngine.masterFilter.connect(AudioEngine.masterGain);
+
 AudioEngine.customWaveform = <PeriodicWave>(
   AudioEngine.ctx.createPeriodicWave(
-    new Float32Array([0, 0, 1, 0, 1]),
-    new Float32Array(4)
+    AudioEngine.cosineTerms,
+    AudioEngine.sineTerms
   )
 );
 
