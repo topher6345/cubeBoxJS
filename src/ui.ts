@@ -11,19 +11,19 @@ export default class UI {
     );
 
     this.volumeControl = <HTMLInputElement>(
-      document.querySelector("input[name='volume']")
+      document.querySelector("input[name='volumeControl']")
     );
 
     this.masterControl = <HTMLInputElement>(
-      document.querySelector("input[name='masterClock']")
+      document.querySelector("input[name='masterControl']")
     );
 
     this.scalePicker = <HTMLSelectElement>(
-      document.querySelector("select[name='scale']")
+      document.querySelector("select[name='scalePicker']")
     );
 
     this.filterControl = <HTMLInputElement>(
-      document.querySelector("input[name='filter']")
+      document.querySelector("input[name='filterControl']")
     );
   }
 }

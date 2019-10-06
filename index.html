@@ -130,7 +130,7 @@
             step="0.01"
             value="0.5"
             list="volumes"
-            name="volume"
+            name="volumeControl"
           />
           <datalist id="volumes">
             <option value="0.0" label="Mute"> </option>
@@ -144,9 +144,9 @@
             max="10000"
             step="10"
             value="1000"
-            name="filter"
+            name="filterControl"
           />
-          <input type="checkbox" name="masterClock" checked /> On/Off
+          <input type="checkbox" name="masterControl" checked /> On/Off
         </div>
       </div>
       <div class="right">
@@ -159,7 +159,7 @@
           <option value="custom">Custom</option>
         </select>
         <span>Current scale: </span>
-        <select name="scale">
+        <select name="scalePicker">
           <option value="Ionian">Ionian</option>
           <option value="Lydian" selected>Lydian</option>
           <option value="Locrian">Locrian</option>
