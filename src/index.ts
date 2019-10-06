@@ -7,7 +7,6 @@ import AudioEngine from "./audio-engine";
 import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
-
 const ui = new UI();
 ui.wavePicker.addEventListener(
   "change",
