@@ -1,102 +1,108 @@
 let masterControlState = true;
 
 import { SCALES } from "./scales";
-import CubeBox from "./cube-box";
+import cubeBox from "./cube-box";
 import CompositionEngine from "./composition-engine";
 
-const AudioEngine: any = {};
-AudioEngine.ctx = new AudioContext();
-AudioEngine.masterGain = <GainNode>AudioEngine.ctx.createGain();
-AudioEngine.masterGain.connect(AudioEngine.ctx.destination);
-AudioEngine.masterFilter = AudioEngine.ctx.createBiquadFilter();
-AudioEngine.masterFilter.type = "lowpass";
-AudioEngine.masterFilter.frequency.setValueAtTime(
-  12000,
-  AudioEngine.ctx.currentTime
-);
-AudioEngine.masterFilter.Q.value = 0.01;
+class AudioEngine {
+  ctx: AudioContext;
+  masterGain: GainNode;
+  masterFilter: BiquadFilterNode;
+  sineTerms: Float32Array;
+  cosineTerms: Float32Array;
+  customWaveform: PeriodicWave;
 
-AudioEngine.masterFilter.connect(AudioEngine.masterGain);
+  constructor() {
+    this.ctx = new AudioContext();
+    this.masterGain = <GainNode>this.ctx.createGain();
+    this.masterGain.connect(this.ctx.destination);
+    this.masterFilter = this.ctx.createBiquadFilter();
+    this.masterFilter.type = "lowpass";
+    this.masterFilter.frequency.setValueAtTime(12000, this.ctx.currentTime);
+    this.masterFilter.Q.value = 0.01;
 
-AudioEngine.sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-AudioEngine.cosineTerms = new Float32Array(AudioEngine.sineTerms.length);
-AudioEngine.masterFilter.connect(AudioEngine.masterGain);
+    this.masterFilter.connect(this.masterGain);
 
-AudioEngine.customWaveform = <PeriodicWave>(
-  AudioEngine.ctx.createPeriodicWave(
-    AudioEngine.cosineTerms,
-    AudioEngine.sineTerms
-  )
-);
+    this.sineTerms = new Float32Array([0, 0, 1, 0, 1]);
+    this.cosineTerms = new Float32Array(this.sineTerms.length);
+    this.masterFilter.connect(this.masterGain);
 
-AudioEngine.playTone = function(freq: number, detune: number, delay: number) {
-  const expZero = 0.00000001;
-  const lfoFreq = 0.01;
-  const osc: OscillatorNode = AudioEngine.ctx.createOscillator();
-  const sine = AudioEngine.ctx.createOscillator();
-  sine.type = "sine";
-  sine.frequency.value = lfoFreq;
-
-  const sineGain = AudioEngine.ctx.createGain();
-  sineGain.gain.value = 3;
-  const ADSRNode = AudioEngine.ctx.createGain();
-  const biquadFilter = AudioEngine.ctx.createBiquadFilter();
-  const biquadFilterQValue = 0.01;
-  const biquadFilterInitCutoffFreq = 12000;
-  const biquadFilterADSRS = 1000;
-
-  biquadFilter.type = "lowpass";
-  biquadFilter.frequency.setValueAtTime(
-    biquadFilterInitCutoffFreq,
-    AudioEngine.ctx.currentTime
-  );
-  biquadFilter.Q.value = biquadFilterQValue;
-
-  biquadFilter.frequency.exponentialRampToValueAtTime(
-    biquadFilterADSRS,
-    AudioEngine.ctx.currentTime + delay + 1
-  );
-
-  // sine -> sineGain
-  //            |
-  //          frequency
-  //            |
-  //           osc -> ADSRNode -> biquatFilter -> masterFilter
-  sine.connect(sineGain);
-  sineGain.connect(osc.frequency);
-  osc.connect(ADSRNode);
-  ADSRNode.connect(biquadFilter);
-  biquadFilter.connect(AudioEngine.masterFilter);
-
-  const type: string = UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
-
-  if (type == "custom") {
-    osc.setPeriodicWave(AudioEngine.customWaveform);
-  } else {
-    osc.type = <OscillatorType>type;
+    this.customWaveform = <PeriodicWave>(
+      this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
+    );
   }
 
-  ADSRNode.gain.cancelScheduledValues(AudioEngine.ctx.currentTime + delay);
-  ADSRNode.gain.setValueAtTime(0, AudioEngine.ctx.currentTime + delay);
-  ADSRNode.gain.linearRampToValueAtTime(
-    1,
-    AudioEngine.ctx.currentTime + delay + 0.1
-  );
+  playTone(freq: number, detune: number, delay: number) {
+    const expZero = 0.00000001;
+    const lfoFreq = 0.01;
+    const osc: OscillatorNode = this.ctx.createOscillator();
+    const sine = this.ctx.createOscillator();
+    sine.type = "sine";
+    sine.frequency.value = lfoFreq;
 
-  osc.frequency.value = freq;
-  osc.detune.setValueAtTime(detune, AudioEngine.ctx.currentTime + delay);
-  sine.start(AudioEngine.ctx.currentTime + delay);
-  osc.start(AudioEngine.ctx.currentTime + delay);
+    const sineGain = this.ctx.createGain();
+    sineGain.gain.value = 3;
+    const ADSRNode = this.ctx.createGain();
+    const biquadFilter = this.ctx.createBiquadFilter();
+    const biquadFilterQValue = 0.01;
+    const biquadFilterInitCutoffFreq = 12000;
+    const filterEnvelopeSustain = 1000;
+    const currentTime = this.ctx.currentTime;
+    const decayTime = CompositionEngine.decayTime;
 
-  ADSRNode.gain.exponentialRampToValueAtTime(
-    expZero,
-    AudioEngine.ctx.currentTime + delay + CompositionEngine.decayTime + 0.2
-  );
-  osc.stop(AudioEngine.ctx.currentTime + CompositionEngine.decayTime + delay);
-  sine.stop(AudioEngine.ctx.currentTime + CompositionEngine.decayTime + delay);
-};
+    biquadFilter.type = "lowpass";
+    biquadFilter.frequency.setValueAtTime(
+      biquadFilterInitCutoffFreq,
+      currentTime
+    );
+    biquadFilter.Q.value = biquadFilterQValue;
 
-CompositionEngine.audioEngine = AudioEngine;
+    biquadFilter.frequency.exponentialRampToValueAtTime(
+      filterEnvelopeSustain,
+      currentTime + delay + 1
+    );
+
+    // sine -> sineGain
+    //            |
+    //          frequency
+    //            |
+    //           osc -> ADSRNode -> biquatFilter -> masterFilter
+    sine.connect(sineGain);
+    sineGain.connect(osc.frequency);
+    osc.connect(ADSRNode);
+    ADSRNode.connect(biquadFilter);
+    biquadFilter.connect(this.masterFilter);
+
+    const type: string =
+      UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
+
+    if (type == "custom") {
+      osc.setPeriodicWave(this.customWaveform);
+    } else {
+      osc.type = <OscillatorType>type;
+    }
+
+    ADSRNode.gain.cancelScheduledValues(currentTime + delay);
+    ADSRNode.gain.setValueAtTime(0, currentTime + delay);
+    ADSRNode.gain.linearRampToValueAtTime(1, currentTime + delay + 0.1);
+
+    osc.frequency.value = freq;
+    osc.detune.setValueAtTime(detune, currentTime + delay);
+    sine.start(currentTime + delay);
+    osc.start(currentTime + delay);
+
+    ADSRNode.gain.exponentialRampToValueAtTime(
+      expZero,
+      currentTime + delay + decayTime + 0.2
+    );
+    osc.stop(currentTime + decayTime + delay);
+    sine.stop(currentTime + decayTime + delay);
+  }
+}
+
+const audioEngine = new AudioEngine();
+
+CompositionEngine.audioEngine = audioEngine;
 
 const UI: any = {};
 UI.wavePicker = <HTMLSelectElement>(
@@ -109,7 +115,7 @@ UI.volumeControl = <HTMLInputElement>(
 UI.volumeControl.addEventListener(
   "change",
   () => {
-    AudioEngine.masterGain.gain.value = parseFloat(UI.volumeControl.value);
+    audioEngine.masterGain.gain.value = parseFloat(UI.volumeControl.value);
   },
   false
 );
@@ -135,9 +141,9 @@ UI.filterControl = <HTMLInputElement>(
 UI.filterControl.addEventListener(
   "change",
   () => {
-    AudioEngine.masterFilter.frequency.setValueAtTime(
+    audioEngine.masterFilter.frequency.setValueAtTime(
       parseFloat(UI.filterControl.value),
-      AudioEngine.ctx.currentTime
+      audioEngine.ctx.currentTime
     );
   },
   false
@@ -161,7 +167,7 @@ function main(now: number) {
           CompositionEngine.globalRoot,
           0
         );
-        CubeBox.play(index, colorIndex);
+        cubeBox.play(index, colorIndex);
       }
     });
 
@@ -176,14 +182,14 @@ function main(now: number) {
           index * swipeFrequency
         );
         setTimeout(
-          () => CubeBox.play(index + 4, colorIndex),
+          () => cubeBox.play(index + 4, colorIndex),
           index * swipeFrequency * 1000
         );
       }
     });
     then = now;
   }
-  CubeBox.draw();
+  cubeBox.draw();
   requestAnimationFrame(main);
   return;
 }
