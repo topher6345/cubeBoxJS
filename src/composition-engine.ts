@@ -43,32 +43,6 @@ class CompositionEngine {
       this.oscialltorType
     );
   }
-
-  playAllChordVoices(scalePickerValue: string, callback: any) {
-    this.chordVoices.forEach((voice: Generator, index: number) => {
-      const scaleDegree = voice.next().value;
-      if (scaleDegree) {
-        const colorIndex = SCALES[scalePickerValue][scaleDegree];
-        this.notePressed(colorIndex, this.globalRoot, 0);
-        callback(index, colorIndex);
-      }
-    });
-  }
-
-  playAllSwipeVoices(scalePickerValue: string, callback: any) {
-    this.swipeVoices.forEach((voice: Generator, index: number) => {
-      const scaleDegree = voice.next().value;
-      const swipeFrequency = 0.4;
-      if (scaleDegree) {
-        const colorIndex = SCALES[scalePickerValue][scaleDegree];
-        this.notePressed(colorIndex, this.globalRoot, index * swipeFrequency);
-        setTimeout(
-          () => callback(index + 4, colorIndex),
-          index * swipeFrequency * 1000
-        );
-      }
-    });
-  }
 }
 
 export default CompositionEngine;
