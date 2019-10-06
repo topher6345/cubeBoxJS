@@ -1,94 +1,50 @@
 import Cube from "./cube";
 
 const CubeBox: any = {};
-CubeBox.CANVAS = <HTMLCanvasElement>document.getElementById("canvas");
-CubeBox.CTX = <CanvasRenderingContext2D>CubeBox.CANVAS.getContext("2d");
-CubeBox.CUBE_ORIGIN = <[number, number]>[33, 33];
-CubeBox.CUBE_SIZE = <number>66;
-CubeBox.CUBES = <Cube[]>[
+const canvas = <HTMLCanvasElement>document.getElementById("canvas");
+const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
+const cubeOrigin = <[number, number]>[33, 33];
+const cubeSize = <number>66;
+const cubes = <Cube[]>[
+  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
+  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
+  new Cube(ctx, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
   new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 0,
-      CubeBox.CUBE_ORIGIN[1] + 0,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
-    0
-  ),
-  new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 0,
-      CubeBox.CUBE_ORIGIN[1] + 33,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
-    1
-  ),
-  new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 33,
-      CubeBox.CUBE_ORIGIN[1] + 0,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
-    2
-  ),
-  new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 33,
-      CubeBox.CUBE_ORIGIN[1] + 33,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
+    ctx,
+    [cubeOrigin[0] + 33, cubeOrigin[1] + 33, cubeSize, cubeSize],
     3
   ),
   new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 66 + 66,
-      CubeBox.CUBE_ORIGIN[1] + 0,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
+    ctx,
+    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
     4
   ),
   new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 66 + 66,
-      CubeBox.CUBE_ORIGIN[1] + 33,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
+    ctx,
+    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
     5
   ),
   new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 99 + 66,
-      CubeBox.CUBE_ORIGIN[1] + 0,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
+    ctx,
+    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
     6
   ),
   new Cube(
-    CubeBox.CTX,
-    [
-      CubeBox.CUBE_ORIGIN[0] + 99 + 66,
-      CubeBox.CUBE_ORIGIN[1] + 33,
-      CubeBox.CUBE_SIZE,
-      CubeBox.CUBE_SIZE
-    ],
+    ctx,
+    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
     7
   )
 ];
 CubeBox.clearRect = () => {
-  CubeBox.CTX.clearRect(0, 0, CubeBox.CANVAS.width, CubeBox.CANVAS.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
+
+CubeBox.draw = () => {
+  CubeBox.clearRect();
+  (<Cube[]>cubes).forEach(cube => cube.draw());
+};
+
+CubeBox.play = (index: number, colorIndex: number) =>
+  cubes[index].play(colorIndex);
 
 export default CubeBox;
