@@ -3,6 +3,14 @@ import { noteFreq, Octave } from "./composition-engine/note-table";
 import AudioEngine from "./audio-engine";
 
 export default class CompositionEngine {
+  /**
+   * CompositionEngine is a subsystem that decides which notes to play and when.
+   *
+   * It has an audioEngine property which exposes a notePressed() method
+   *
+   * CompositionEngine is responsible for what goes in as the arguments to notePressed()
+   *
+   */
   public chordSpeed: number;
   public chordVoices: Generator[];
   public swipeVoices: Generator[];

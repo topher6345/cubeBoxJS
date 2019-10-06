@@ -2,6 +2,9 @@ type CubePosition = [number, number, number, number];
 type RGB = [number, number, number];
 
 export default class Cube {
+  /**
+   * A Square that draws itself on the screen and fades out.
+   */
   private ctx: CanvasRenderingContext2D;
   private position: CubePosition;
   private alpha: number;

@@ -4,6 +4,7 @@ export default class UI {
   public masterControl: HTMLInputElement;
   public scalePicker: HTMLSelectElement;
   public filterControl: HTMLInputElement;
+  public blendModePicker: HTMLSelectElement;
 
   constructor() {
     this.wavePicker = <HTMLSelectElement>(
@@ -24,6 +25,10 @@ export default class UI {
 
     this.filterControl = <HTMLInputElement>(
       document.querySelector("input[name='filterControl']")
+    );
+
+    this.blendModePicker = <HTMLSelectElement>(
+      document.querySelector("select[name='blendModePicker']")
     );
   }
 }

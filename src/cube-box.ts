@@ -1,8 +1,20 @@
 import Cube from "./cube-box/cube";
 
 class CubeBox {
+  /**
+   *
+   * An instance wraps the Canvas context
+   *
+   * This class is responsible for laying out the cubes on the canvas.
+   *
+   * Call draw() to draw to the canvas.
+   *
+   * It passes the canvas contex into `Cube`s
+   *
+   * `Cube`s draw themselves on the screen.
+   */
   private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
+  public ctx: CanvasRenderingContext2D;
   private cubeOrigin: [number, number];
   private cubeSize: number;
   private cubes: Cube[];
