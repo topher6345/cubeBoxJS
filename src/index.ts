@@ -12,8 +12,8 @@ const ui = new UI();
 ui.wavePicker.addEventListener(
   "change",
   () => {
-    compositionEngine.oscialltorType =
-      ui.wavePicker.options[ui.wavePicker.selectedIndex].value;
+    const index = ui.wavePicker.selectedIndex;
+    compositionEngine.oscialltorType = ui.wavePicker.options[index].value;
   },
   false
 );
@@ -37,8 +37,9 @@ ui.masterControl.addEventListener(
 ui.filterControl.addEventListener(
   "change",
   () => {
+    const value = parseFloat(ui.filterControl.value);
     audioEngine.masterFilter.frequency.setValueAtTime(
-      parseFloat(ui.filterControl.value),
+      value,
       audioEngine.currentTime()
     );
   },
