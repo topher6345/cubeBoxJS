@@ -1,4 +1,4 @@
-import Cube from "./cube";
+import Cube from "./cube-box/cube";
 
 class CubeBox {
   private canvas: HTMLCanvasElement;
