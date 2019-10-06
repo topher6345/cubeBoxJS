@@ -27,10 +27,15 @@ ui.wavePicker.addEventListener(
   false
 );
 
+function expon(x: string) {
+  // Must be in range 0.0-1.0
+  return -Math.sqrt(-parseFloat(x) + 1) + 1;
+}
+
 ui.volumeControl.addEventListener(
   "change",
   () => {
-    audioEngine.masterGain.gain.value = parseFloat(ui.volumeControl.value); // TODO: make exponential
+    audioEngine.masterGain.gain.value = expon(ui.volumeControl.value);
   },
   false
 );
@@ -46,7 +51,9 @@ ui.masterControl.addEventListener(
 ui.filterControl.addEventListener(
   "change",
   () => {
-    const frequency = parseFloat(ui.filterControl.value); // TODO: make exponential
+    const max = 18500;
+    const floor = 400;
+    const frequency = expon(ui.filterControl.value) * max + floor;
     audioEngine.masterFilter.frequency.setValueAtTime(
       frequency,
       audioEngine.currentTime()
