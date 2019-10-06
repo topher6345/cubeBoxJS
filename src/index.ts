@@ -110,20 +110,7 @@ AudioEngine.playTone = function(freq: number, detune: number, delay: number) {
   );
 };
 
-AudioEngine.notePressed = function(
-  note: number,
-  octave: number,
-  delay: number
-) {
-  const stringNote: string = Object.keys(
-    CompositionEngine.NOTE_FREQUENCIES[octave]
-  )[note];
-  const frequency =
-    CompositionEngine.NOTE_FREQUENCIES[octave][stringNote.toString()];
-
-  AudioEngine.playTone(frequency, -5, delay);
-  AudioEngine.playTone(frequency, 5, delay);
-};
+CompositionEngine.audioEngine = AudioEngine;
 
 const UI: any = {};
 UI.wavePicker = <HTMLSelectElement>(
