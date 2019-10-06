@@ -11,7 +11,7 @@ export function* urnJB(length: number) {
   }
 }
 
-export function randArray(length: number) {
+function randArray(length: number) {
   let array: number[] = [];
 
   for (let i = 0; i < length; i++) {

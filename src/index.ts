@@ -194,31 +194,34 @@ function main(now: number) {
       const scaleDegree = voice.next().value;
       if (scaleDegree) {
         const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
-        AudioEngine.notePressed(colorIndex, CompositionEngine.globalRoot, 0);
-        CubeBox.CUBES[index].play(colorIndex);
+        CompositionEngine.notePressed(
+          colorIndex,
+          CompositionEngine.globalRoot,
+          0
+        );
+        CubeBox.play(index, colorIndex);
       }
     });
 
     CompositionEngine.swipeVoices.forEach((voice: Generator, index: number) => {
       const scaleDegree = voice.next().value;
+      const swipeFrequency = 0.4;
       if (scaleDegree) {
         const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
-        AudioEngine.notePressed(
+        CompositionEngine.notePressed(
           colorIndex,
           CompositionEngine.globalRoot,
-          index * 0.4
+          index * swipeFrequency
         );
         setTimeout(
-          () => CubeBox.CUBES[index + 4].play(colorIndex),
-          index * 1000 * 0.4
+          () => CubeBox.play(index + 4, colorIndex),
+          index * swipeFrequency * 1000
         );
       }
     });
     then = now;
   }
-
-  CubeBox.clearRect();
-  (<Cube[]>CubeBox.CUBES).forEach(cube => cube.draw());
+  CubeBox.draw();
   requestAnimationFrame(main);
   return;
 }
