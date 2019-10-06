@@ -7,54 +7,63 @@ import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
 
-const UI: any = {};
-UI.wavePicker = <HTMLSelectElement>(
+class UI {
+  wavePicker: HTMLSelectElement;
+  volumeControl: HTMLInputElement;
+  masterControl: HTMLInputElement;
+  scalePicker: HTMLSelectElement;
+  filterControl: HTMLInputElement;
+}
+
+const ui = new UI();
+
+ui.wavePicker = <HTMLSelectElement>(
   document.querySelector("select[name='waveform']")
 );
 
-UI.wavePicker.addEventListener(
+ui.wavePicker.addEventListener(
   "change",
   () => {
     compositionEngine.oscialltorType =
-      UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
+      ui.wavePicker.options[ui.wavePicker.selectedIndex].value;
   },
   false
 );
 
-UI.volumeControl = <HTMLInputElement>(
+ui.volumeControl = <HTMLInputElement>(
   document.querySelector("input[name='volume']")
 );
-UI.volumeControl.addEventListener(
+ui.volumeControl.addEventListener(
   "change",
   () => {
-    audioEngine.masterGain.gain.value = parseFloat(UI.volumeControl.value);
+    audioEngine.masterGain.gain.value = parseFloat(ui.volumeControl.value);
   },
   false
 );
 
-UI.masterControl = <HTMLInputElement>(
+ui.masterControl = <HTMLInputElement>(
   document.querySelector("input[name='masterClock']")
 );
-UI.masterControl.addEventListener(
+ui.masterControl.addEventListener(
   "change",
   () => {
-    masterControlState = UI.masterControl.checked;
+    masterControlState = ui.masterControl.checked;
   },
   false
 );
 
-UI.scalePicker = <HTMLSelectElement>(
+ui.scalePicker = <HTMLSelectElement>(
   document.querySelector("select[name='scale']")
 );
 
-UI.filterControl = <HTMLInputElement>(
+ui.filterControl = <HTMLInputElement>(
   document.querySelector("input[name='filter']")
 );
-UI.filterControl.addEventListener(
+ui.filterControl.addEventListener(
   "change",
   () => {
     audioEngine.masterFilter.frequency.setValueAtTime(
-      parseFloat(UI.filterControl.value),
+      parseFloat(ui.filterControl.value),
       audioEngine.currentTime()
     );
   },
@@ -73,7 +82,7 @@ function main(now: number) {
     compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
       const scaleDegree = voice.next().value;
       if (scaleDegree) {
-        const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
+        const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
         compositionEngine.notePressed(
           colorIndex,
           compositionEngine.globalRoot,
@@ -87,7 +96,7 @@ function main(now: number) {
       const scaleDegree = voice.next().value;
       const swipeFrequency = 0.4;
       if (scaleDegree) {
-        const colorIndex = SCALES[UI.scalePicker.value][scaleDegree];
+        const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
         compositionEngine.notePressed(
           colorIndex,
           compositionEngine.globalRoot,
