@@ -1,8 +1,20 @@
-class AudioEngine {
-  private ctx: AudioContext;
+export default class AudioEngine {
+  /**
+   * AudioEngine is a subsystem that handles interaction with the WebAudio API.
+   *
+   * An instance is initialized which wraps the global audio context.
+   *
+   * The instance exposes a method playTone() which plays the sound.
+   *
+   */
+
+  /**
+   * These properties can be hooked up to the UI
+   * */
   public masterGain: GainNode;
   public masterFilter: BiquadFilterNode;
 
+  private ctx: AudioContext;
   private sineTerms: Float32Array;
   private cosineTerms: Float32Array;
   private customWaveform: PeriodicWave;
@@ -38,20 +50,25 @@ class AudioEngine {
     decayTime: number,
     oscialltorType: string
   ) {
+    /**
+     * Every playTone() invocation creates a new oscialltor and destroys it when the note is done.
+     *
+     * We can do this because playTone requires a decayTime known ahead of time.
+     */
     const expZero = 0.00000001;
-    const lfoFreq = 0.01;
+    const lfoFreq = 0.01; // TODO: hook this up to UI
     const osc: OscillatorNode = this.ctx.createOscillator();
     const sine = this.ctx.createOscillator();
     sine.type = "sine";
     sine.frequency.value = lfoFreq;
 
     const sineGain = this.ctx.createGain();
-    sineGain.gain.value = 3;
+    sineGain.gain.value = 3; // TODO: hook this up to UI
     const ADSRNode = this.ctx.createGain();
     const biquadFilter = this.ctx.createBiquadFilter();
-    const biquadFilterQValue = 0.01;
-    const biquadFilterInitCutoffFreq = 12000;
-    const filterEnvelopeSustain = 1000;
+    const biquadFilterQValue = 0.01; // TODO: hook this up to UI
+    const biquadFilterInitCutoffFreq = 12000; // TODO: hook this up to UI
+    const filterEnvelopeSustain = 1000; // TODO: hook this up to UI
     const currentTime = this.ctx.currentTime;
 
     biquadFilter.type = "lowpass";
@@ -81,7 +98,7 @@ class AudioEngine {
     // UI.wavePicker.options[UI.wavePicker.selectedIndex].value;
 
     if (oscialltorType == "custom") {
-      osc.setPeriodicWave(this.customWaveform);
+      osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
     } else {
       osc.type = <OscillatorType>oscialltorType;
     }
@@ -103,5 +120,3 @@ class AudioEngine {
     sine.stop(currentTime + decayTime + delay);
   }
 }
-
-export default AudioEngine;
