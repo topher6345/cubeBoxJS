@@ -1,37 +1,41 @@
 import { urnJB } from "./random";
 import { createNoteTable, Octave } from "./note-table";
 
-const CompositionEngine: any = {};
-CompositionEngine.NOTE_FREQUENCIES = <Octave[]>createNoteTable();
-CompositionEngine.decayTime = 4;
-CompositionEngine.chordSpeed = CompositionEngine.decayTime * 1000; //ms
-CompositionEngine.chordVoices = <Array<Generator>>[
-  urnJB(7),
-  urnJB(7),
-  urnJB(7),
-  urnJB(7)
-];
-CompositionEngine.swipeVoices = <Array<Generator>>[
-  urnJB(7),
-  urnJB(7),
-  urnJB(7),
-  urnJB(7)
-];
-CompositionEngine.globalRoot = 3;
+class CompositionEngine {
+  NOTE_FREQUENCIES: Octave[];
+  decayTime: number;
+  chordSpeed: number;
+  chordVoices: Generator[];
+  swipeVoices: Generator[];
+  globalRoot: number;
+  audioEngine: any;
 
-CompositionEngine.notePressed = function(
-  note: number,
-  octave: number,
-  delay: number
-) {
-  const stringNote: string = Object.keys(
-    CompositionEngine.NOTE_FREQUENCIES[octave]
-  )[note];
-  const frequency =
-    CompositionEngine.NOTE_FREQUENCIES[octave][stringNote.toString()];
+  constructor() {
+    this.NOTE_FREQUENCIES = <Octave[]>createNoteTable();
+    this.decayTime = 4;
+    this.chordSpeed = this.decayTime * 1000; //ms
+    this.chordVoices = <Array<Generator>>[
+      urnJB(7),
+      urnJB(7),
+      urnJB(7),
+      urnJB(7)
+    ];
+    this.swipeVoices = <Array<Generator>>[
+      urnJB(7),
+      urnJB(7),
+      urnJB(7),
+      urnJB(7)
+    ];
+    this.globalRoot = 3;
+  }
 
-  CompositionEngine.audioEngine.playTone(frequency, -5, delay);
-  CompositionEngine.audioEngine.playTone(frequency, 5, delay);
-};
+  notePressed(note: number, octave: number, delay: number) {
+    const stringNote: string = Object.keys(this.NOTE_FREQUENCIES[octave])[note];
+    const frequency = this.NOTE_FREQUENCIES[octave][stringNote.toString()];
 
-export default CompositionEngine;
+    this.audioEngine.playTone(frequency, -5, delay);
+    this.audioEngine.playTone(frequency, 5, delay);
+  }
+}
+
+export default new CompositionEngine();

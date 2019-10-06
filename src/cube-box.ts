@@ -1,50 +1,113 @@
 import Cube from "./cube";
 
-const CubeBox: any = {};
-const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
-const cubeOrigin = <[number, number]>[33, 33];
-const cubeSize = <number>66;
-const cubes = <Cube[]>[
-  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 0, cubeSize, cubeSize], 0),
-  new Cube(ctx, [cubeOrigin[0] + 0, cubeOrigin[1] + 33, cubeSize, cubeSize], 1),
-  new Cube(ctx, [cubeOrigin[0] + 33, cubeOrigin[1] + 0, cubeSize, cubeSize], 2),
-  new Cube(
-    ctx,
-    [cubeOrigin[0] + 33, cubeOrigin[1] + 33, cubeSize, cubeSize],
-    3
-  ),
-  new Cube(
-    ctx,
-    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
-    4
-  ),
-  new Cube(
-    ctx,
-    [cubeOrigin[0] + 66 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
-    5
-  ),
-  new Cube(
-    ctx,
-    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 0, cubeSize, cubeSize],
-    6
-  ),
-  new Cube(
-    ctx,
-    [cubeOrigin[0] + 99 + 66, cubeOrigin[1] + 33, cubeSize, cubeSize],
-    7
-  )
-];
-CubeBox.clearRect = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-};
+class CubeBox {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  cubeOrigin: [number, number];
+  cubeSize: number;
+  cubes: Cube[];
 
-CubeBox.draw = () => {
-  CubeBox.clearRect();
-  (<Cube[]>cubes).forEach(cube => cube.draw());
-};
+  constructor() {
+    this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
+    this.ctx = <CanvasRenderingContext2D>this.canvas.getContext("2d");
+    this.cubeOrigin = <[number, number]>[33, 33];
+    this.cubeSize = <number>66;
+    this.cubes = <Cube[]>[
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 0,
+          this.cubeOrigin[1] + 0,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        0
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 0,
+          this.cubeOrigin[1] + 33,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        1
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 33,
+          this.cubeOrigin[1] + 0,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        2
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 33,
+          this.cubeOrigin[1] + 33,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        3
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 66 + 66,
+          this.cubeOrigin[1] + 0,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        4
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 66 + 66,
+          this.cubeOrigin[1] + 33,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        5
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 99 + 66,
+          this.cubeOrigin[1] + 0,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        6
+      ),
+      new Cube(
+        this.ctx,
+        [
+          this.cubeOrigin[0] + 99 + 66,
+          this.cubeOrigin[1] + 33,
+          this.cubeSize,
+          this.cubeSize
+        ],
+        7
+      )
+    ];
+  }
 
-CubeBox.play = (index: number, colorIndex: number) =>
-  cubes[index].play(colorIndex);
+  clearRect() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
 
-export default CubeBox;
+  draw() {
+    this.clearRect();
+    this.cubes.forEach(cube => cube.draw());
+  }
+
+  play(index: number, colorIndex: number) {
+    this.cubes[index].play(colorIndex);
+  }
+}
+
+export default new CubeBox();
