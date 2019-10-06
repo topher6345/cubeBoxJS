@@ -84,6 +84,10 @@
         height: 30px;
       }
 
+      .settingsBar div {
+        background-color: #2d2d2d;
+      }
+
       .left {
         width: 50%;
         position: absolute;
@@ -129,13 +133,8 @@
             max="1.0"
             step="0.01"
             value="0.5"
-            list="volumes"
             name="volumeControl"
           />
-          <datalist id="volumes">
-            <option value="0.0" label="Mute"> </option>
-            <option value="1.0" label="100%"> </option>
-          </datalist>
 
           <span>Master Filter: </span>
           <input
@@ -147,6 +146,55 @@
             name="filterControl"
           />
           <input type="checkbox" name="masterControl" checked /> On/Off
+        </div>
+        <div>
+          <span>Decay time</span>
+          <input
+            type="range"
+            min="0.5"
+            max="8.0"
+            step="0.5"
+            value="4.0"
+            name="decayTime"
+          />
+          <span>Octave</span>
+          <input
+            type="range"
+            min="0"
+            max="6"
+            step="1"
+            value="3"
+            name="octave"
+          />
+          <span>LFO Frequency</span>
+          <input
+            type="range"
+            min="0.0"
+            max="1.0"
+            step="0.01"
+            value="0.01"
+            name="lfoFrequency"
+          />
+        </div>
+        <div>
+          <span>Filter Envelope Q</span>
+          <input
+            type="range"
+            min="0.0"
+            max="20.0"
+            step="0.01"
+            value="0.01"
+            name="filterEnvelopeQ"
+          />
+          <span>Detune</span>
+          <input
+            type="range"
+            min="0.0"
+            max="50.0"
+            step="1"
+            value="0"
+            name="detune"
+          />
         </div>
       </div>
       <div class="right">
@@ -195,7 +243,7 @@
           <option value="hue">hue</option>
           <option value="saturation">saturation</option>
           <option value="color">color</option>
-          "luminosity"
+          <option value="luminosity">luminosity</option>
         </select>
       </div>
     </div>

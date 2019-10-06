@@ -8,7 +8,6 @@ import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
 const ui = new UI();
-
 ui.blendModePicker.addEventListener(
   "change",
   () => {
@@ -58,6 +57,50 @@ ui.filterControl.addEventListener(
       frequency,
       audioEngine.currentTime()
     );
+  },
+  false
+);
+ui.decayTime.addEventListener(
+  "change",
+  () => {
+    // console.log(ui.decayTime.value);
+    compositionEngine.setDecayTime(parseFloat(ui.decayTime.value));
+  },
+  false
+);
+
+compositionEngine.globalRoot = parseFloat(ui.octave.value);
+ui.octave.addEventListener(
+  "change",
+  () => {
+    compositionEngine.globalRoot = parseFloat(ui.octave.value);
+  },
+  false
+);
+
+ui.lfoFrequency.addEventListener(
+  "change",
+  () => {
+    const max = 8;
+    const floor = 0.001;
+    const frequency = expon(ui.lfoFrequency.value) * max + floor;
+    audioEngine.lfoFreq = frequency;
+  },
+  false
+);
+
+ui.filterEnvelopeQ.addEventListener(
+  "change",
+  () => {
+    audioEngine.filterEnvelopeQ = parseFloat(ui.filterEnvelopeQ.value);
+  },
+  false
+);
+
+ui.detune.addEventListener(
+  "change",
+  () => {
+    compositionEngine.detune = parseFloat(ui.detune.value);
   },
   false
 );

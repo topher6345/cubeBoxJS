@@ -13,6 +13,8 @@ export default class AudioEngine {
    * */
   public masterGain: GainNode;
   public masterFilter: BiquadFilterNode;
+  public lfoFreq: number;
+  public filterEnvelopeQ: number;
 
   private ctx: AudioContext;
   private sineTerms: Float32Array;
@@ -33,6 +35,9 @@ export default class AudioEngine {
     this.sineTerms = new Float32Array([0, 0, 1, 0, 1]);
     this.cosineTerms = new Float32Array(this.sineTerms.length);
     this.masterFilter.connect(this.masterGain);
+
+    this.lfoFreq = 0.01;
+    this.filterEnvelopeQ = 0.01;
 
     this.customWaveform = <PeriodicWave>(
       this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
@@ -56,7 +61,6 @@ export default class AudioEngine {
      * We can do this because playTone requires a decayTime known ahead of time.
      */
     const expZero = 0.00000001;
-    const lfoFreq = 0.01; // TODO: hook this up to UI
     const osc: OscillatorNode = this.ctx.createOscillator();
     if (oscialltorType == "custom") {
       osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
@@ -65,13 +69,12 @@ export default class AudioEngine {
     }
     const sine = this.ctx.createOscillator();
     sine.type = "sine";
-    sine.frequency.value = lfoFreq;
+    sine.frequency.value = this.lfoFreq;
 
     const sineGain = this.ctx.createGain();
     sineGain.gain.value = 3; // TODO: hook this up to UI
     const ADSRNode = this.ctx.createGain();
     const biquadFilter = this.ctx.createBiquadFilter();
-    const biquadFilterQValue = 0.01; // TODO: hook this up to UI
     const biquadFilterInitCutoffFreq = 12000; // TODO: hook this up to UI
     const filterEnvelopeSustain = 1000; // TODO: hook this up to UI
     const currentTime = this.ctx.currentTime;
@@ -81,7 +84,7 @@ export default class AudioEngine {
       biquadFilterInitCutoffFreq,
       currentTime
     );
-    biquadFilter.Q.value = biquadFilterQValue;
+    biquadFilter.Q.value = this.filterEnvelopeQ;
 
     biquadFilter.frequency.exponentialRampToValueAtTime(
       filterEnvelopeSustain,

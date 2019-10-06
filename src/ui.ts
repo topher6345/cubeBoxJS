@@ -5,6 +5,11 @@ export default class UI {
   public scalePicker: HTMLSelectElement;
   public filterControl: HTMLInputElement;
   public blendModePicker: HTMLSelectElement;
+  public decayTime: HTMLInputElement;
+  public octave: HTMLInputElement;
+  public lfoFrequency: HTMLInputElement;
+  public filterEnvelopeQ: HTMLInputElement;
+  public detune: HTMLInputElement;
 
   constructor() {
     this.wavePicker = <HTMLSelectElement>(
@@ -29,6 +34,26 @@ export default class UI {
 
     this.blendModePicker = <HTMLSelectElement>(
       document.querySelector("select[name='blendModePicker']")
+    );
+
+    this.decayTime = <HTMLInputElement>(
+      document.querySelector("input[name='decayTime']")
+    );
+
+    this.octave = <HTMLInputElement>(
+      document.querySelector("input[name='octave']")
+    );
+
+    this.lfoFrequency = <HTMLInputElement>(
+      document.querySelector("input[name='lfoFrequency']")
+    );
+
+    this.filterEnvelopeQ = <HTMLInputElement>(
+      document.querySelector("input[name='filterEnvelopeQ']")
+    );
+
+    this.detune = <HTMLInputElement>(
+      document.querySelector("input[name='detune']")
     );
   }
 }

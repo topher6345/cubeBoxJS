@@ -16,20 +16,28 @@ export default class CompositionEngine {
   public swipeVoices: Generator[];
   public globalRoot: number;
   public oscialltorType: string;
+  public decayTime: number;
+  public detune: number;
 
   private noteFrequencies: Octave[];
-  private decayTime: number;
+
   private audioEngine: AudioEngine;
 
   constructor(audioEngine: AudioEngine, oscialltorType: string) {
     this.noteFrequencies = noteFreq;
-    this.decayTime = 4; // TODO: hook this up to UI
+    this.decayTime = 4;
     this.chordSpeed = this.decayTime * 1000; //ms
     this.chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
     this.swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
-    this.globalRoot = 3; // TODO: hook this up to UI
+
     this.oscialltorType = oscialltorType;
     this.audioEngine = audioEngine;
+    this.detune = 0;
+  }
+
+  setDecayTime(decayTime: number) {
+    this.decayTime = decayTime;
+    this.chordSpeed = this.decayTime * 1000; //ms
   }
 
   notePressed(note: number, octave: number, delay: number) {
@@ -38,14 +46,14 @@ export default class CompositionEngine {
 
     this.audioEngine.playTone(
       frequency,
-      -5,
+      -this.detune,
       delay,
       this.decayTime,
       this.oscialltorType
     );
     this.audioEngine.playTone(
       frequency,
-      5,
+      this.detune,
       delay,
       this.decayTime,
       this.oscialltorType
