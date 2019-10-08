@@ -11,14 +11,15 @@ export default class AudioEngine {
   /**
    * These properties can be hooked up to the UI
    * */
-  public masterGain: GainNode;
-  public masterFilter: BiquadFilterNode;
-  public lfoFreq: number;
+
   public filterEnvelopeQ: number;
   public filterEnvelopeStart: number;
   public frequencyModulationAmount: number;
   public amplitudeRelease: number;
 
+  private lfoFreq: number;
+  private masterFilter: BiquadFilterNode;
+  private masterGain: GainNode;
   private ctx: AudioContext;
   private sineTerms: Float32Array;
   private cosineTerms: Float32Array;
@@ -50,10 +51,6 @@ export default class AudioEngine {
     );
 
     this.frequencyModulationAmount = 3;
-  }
-
-  currentTime(): number {
-    return this.ctx.currentTime;
   }
 
   playTone(
@@ -136,5 +133,40 @@ export default class AudioEngine {
     oscillator.start(currentTime + delay);
     oscillator.stop(currentTime + decayTime + delay);
     frequencyModulation.stop(currentTime + decayTime + delay);
+  }
+
+  setMasterGain(input: string) {
+    this.masterGain.gain.value = this.expon(input);
+  }
+
+  setMasterFilterValue(input: string) {
+    this.masterFilter.frequency.setValueAtTime(
+      this.exponOver(input, 18500, 400),
+      this.currentTime()
+    );
+  }
+
+  setLfoFrequency(input: string) {
+    this.lfoFreq = this.exponOver(input, 8, 0.001);
+  }
+
+  setFilterEnvelopeStartFrequency(input: string) {
+    this.masterFilter.frequency.setValueAtTime(
+      this.exponOver(input, 18500, 1000),
+      this.currentTime()
+    );
+  }
+
+  private exponOver(input: string, max: number, floor: number) {
+    return this.expon(input) * max + floor;
+  }
+
+  private expon(x: string) {
+    // Must be in range 0.0-1.0
+    return -Math.sqrt(-parseFloat(x) + 1) + 1;
+  }
+
+  private currentTime(): number {
+    return this.ctx.currentTime;
   }
 }

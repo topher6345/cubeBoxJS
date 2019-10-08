@@ -1,19 +1,19 @@
-type CubePosition = [number, number, number, number];
+type SquarePosition = [number, number, number, number];
 type RGB = [number, number, number];
 
-export default class Cube {
+export default class Square {
   /**
    * A Square that draws itself on the screen and fades out.
    */
   private ctx: CanvasRenderingContext2D;
-  private position: CubePosition;
+  private position: SquarePosition;
   private alpha: number;
   private colors: Array<RGB>;
   private note: number;
 
   constructor(
     ctx: CanvasRenderingContext2D,
-    position: CubePosition,
+    position: SquarePosition,
     note: number
   ) {
     this.ctx = ctx;
@@ -38,7 +38,6 @@ export default class Cube {
 
   draw() {
     this.alpha = this.alpha > 0 ? this.alpha - 1 : this.alpha;
-
     const rgba = [...this.colors[this.note], this.alpha / 100];
     this.ctx.fillStyle = `rgba(${rgba.join(",")})`;
     const [x, y, xw, yw] = this.position;

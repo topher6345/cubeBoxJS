@@ -20,7 +20,6 @@ export default class CompositionEngine {
   public detune: number;
 
   private noteFrequencies: Octave[];
-
   private audioEngine: AudioEngine;
 
   constructor(audioEngine: AudioEngine, oscialltorType: string) {
@@ -33,16 +32,17 @@ export default class CompositionEngine {
     this.oscialltorType = oscialltorType;
     this.audioEngine = audioEngine;
     this.detune = 0;
+    this.globalRoot = 3;
   }
 
-  setDecayTime(decayTime: number) {
-    this.decayTime = decayTime;
+  setDecayTime(decayTime: string) {
+    this.decayTime = parseFloat(decayTime);
     this.chordSpeed = this.decayTime * 1000; //ms
   }
 
-  notePressed(note: number, octave: number, delay: number) {
-    const stringNote: string = Object.keys(this.noteFrequencies[octave])[note];
-    const frequency = this.noteFrequencies[octave][stringNote.toString()];
+  notePressed(note: number, delay: number) {
+    const stringNote = this.getStringNote(note);
+    const frequency = this.getNoteFrequencies(stringNote);
 
     this.audioEngine.playTone(
       frequency,
@@ -58,5 +58,13 @@ export default class CompositionEngine {
       this.decayTime,
       this.oscialltorType
     );
+  }
+
+  private getStringNote(note: number) {
+    return Object.keys(this.noteFrequencies[this.globalRoot])[note];
+  }
+
+  private getNoteFrequencies(note: string) {
+    return this.noteFrequencies[this.globalRoot][note];
   }
 }

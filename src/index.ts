@@ -1,97 +1,86 @@
 let masterControlState = true;
-
-import { SCALES } from "./scales";
-import cubeBox from "./cube-box";
-import UI from "./ui";
+/**
+ *
+ * This file is where everything gets hooked up
+ *
+ */
+import Scales from "./scales";
+import graphicsEngine from "./graphics-engine";
+import controls from "./controls";
 import AudioEngine from "./audio-engine";
-import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
+import CompositionEngine from "./composition-engine";
+
+// Hook up the Audio Engine to the Composition Engine
 const compositionEngine = new CompositionEngine(audioEngine, "square");
-const ui = new UI();
 
-ui.attach("blendModePicker", () => {
-  const index = ui.blendModePicker.selectedIndex;
-  cubeBox.setBlendMode(ui.blendModePicker.options[index].value);
+controls.attach("blendModePicker", () => {
+  const index = controls.blendModePicker.selectedIndex;
+  graphicsEngine.setBlendMode(controls.blendModePicker.options[index].value);
 });
 
-ui.attach("wavePicker", () => {
-  const index = ui.wavePicker.selectedIndex;
-  compositionEngine.oscialltorType = ui.wavePicker.options[index].value;
+controls.attach("wavePicker", () => {
+  const index = controls.wavePicker.selectedIndex;
+  compositionEngine.oscialltorType = controls.wavePicker.options[index].value;
 });
 
-ui.attach("volumeControl", () => {
-  audioEngine.masterGain.gain.value = ui.expon(ui.volumeControl.value);
+controls.attach("volumeControl", () => {
+  audioEngine.setMasterGain(controls.volumeControl.value);
 });
 
-ui.attach("masterControl", () => {
-  masterControlState = ui.masterControl.checked;
+controls.attach("masterControl", () => {
+  masterControlState = controls.masterControl.checked;
 });
 
-ui.attach("filterControl", () => {
-  const max = 18500;
-  const floor = 400;
-  const frequency = ui.expon(ui.filterControl.value) * max + floor;
-  audioEngine.masterFilter.frequency.setValueAtTime(
-    frequency,
-    audioEngine.currentTime()
+controls.attach("filterControl", () => {
+  audioEngine.setMasterFilterValue(controls.filterControl.value);
+});
+
+controls.attach("decayTime", () => {
+  compositionEngine.setDecayTime(controls.decayTime.value);
+});
+
+controls.attach("octave", () => {
+  compositionEngine.globalRoot = parseFloat(controls.octave.value);
+});
+
+controls.attach("lfoFrequency", () => {
+  audioEngine.setLfoFrequency(controls.lfoFrequency.value);
+});
+
+controls.attach("filterEnvelopeQ", () => {
+  audioEngine.filterEnvelopeQ = parseFloat(controls.filterEnvelopeQ.value);
+});
+
+controls.attach("detune", () => {
+  compositionEngine.detune = parseFloat(controls.detune.value);
+});
+
+controls.attach("filterEnvelopeStart", () => {
+  audioEngine.setFilterEnvelopeStartFrequency(
+    controls.filterEnvelopeStart.value
   );
 });
 
-ui.attach("decayTime", () => {
-  compositionEngine.setDecayTime(parseFloat(ui.decayTime.value));
-});
-
-compositionEngine.globalRoot = parseFloat(ui.octave.value);
-
-ui.attach("octave", () => {
-  compositionEngine.globalRoot = parseFloat(ui.octave.value);
-});
-
-ui.attach("lfoFrequency", () => {
-  const max = 8;
-  const floor = 0.001;
-  const frequency = ui.expon(ui.lfoFrequency.value) * max + floor;
-  audioEngine.lfoFreq = frequency;
-});
-
-ui.attach("filterEnvelopeQ", () => {
-  audioEngine.filterEnvelopeQ = parseFloat(ui.filterEnvelopeQ.value);
-});
-
-ui.attach("detune", () => {
-  compositionEngine.detune = parseFloat(ui.detune.value);
-});
-
-ui.attach("filterEnvelopeStart", () => {
-  const max = 18500;
-  const floor = 1000;
-  const frequency = ui.expon(ui.filterEnvelopeStart.value) * max + floor;
-  audioEngine.masterFilter.frequency.setValueAtTime(
-    frequency,
-    audioEngine.currentTime()
-  );
-});
-
-ui.attach("frequencyModulationAmount", () => {
+controls.attach("frequencyModulationAmount", () => {
   audioEngine.frequencyModulationAmount = parseFloat(
-    ui.frequencyModulationAmount.value
+    controls.frequencyModulationAmount.value
   );
 });
 
-ui.attach("amplitudeRelease", () => {
-  audioEngine.amplitudeRelease = parseFloat(ui.amplitudeRelease.value);
+controls.attach("amplitudeRelease", () => {
+  audioEngine.amplitudeRelease = parseFloat(controls.amplitudeRelease.value);
 });
+
+controls.validate();
+
 function play() {
   compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
     const scaleDegree = voice.next().value;
     if (scaleDegree) {
-      const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
-      compositionEngine.notePressed(
-        colorIndex,
-        compositionEngine.globalRoot,
-        0
-      );
-      cubeBox.play(index, colorIndex);
+      const colorIndex = Scales[controls.scalePicker.value][scaleDegree];
+      compositionEngine.notePressed(colorIndex, 0);
+      graphicsEngine.play(index, colorIndex);
     }
   });
 
@@ -99,14 +88,10 @@ function play() {
     const scaleDegree = voice.next().value;
     const swipeFrequency = 0.4;
     if (scaleDegree) {
-      const colorIndex = SCALES[ui.scalePicker.value][scaleDegree];
-      compositionEngine.notePressed(
-        colorIndex,
-        compositionEngine.globalRoot,
-        index * swipeFrequency
-      );
+      const colorIndex = Scales[controls.scalePicker.value][scaleDegree];
+      compositionEngine.notePressed(colorIndex, index * swipeFrequency);
       setTimeout(
-        () => cubeBox.play(index + 4, colorIndex),
+        () => graphicsEngine.play(index + 4, colorIndex),
         index * swipeFrequency * 1000
       );
     }
@@ -125,7 +110,7 @@ function main(now: number) {
     play();
     then = now;
   }
-  cubeBox.draw();
+  graphicsEngine.draw();
   requestAnimationFrame(main);
   return;
 }
