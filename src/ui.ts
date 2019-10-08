@@ -56,4 +56,13 @@ export default class UI {
       document.querySelector("input[name='detune']")
     );
   }
+
+  attach(param: string, callback: Function) {
+    (this as any)[param].addEventListener("change", callback, false);
+  }
+
+  expon(x: string) {
+    // Must be in range 0.0-1.0
+    return -Math.sqrt(-parseFloat(x) + 1) + 1;
+  }
 }

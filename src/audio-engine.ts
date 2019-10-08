@@ -60,34 +60,53 @@ export default class AudioEngine {
      *
      * We can do this because playTone requires a decayTime known ahead of time.
      */
+    const currentTime = this.ctx.currentTime;
     const expZero = 0.00000001;
+
     const osc: OscillatorNode = this.ctx.createOscillator();
     if (oscialltorType == "custom") {
       osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
     } else {
       osc.type = <OscillatorType>oscialltorType;
     }
+    osc.frequency.value = freq;
+    osc.detune.setValueAtTime(detune, currentTime + delay);
+
     const sine = this.ctx.createOscillator();
     sine.type = "sine";
     sine.frequency.value = this.lfoFreq;
 
     const sineGain = this.ctx.createGain();
     sineGain.gain.value = 3; // TODO: hook this up to UI
-    const ADSRNode = this.ctx.createGain();
+
+    const attackDecay = this.ctx.createGain();
+    // Amplitude Pre-Attack
+    attackDecay.gain.cancelScheduledValues(currentTime + delay);
+    attackDecay.gain.setValueAtTime(0, currentTime + delay);
+    // Amplitude Attack
+    attackDecay.gain.linearRampToValueAtTime(1, currentTime + delay + 0.1);
+    // Amplitude Decay
+    attackDecay.gain.exponentialRampToValueAtTime(
+      expZero,
+      currentTime + delay + decayTime + 0.2
+    );
+
     const biquadFilter = this.ctx.createBiquadFilter();
     const biquadFilterInitCutoffFreq = 12000; // TODO: hook this up to UI
     const filterEnvelopeSustain = 1000; // TODO: hook this up to UI
-    const currentTime = this.ctx.currentTime;
 
     biquadFilter.type = "lowpass";
+    biquadFilter.Q.value = this.filterEnvelopeQ;
+
+    // Filter Frequency Pre-Attack
     biquadFilter.frequency.setValueAtTime(
       biquadFilterInitCutoffFreq,
       currentTime
     );
-    biquadFilter.Q.value = this.filterEnvelopeQ;
 
+    // Filter Frequency Decay
     biquadFilter.frequency.exponentialRampToValueAtTime(
-      filterEnvelopeSustain,
+      filterEnvelopeSustain, // Filter Frequency Sustain
       currentTime + delay + 1
     );
 
@@ -95,26 +114,15 @@ export default class AudioEngine {
     //            |
     //          frequency
     //            |
-    //           osc -> ADSRNode -> biquatFilter -> masterFilter
+    //           osc -> attackDecay -> biquadFilter -> masterFilter
     sine.connect(sineGain);
     sineGain.connect(osc.frequency);
-    osc.connect(ADSRNode);
-    ADSRNode.connect(biquadFilter);
+    osc.connect(attackDecay);
+    attackDecay.connect(biquadFilter);
     biquadFilter.connect(this.masterFilter);
 
-    ADSRNode.gain.cancelScheduledValues(currentTime + delay);
-    ADSRNode.gain.setValueAtTime(0, currentTime + delay);
-    ADSRNode.gain.linearRampToValueAtTime(1, currentTime + delay + 0.1);
-
-    osc.frequency.value = freq;
-    osc.detune.setValueAtTime(detune, currentTime + delay);
     sine.start(currentTime + delay);
     osc.start(currentTime + delay);
-
-    ADSRNode.gain.exponentialRampToValueAtTime(
-      expZero,
-      currentTime + delay + decayTime + 0.2
-    );
     osc.stop(currentTime + decayTime + delay);
     sine.stop(currentTime + decayTime + delay);
   }

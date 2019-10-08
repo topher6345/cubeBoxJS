@@ -8,102 +8,60 @@ import CompositionEngine from "./composition-engine";
 const audioEngine = new AudioEngine();
 const compositionEngine = new CompositionEngine(audioEngine, "square");
 const ui = new UI();
-ui.blendModePicker.addEventListener(
-  "change",
-  () => {
-    const index = ui.blendModePicker.selectedIndex;
-    cubeBox.ctx.globalCompositeOperation =
-      ui.blendModePicker.options[index].value;
-  },
-  false
-);
-ui.wavePicker.addEventListener(
-  "change",
-  () => {
-    const index = ui.wavePicker.selectedIndex;
-    compositionEngine.oscialltorType = ui.wavePicker.options[index].value;
-  },
-  false
-);
 
-function expon(x: string) {
-  // Must be in range 0.0-1.0
-  return -Math.sqrt(-parseFloat(x) + 1) + 1;
-}
+ui.attach("blendModePicker", () => {
+  const index = ui.blendModePicker.selectedIndex;
+  cubeBox.ctx.globalCompositeOperation =
+    ui.blendModePicker.options[index].value;
+});
 
-ui.volumeControl.addEventListener(
-  "change",
-  () => {
-    audioEngine.masterGain.gain.value = expon(ui.volumeControl.value);
-  },
-  false
-);
+ui.attach("wavePicker", () => {
+  const index = ui.wavePicker.selectedIndex;
+  compositionEngine.oscialltorType = ui.wavePicker.options[index].value;
+});
 
-ui.masterControl.addEventListener(
-  "change",
-  () => {
-    masterControlState = ui.masterControl.checked;
-  },
-  false
-);
+ui.attach("volumeControl", () => {
+  audioEngine.masterGain.gain.value = ui.expon(ui.volumeControl.value);
+});
 
-ui.filterControl.addEventListener(
-  "change",
-  () => {
-    const max = 18500;
-    const floor = 400;
-    const frequency = expon(ui.filterControl.value) * max + floor;
-    audioEngine.masterFilter.frequency.setValueAtTime(
-      frequency,
-      audioEngine.currentTime()
-    );
-  },
-  false
-);
-ui.decayTime.addEventListener(
-  "change",
-  () => {
-    // console.log(ui.decayTime.value);
-    compositionEngine.setDecayTime(parseFloat(ui.decayTime.value));
-  },
-  false
-);
+ui.attach("masterControl", () => {
+  masterControlState = ui.masterControl.checked;
+});
+
+ui.attach("filterControl", () => {
+  const max = 18500;
+  const floor = 400;
+  const frequency = ui.expon(ui.filterControl.value) * max + floor;
+  audioEngine.masterFilter.frequency.setValueAtTime(
+    frequency,
+    audioEngine.currentTime()
+  );
+});
+
+ui.attach("decayTime", () => {
+  compositionEngine.setDecayTime(parseFloat(ui.decayTime.value));
+});
 
 compositionEngine.globalRoot = parseFloat(ui.octave.value);
-ui.octave.addEventListener(
-  "change",
-  () => {
-    compositionEngine.globalRoot = parseFloat(ui.octave.value);
-  },
-  false
-);
 
-ui.lfoFrequency.addEventListener(
-  "change",
-  () => {
-    const max = 8;
-    const floor = 0.001;
-    const frequency = expon(ui.lfoFrequency.value) * max + floor;
-    audioEngine.lfoFreq = frequency;
-  },
-  false
-);
+ui.attach("octave", () => {
+  compositionEngine.globalRoot = parseFloat(ui.octave.value);
+});
 
-ui.filterEnvelopeQ.addEventListener(
-  "change",
-  () => {
-    audioEngine.filterEnvelopeQ = parseFloat(ui.filterEnvelopeQ.value);
-  },
-  false
-);
+ui.attach("lfoFrequency", () => {
+  const max = 8;
+  const floor = 0.001;
+  const frequency = ui.expon(ui.lfoFrequency.value) * max + floor;
+  audioEngine.lfoFreq = frequency;
+});
 
-ui.detune.addEventListener(
-  "change",
-  () => {
-    compositionEngine.detune = parseFloat(ui.detune.value);
-  },
-  false
-);
+ui.attach("filterEnvelopeQ", () => {
+  audioEngine.filterEnvelopeQ = parseFloat(ui.filterEnvelopeQ.value);
+});
+
+ui.attach("detune", () => {
+  compositionEngine.detune = parseFloat(ui.detune.value);
+});
 
 function play() {
   compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
