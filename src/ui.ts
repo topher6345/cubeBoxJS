@@ -41,10 +41,6 @@ export default class UI {
     );
   }
 
-  getElem(kind: string, name: string) {
-    document.querySelector(`${kind}[name='${name}']`);
-  }
-
   attach(param: string, callback: Function) {
     (this as any)[param].addEventListener("change", callback, false);
   }
