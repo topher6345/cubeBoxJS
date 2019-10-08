@@ -63,32 +63,37 @@ export default class AudioEngine {
     const currentTime = this.ctx.currentTime;
     const expZero = 0.00000001;
 
-    const osc: OscillatorNode = this.ctx.createOscillator();
+    const oscillator: OscillatorNode = this.ctx.createOscillator();
     if (oscialltorType == "custom") {
-      osc.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
+      oscillator.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
     } else {
-      osc.type = <OscillatorType>oscialltorType;
+      oscillator.type = <OscillatorType>oscialltorType;
     }
-    osc.frequency.value = freq;
-    osc.detune.setValueAtTime(detune, currentTime + delay);
+    oscillator.frequency.value = freq;
+    oscillator.detune.setValueAtTime(detune, currentTime + delay);
 
-    const sine = this.ctx.createOscillator();
-    sine.type = "sine";
-    sine.frequency.value = this.lfoFreq;
+    const frequencyModulation = this.ctx.createOscillator();
+    frequencyModulation.type = "sine"; // TODO: hook this up to UI
+    frequencyModulation.frequency.value = this.lfoFreq;
 
-    const sineGain = this.ctx.createGain();
-    sineGain.gain.value = 3; // TODO: hook this up to UI
+    const frequencyModulationGain = this.ctx.createGain();
+    frequencyModulationGain.gain.value = 3; // TODO: hook this up to UI
 
-    const attackDecay = this.ctx.createGain();
+    const amplitudeEnvelope = this.ctx.createGain();
+    const amplitudeAttack = 0.1; // TODO: hook this up to UI
+    const amplitudeRelease = 0.2;
     // Amplitude Pre-Attack
-    attackDecay.gain.cancelScheduledValues(currentTime + delay);
-    attackDecay.gain.setValueAtTime(0, currentTime + delay);
+    amplitudeEnvelope.gain.cancelScheduledValues(currentTime + delay);
+    amplitudeEnvelope.gain.setValueAtTime(0, currentTime + delay);
     // Amplitude Attack
-    attackDecay.gain.linearRampToValueAtTime(1, currentTime + delay + 0.1);
+    amplitudeEnvelope.gain.linearRampToValueAtTime(
+      1,
+      currentTime + delay + amplitudeAttack
+    );
     // Amplitude Decay
-    attackDecay.gain.exponentialRampToValueAtTime(
+    amplitudeEnvelope.gain.exponentialRampToValueAtTime(
       expZero,
-      currentTime + delay + decayTime + 0.2
+      currentTime + delay + decayTime + amplitudeRelease
     );
 
     const biquadFilter = this.ctx.createBiquadFilter();
@@ -114,16 +119,16 @@ export default class AudioEngine {
     //            |
     //          frequency
     //            |
-    //           osc -> attackDecay -> biquadFilter -> masterFilter
-    sine.connect(sineGain);
-    sineGain.connect(osc.frequency);
-    osc.connect(attackDecay);
-    attackDecay.connect(biquadFilter);
+    //           osc -> amplitudeEnvelope -> biquadFilter -> masterFilter
+    frequencyModulation.connect(frequencyModulationGain);
+    frequencyModulationGain.connect(oscillator.frequency);
+    oscillator.connect(amplitudeEnvelope);
+    amplitudeEnvelope.connect(biquadFilter);
     biquadFilter.connect(this.masterFilter);
 
-    sine.start(currentTime + delay);
-    osc.start(currentTime + delay);
-    osc.stop(currentTime + decayTime + delay);
-    sine.stop(currentTime + decayTime + delay);
+    frequencyModulation.start(currentTime + delay);
+    oscillator.start(currentTime + delay);
+    oscillator.stop(currentTime + decayTime + delay);
+    frequencyModulation.stop(currentTime + decayTime + delay);
   }
 }
