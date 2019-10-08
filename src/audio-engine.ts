@@ -16,6 +16,8 @@ export default class AudioEngine {
   public lfoFreq: number;
   public filterEnvelopeQ: number;
   public filterEnvelopeStart: number;
+  public frequencyModulationAmount: number;
+  public amplitudeRelease: number;
 
   private ctx: AudioContext;
   private sineTerms: Float32Array;
@@ -40,11 +42,14 @@ export default class AudioEngine {
     this.lfoFreq = 0.01;
     this.filterEnvelopeQ = 0.01;
 
-    this.filterEnvelopeStart = 12000; // TODO: hook this up to UI
+    this.filterEnvelopeStart = 12000;
+    this.amplitudeRelease = 0.2;
 
     this.customWaveform = <PeriodicWave>(
       this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
     );
+
+    this.frequencyModulationAmount = 3;
   }
 
   currentTime(): number {
@@ -80,11 +85,10 @@ export default class AudioEngine {
     frequencyModulation.frequency.value = this.lfoFreq;
 
     const frequencyModulationGain = this.ctx.createGain();
-    frequencyModulationGain.gain.value = 3; // TODO: hook this up to UI
+    frequencyModulationGain.gain.value = this.frequencyModulationAmount;
 
     const amplitudeEnvelope = this.ctx.createGain();
     const amplitudeAttack = 0.1; // TODO: hook this up to UI
-    const amplitudeRelease = 0.2;
     // Amplitude Pre-Attack
     amplitudeEnvelope.gain.cancelScheduledValues(currentTime + delay);
     amplitudeEnvelope.gain.setValueAtTime(0, currentTime + delay);
@@ -96,7 +100,7 @@ export default class AudioEngine {
     // Amplitude Decay
     amplitudeEnvelope.gain.exponentialRampToValueAtTime(
       expZero,
-      currentTime + delay + decayTime + amplitudeRelease
+      currentTime + delay + decayTime + this.amplitudeRelease
     );
 
     const biquadFilter = this.ctx.createBiquadFilter();

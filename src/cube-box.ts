@@ -14,7 +14,7 @@ class CubeBox {
    * `Cube`s draw themselves on the screen.
    */
   private canvas: HTMLCanvasElement;
-  public ctx: CanvasRenderingContext2D;
+  private ctx: CanvasRenderingContext2D;
   private cubeOrigin: [number, number];
   private cubeSize: number;
   private cubes: Cube[];
@@ -110,6 +110,10 @@ class CubeBox {
 
   private clearRect() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  setBlendMode(blendMode: string) {
+    this.ctx.globalCompositeOperation = blendMode;
   }
 
   draw() {

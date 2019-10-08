@@ -11,8 +11,7 @@ const ui = new UI();
 
 ui.attach("blendModePicker", () => {
   const index = ui.blendModePicker.selectedIndex;
-  cubeBox.ctx.globalCompositeOperation =
-    ui.blendModePicker.options[index].value;
+  cubeBox.setBlendMode(ui.blendModePicker.options[index].value);
 });
 
 ui.attach("wavePicker", () => {
@@ -73,6 +72,15 @@ ui.attach("filterEnvelopeStart", () => {
   );
 });
 
+ui.attach("frequencyModulationAmount", () => {
+  audioEngine.frequencyModulationAmount = parseFloat(
+    ui.frequencyModulationAmount.value
+  );
+});
+
+ui.attach("amplitudeRelease", () => {
+  audioEngine.amplitudeRelease = parseFloat(ui.amplitudeRelease.value);
+});
 function play() {
   compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
     const scaleDegree = voice.next().value;

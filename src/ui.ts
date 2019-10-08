@@ -1,65 +1,48 @@
 export default class UI {
-  public wavePicker: HTMLSelectElement;
-  public volumeControl: HTMLInputElement;
-  public masterControl: HTMLInputElement;
-  public scalePicker: HTMLSelectElement;
-  public filterControl: HTMLInputElement;
-  public blendModePicker: HTMLSelectElement;
-  public decayTime: HTMLInputElement;
-  public octave: HTMLInputElement;
-  public lfoFrequency: HTMLInputElement;
-  public filterEnvelopeQ: HTMLInputElement;
-  public detune: HTMLInputElement;
-  public filterEnvelopeStart: HTMLInputElement;
+  wavePicker: HTMLSelectElement;
+  volumeControl: HTMLInputElement;
+  masterControl: HTMLInputElement;
+  scalePicker: HTMLSelectElement;
+  filterControl: HTMLInputElement;
+  blendModePicker: HTMLSelectElement;
+  decayTime: HTMLInputElement;
+  octave: HTMLInputElement;
+  lfoFrequency: HTMLInputElement;
+  filterEnvelopeQ: HTMLInputElement;
+  detune: HTMLInputElement;
+  filterEnvelopeStart: HTMLInputElement;
+  frequencyModulationAmount: HTMLInputElement;
+  amplitudeRelease: HTMLInputElement;
 
   constructor() {
-    this.wavePicker = <HTMLSelectElement>(
-      document.querySelector("select[name='waveform']")
+    this.wavePicker = document.querySelector("select[name='waveform']");
+    this.volumeControl = document.querySelector("input[name='volumeControl']");
+    this.masterControl = document.querySelector("input[name='masterControl']");
+    this.scalePicker = document.querySelector("select[name='scalePicker']");
+    this.filterControl = document.querySelector("input[name='filterControl']");
+    this.blendModePicker = document.querySelector(
+      "select[name='blendModePicker']"
     );
+    this.decayTime = document.querySelector("input[name='decayTime']");
+    this.octave = document.querySelector("input[name='octave']");
+    this.lfoFrequency = document.querySelector("input[name='lfoFrequency']");
+    this.filterEnvelopeQ = document.querySelector(
+      "input[name='filterEnvelopeQ']"
+    );
+    this.detune = document.querySelector("input[name='detune']");
+    this.filterEnvelopeStart = document.querySelector(
+      "input[name='filterEnvelopeStart']"
+    );
+    this.frequencyModulationAmount = document.querySelector(
+      "input[name='frequencyModulationAmount']"
+    );
+    this.amplitudeRelease = document.querySelector(
+      "input[name='frequencyModulationAmount']"
+    );
+  }
 
-    this.volumeControl = <HTMLInputElement>(
-      document.querySelector("input[name='volumeControl']")
-    );
-
-    this.masterControl = <HTMLInputElement>(
-      document.querySelector("input[name='masterControl']")
-    );
-
-    this.scalePicker = <HTMLSelectElement>(
-      document.querySelector("select[name='scalePicker']")
-    );
-
-    this.filterControl = <HTMLInputElement>(
-      document.querySelector("input[name='filterControl']")
-    );
-
-    this.blendModePicker = <HTMLSelectElement>(
-      document.querySelector("select[name='blendModePicker']")
-    );
-
-    this.decayTime = <HTMLInputElement>(
-      document.querySelector("input[name='decayTime']")
-    );
-
-    this.octave = <HTMLInputElement>(
-      document.querySelector("input[name='octave']")
-    );
-
-    this.lfoFrequency = <HTMLInputElement>(
-      document.querySelector("input[name='lfoFrequency']")
-    );
-
-    this.filterEnvelopeQ = <HTMLInputElement>(
-      document.querySelector("input[name='filterEnvelopeQ']")
-    );
-
-    this.detune = <HTMLInputElement>(
-      document.querySelector("input[name='detune']")
-    );
-
-    this.filterEnvelopeStart = <HTMLInputElement>(
-      document.querySelector("input[name='filterEnvelopeStart']")
-    );
+  getElem(kind: string, name: string) {
+    document.querySelector(`${kind}[name='${name}']`);
   }
 
   attach(param: string, callback: Function) {
