@@ -15,6 +15,7 @@ export default class AudioEngine {
   public masterFilter: BiquadFilterNode;
   public lfoFreq: number;
   public filterEnvelopeQ: number;
+  public filterEnvelopeStart: number;
 
   private ctx: AudioContext;
   private sineTerms: Float32Array;
@@ -38,6 +39,8 @@ export default class AudioEngine {
 
     this.lfoFreq = 0.01;
     this.filterEnvelopeQ = 0.01;
+
+    this.filterEnvelopeStart = 12000; // TODO: hook this up to UI
 
     this.customWaveform = <PeriodicWave>(
       this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
@@ -97,7 +100,6 @@ export default class AudioEngine {
     );
 
     const biquadFilter = this.ctx.createBiquadFilter();
-    const biquadFilterInitCutoffFreq = 12000; // TODO: hook this up to UI
     const filterEnvelopeSustain = 1000; // TODO: hook this up to UI
 
     biquadFilter.type = "lowpass";
@@ -105,7 +107,7 @@ export default class AudioEngine {
 
     // Filter Frequency Pre-Attack
     biquadFilter.frequency.setValueAtTime(
-      biquadFilterInitCutoffFreq,
+      this.filterEnvelopeStart,
       currentTime
     );
 

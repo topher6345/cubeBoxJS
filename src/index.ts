@@ -63,6 +63,16 @@ ui.attach("detune", () => {
   compositionEngine.detune = parseFloat(ui.detune.value);
 });
 
+ui.attach("filterEnvelopeStart", () => {
+  const max = 18500;
+  const floor = 1000;
+  const frequency = ui.expon(ui.filterEnvelopeStart.value) * max + floor;
+  audioEngine.masterFilter.frequency.setValueAtTime(
+    frequency,
+    audioEngine.currentTime()
+  );
+});
+
 function play() {
   compositionEngine.chordVoices.forEach((voice: Generator, index: number) => {
     const scaleDegree = voice.next().value;

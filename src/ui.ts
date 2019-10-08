@@ -10,6 +10,7 @@ export default class UI {
   public lfoFrequency: HTMLInputElement;
   public filterEnvelopeQ: HTMLInputElement;
   public detune: HTMLInputElement;
+  public filterEnvelopeStart: HTMLInputElement;
 
   constructor() {
     this.wavePicker = <HTMLSelectElement>(
@@ -54,6 +55,10 @@ export default class UI {
 
     this.detune = <HTMLInputElement>(
       document.querySelector("input[name='detune']")
+    );
+
+    this.filterEnvelopeStart = <HTMLInputElement>(
+      document.querySelector("input[name='filterEnvelopeStart']")
     );
   }
 
