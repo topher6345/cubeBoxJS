@@ -4,8 +4,10 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "lib": ["es2017", "dom"],
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "build"
   },
-  "include": ["src/*.ts"]
+  "include": ["src/*.ts", "src/index.new.tsx"]
 }
