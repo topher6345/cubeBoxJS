@@ -1,26 +1,4 @@
-type Inputs = {
-  elem: HTMLElement;
-  type: string;
-  min: number;
-  max: number;
-  step: number;
-  value: number;
-};
-
-class ControlType {
-  static createSlider(inputs: Inputs): HTMLInputElement {
-    const { elem, type, min, max, step, value } = inputs;
-    const slider = <HTMLInputElement>document.createElement(type);
-    elem.appendChild(slider);
-    slider.setAttribute("min", min.toString());
-    slider.setAttribute("max", max.toString());
-    slider.setAttribute("step", step.toString());
-    slider.setAttribute("value", value.toString());
-    return slider;
-  }
-}
-
-class Controls {
+export default class Controls {
   wavePicker: HTMLSelectElement;
   volumeControl: HTMLInputElement;
   masterControl: HTMLInputElement;
@@ -37,10 +15,8 @@ class Controls {
   amplitudeRelease: HTMLInputElement;
 
   private attached: string[];
-  private document: HTMLDocument;
 
-  constructor(document: HTMLDocument) {
-    this.document = document;
+  constructor() {
     this.blendModePicker = <HTMLSelectElement>(
       this.elem("select", "blendModePicker")
     );
@@ -102,7 +78,7 @@ class Controls {
   }
 
   private elem(kind: string, name: string): HTMLElement {
-    return this.document.querySelector(`${kind}[name='${name}']`);
+    return document.querySelector(`${kind}[name='${name}']`);
   }
 
   private difference(setA: string[], setB: string[]) {
@@ -113,5 +89,3 @@ class Controls {
     return _difference;
   }
 }
-
-export default Controls;

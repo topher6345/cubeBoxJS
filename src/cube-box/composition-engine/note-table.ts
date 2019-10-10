@@ -1,4 +1,4 @@
-export interface Octave {
+export type Octave = {
   [key: string]: number;
   C: number;
   "C#": number;
@@ -12,9 +12,9 @@ export interface Octave {
   A: number;
   "A#": number;
   B: number;
-}
+};
 
-export const noteFreq = [
+export const noteFreq = <Octave[]>[
   {
     A: 55.0,
     "A#": 58.270470189761239,

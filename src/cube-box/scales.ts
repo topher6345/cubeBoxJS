@@ -1,6 +1,6 @@
 type Degrees = [number, number, number, number, number, number, number];
 
-interface Scale {
+type Scale = {
   [key: string]: Degrees;
   Ionian: Degrees;
   Lydian: Degrees;
@@ -9,7 +9,7 @@ interface Scale {
   Aeolean: Degrees;
   Dorian: Degrees;
   Mixolydian: Degrees;
-}
+};
 
 export default <Scale>{
   Ionian: [0, 2, 4, 5, 7, 9, 11],
