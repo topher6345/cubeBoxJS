@@ -1,3 +1,25 @@
+type Inputs = {
+  elem: HTMLElement;
+  type: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+};
+
+class ControlType {
+  static createSlider(inputs: Inputs): HTMLInputElement {
+    const { elem, type, min, max, step, value } = inputs;
+    const slider = <HTMLInputElement>document.createElement(type);
+    elem.appendChild(slider);
+    slider.setAttribute("min", min.toString());
+    slider.setAttribute("max", max.toString());
+    slider.setAttribute("step", step.toString());
+    slider.setAttribute("value", value.toString());
+    return slider;
+  }
+}
+
 class Controls {
   wavePicker: HTMLSelectElement;
   volumeControl: HTMLInputElement;
@@ -15,7 +37,10 @@ class Controls {
   amplitudeRelease: HTMLInputElement;
 
   private attached: string[];
-  constructor() {
+  private document: HTMLDocument;
+
+  constructor(document: HTMLDocument) {
+    this.document = document;
     this.blendModePicker = <HTMLSelectElement>(
       this.elem("select", "blendModePicker")
     );
@@ -41,16 +66,32 @@ class Controls {
       this.elem("input", "frequencyModulationAmount")
     );
 
-    this.attached = ["scalePicker"];
-  }
-
-  elem(kind: string, name: string) {
-    return document.querySelector(`${kind}[name='${name}']`);
+    this.attached = ["scalePicker", "document"];
   }
 
   attach(param: string, callback: Function) {
     this.attached.push(param);
-    (this as any)[param].addEventListener("change", callback, false);
+    try {
+      (this as any)[param].addEventListener("change", callback, false);
+    } catch (e) {
+      throw `
+      Error: 
+        Expected DOM to have an HTML Element with name=${param}.
+      Ex. 
+        <span>{param}</span>
+        <input
+          type="range"
+          min="0.0"
+          max="1.0"
+          step="0.01"
+          value="0.5"
+          name="${param}"
+        />
+
+      Original Exception: 
+        ${e}
+      `;
+    }
   }
 
   validate() {
@@ -60,7 +101,11 @@ class Controls {
     }
   }
 
-  difference(setA: string[], setB: string[]) {
+  private elem(kind: string, name: string): HTMLElement {
+    return this.document.querySelector(`${kind}[name='${name}']`);
+  }
+
+  private difference(setA: string[], setB: string[]) {
     const _difference = new Set(setA);
     for (var elem of setB) {
       _difference.delete(elem);
@@ -69,4 +114,4 @@ class Controls {
   }
 }
 
-export default new Controls();
+export default Controls;

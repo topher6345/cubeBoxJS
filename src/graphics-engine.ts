@@ -128,4 +128,4 @@ class GraphicsEngine {
   }
 }
 
-export default new GraphicsEngine();
+export default GraphicsEngine;
