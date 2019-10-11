@@ -1,20 +1,29 @@
 import * as React from "react";
+import Slider from "./components/slider";
+import Select from "./components/select";
 
 class Foo extends React.Component {
+  options: string[];
   constructor(props: any) {
     super(props);
+
+    this.options = [
+      "Ionian",
+      "Lydian",
+      "Locrian",
+      "Phrygian",
+      "Aeolean",
+      "Dorian",
+      "Mixolydian"
+    ];
   }
+
   render() {
     return (
-      <input
-        type="range"
-        min="0.0"
-        max="1.0"
-        step="0.01"
-        value="0.5"
-        onChange={console.log}
-        name="volumeControl2"
-      />
+      <>
+        <Slider name="foobar" callback={console.log} />
+        <Select name="bas" callback={console.log} options={this.options} />
+      </>
     );
   }
 }
