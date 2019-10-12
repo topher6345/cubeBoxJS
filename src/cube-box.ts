@@ -18,74 +18,74 @@ export default class CubeBox {
     this.compositionEngine = new CompositionEngine(this.audioEngine, "square");
     this.controls = new Controls();
     this.masterControlState = true;
-    this.controls.attach("blendModePicker", () => {
-      const index = this.controls.blendModePicker.selectedIndex;
-      this.graphicsEngine.setBlendMode(
-        this.controls.blendModePicker.options[index].value
-      );
-    });
+    // this.controls.attach("blendModePicker", () => {
+    //   const index = this.controls.blendModePicker.selectedIndex;
+    //   this.graphicsEngine.setBlendMode(
+    //     this.controls.blendModePicker.options[index].value
+    //   );
+    // });
 
-    this.controls.attach("wavePicker", () => {
-      this.compositionEngine.oscialltorType = this.controls.wavePicker.options[
-        this.controls.wavePicker.selectedIndex
-      ].value;
-    });
+    // this.controls.attach("wavePicker", () => {
+    //   this.compositionEngine.oscialltorType = this.controls.wavePicker.options[
+    //     this.controls.wavePicker.selectedIndex
+    //   ].value;
+    // });
 
-    this.controls.attach("volumeControl", () => {
-      this.audioEngine.setMasterGain(this.controls.volumeControl.value);
-    });
+    // this.controls.attach("volumeControl", () => {
+    //   this.audioEngine.setMasterGain(this.controls.volumeControl.value);
+    // });
 
-    this.controls.attach("masterControl", () => {
-      this.masterControlState = this.controls.masterControl.checked;
-    });
+    // this.controls.attach("masterControl", () => {
+    //   this.masterControlState = this.controls.masterControl.checked;
+    // });
 
-    this.controls.attach("filterControl", () => {
-      this.audioEngine.setMasterFilterValue(this.controls.filterControl.value);
-    });
+    // this.controls.attach("filterControl", () => {
+    //   this.audioEngine.setMasterFilterValue(this.controls.filterControl.value);
+    // });
 
-    this.controls.attach("decayTime", () => {
-      this.compositionEngine.setDecayTime(this.controls.decayTime.value);
-    });
+    // this.controls.attach("decayTime", () => {
+    //   this.compositionEngine.setDecayTime(this.controls.decayTime.value);
+    // });
 
-    this.controls.attach("octave", () => {
-      this.compositionEngine.globalRoot = parseFloat(
-        this.controls.octave.value
-      );
-    });
+    // this.controls.attach("octave", () => {
+    //   this.compositionEngine.globalRoot = parseFloat(
+    //     this.controls.octave.value
+    //   );
+    // });
 
-    this.controls.attach("lfoFrequency", () => {
-      this.audioEngine.setLfoFrequency(this.controls.lfoFrequency.value);
-    });
+    // this.controls.attach("lfoFrequency", () => {
+    //   this.audioEngine.setLfoFrequency(this.controls.lfoFrequency.value);
+    // });
 
-    this.controls.attach("filterEnvelopeQ", () => {
-      this.audioEngine.filterEnvelopeQ = parseFloat(
-        this.controls.filterEnvelopeQ.value
-      );
-    });
+    // this.controls.attach("filterEnvelopeQ", () => {
+    //   this.audioEngine.filterEnvelopeQ = parseFloat(
+    //     this.controls.filterEnvelopeQ.value
+    //   );
+    // });
 
-    this.controls.attach("detune", () => {
-      this.compositionEngine.detune = parseFloat(this.controls.detune.value);
-    });
+    // this.controls.attach("detune", () => {
+    //   this.compositionEngine.detune = parseFloat(this.controls.detune.value);
+    // });
 
-    this.controls.attach("filterEnvelopeStart", () => {
-      this.audioEngine.setFilterEnvelopeStartFrequency(
-        this.controls.filterEnvelopeStart.value
-      );
-    });
+    // this.controls.attach("filterEnvelopeStart", () => {
+    //   this.audioEngine.setFilterEnvelopeStartFrequency(
+    //     this.controls.filterEnvelopeStart.value
+    //   );
+    // });
 
-    this.controls.attach("frequencyModulationAmount", () => {
-      this.audioEngine.frequencyModulationAmount = parseFloat(
-        this.controls.frequencyModulationAmount.value
-      );
-    });
+    // this.controls.attach("frequencyModulationAmount", () => {
+    //   this.audioEngine.frequencyModulationAmount = parseFloat(
+    //     this.controls.frequencyModulationAmount.value
+    //   );
+    // });
 
-    this.controls.attach("amplitudeRelease", () => {
-      this.audioEngine.amplitudeRelease = parseFloat(
-        this.controls.amplitudeRelease.value
-      );
-    });
+    // this.controls.attach("amplitudeRelease", () => {
+    //   this.audioEngine.amplitudeRelease = parseFloat(
+    //     this.controls.amplitudeRelease.value
+    //   );
+    // });
 
-    this.controls.validate();
+    // this.controls.validate();
     this.then = null;
   }
 
