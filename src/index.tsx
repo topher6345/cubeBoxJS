@@ -1,11 +1,22 @@
+import * as ReactDOM from "react-dom";
+import CubeBox from "./cube-box";
 import * as React from "react";
 import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
 
-class Foo extends React.Component {
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const cubeBox = new CubeBox(canvas);
+debugger;
+
+interface FooProps extends React.Props<any> {
+  cubeBox: CubeBox;
+}
+class Foo extends React.Component<FooProps> {
+  cubeBox: CubeBox;
   constructor(props: any) {
     super(props);
+    this.cubeBox = props.cubeBox;
   }
 
   render() {
@@ -48,7 +59,7 @@ class Foo extends React.Component {
           />
           <span>Current scale: </span>
           <Select
-            callback={console.log}
+            callback={this.cubeBox.updateScale}
             options={[
               "Ionian",
               "Lydian",
@@ -61,7 +72,7 @@ class Foo extends React.Component {
           />
           <span>Blend Mode: </span>
           <Select
-            callback={console.log}
+            callback={this.cubeBox.graphicsEngine.setBlendMode}
             options={[
               "source-over",
               "source-in",
@@ -97,4 +108,10 @@ class Foo extends React.Component {
   }
 }
 
-export default <Foo />;
+function draw(now: number) {
+  cubeBox.tick(now);
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+ReactDOM.render(<Foo cubeBox={cubeBox} />, document.getElementById("cubebox"));

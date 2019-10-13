@@ -1,22 +1,20 @@
 import Scales from "./cube-box/scales";
 import GraphicsEngine from "./cube-box/graphics-engine";
-import Controls from "./cube-box/controls";
 import AudioEngine from "./cube-box/audio-engine";
 import CompositionEngine from "./cube-box/composition-engine";
 
 export default class CubeBox {
-  private audioEngine: AudioEngine;
-  private compositionEngine: CompositionEngine;
-  private graphicsEngine: GraphicsEngine;
-  private controls: Controls;
-  private masterControlState: boolean;
-  private then: number;
+  audioEngine: AudioEngine;
+  compositionEngine: CompositionEngine;
+  graphicsEngine: GraphicsEngine;
+  masterControlState: boolean;
+  then: number;
+  scale: string;
 
-  constructor() {
+  constructor(canvas: HTMLCanvasElement) {
     this.audioEngine = new AudioEngine();
-    this.graphicsEngine = new GraphicsEngine();
+    this.graphicsEngine = new GraphicsEngine(canvas);
     this.compositionEngine = new CompositionEngine(this.audioEngine, "square");
-    this.controls = new Controls();
     this.masterControlState = true;
     // this.controls.attach("blendModePicker", () => {
     //   const index = this.controls.blendModePicker.selectedIndex;
@@ -87,6 +85,7 @@ export default class CubeBox {
 
     // this.controls.validate();
     this.then = null;
+    this.scale = "Ionian";
   }
 
   tick(now: number) {
@@ -104,13 +103,16 @@ export default class CubeBox {
     this.graphicsEngine.draw();
   }
 
+  updateScale(scale: string) {
+    this.scale = scale;
+  }
+
   private play() {
     this.compositionEngine.chordVoices.forEach(
       (voice: Generator, index: number) => {
         const scaleDegree = voice.next().value;
         if (scaleDegree) {
-          const colorIndex =
-            Scales[this.controls.scalePicker.value][scaleDegree];
+          const colorIndex = Scales[this.scale][scaleDegree];
           this.compositionEngine.notePressed(colorIndex, 0);
           this.graphicsEngine.play(index, colorIndex);
         }
@@ -122,8 +124,7 @@ export default class CubeBox {
         const scaleDegree = voice.next().value;
         const swipeFrequency = 0.4;
         if (scaleDegree) {
-          const colorIndex =
-            Scales[this.controls.scalePicker.value][scaleDegree];
+          const colorIndex = Scales[this.scale][scaleDegree];
           this.compositionEngine.notePressed(
             colorIndex,
             index * swipeFrequency

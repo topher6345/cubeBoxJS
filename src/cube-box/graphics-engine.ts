@@ -20,8 +20,8 @@ class GraphicsEngine {
   private squares: Squares[];
   private unitSquare: number;
 
-  constructor() {
-    this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
     this.ctx = <CanvasRenderingContext2D>this.canvas.getContext("2d");
     this.unitSquare = 33;
     this.squareOrigin = <[number, number]>[this.unitSquare, this.unitSquare];
