@@ -4,6 +4,12 @@ module.exports = {
   mode: "development",
   entry: "./src/index.tsx",
   devtool: "inline-source-map",
+
+  devServer: {
+    contentBase: __dirname,
+    publicPath: "/build/",
+    compress: true
+  },
   module: {
     rules: [
       {

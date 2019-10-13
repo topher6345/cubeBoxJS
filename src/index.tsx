@@ -11,7 +11,7 @@ const audioContext = new AudioContext();
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const cubeBox = new CubeBox(canvas, audioContext);
 
-class Controls extends React.Component {
+class Foo extends React.Component {
   constructor(props: any) {
     super(props);
   }
@@ -188,4 +188,4 @@ function draw(now: number) {
 }
 
 requestAnimationFrame(draw);
-ReactDOM.render(<Controls />, document.getElementById("cubebox"));
+ReactDOM.render(<Foo />, document.getElementById("cubebox"));

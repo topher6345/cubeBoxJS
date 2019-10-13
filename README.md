@@ -1,15 +1,17 @@
 # CubeBoxJS
 
-(Not really cubes but squares)
+A music box.
 
-Typescript rewrite of https://github.com/topher6345/maxmsp-CubeBox
+See colors blend as you hear the tones harmonize.
+
+React+Typescript+WebAudio+Canvas rewrite of https://github.com/topher6345/maxmsp-CubeBox
+
+(Not really cubes but squares)
 
 ## Getting Started
 
 - `npm i`
-- `npm run watch`
-- `gem install serve`
-- `serve`
+- `npm run start`
 
 ## How it draws animation and plays sounds
 
