@@ -15,10 +15,6 @@ class Foo extends React.Component<FooProps> {
     this.cubeBox = props.cubeBox;
   }
 
-  setMasterGain(input: string, cubeBox: CubeBox) {
-    cubeBox.audioEngine.masterGain.gain.value = this.expon(input);
-  }
-
   private expon(x: string) {
     // Must be in range 0.0-1.0
     return -Math.sqrt(-parseFloat(x) + 1) + 1;
@@ -30,37 +26,103 @@ class Foo extends React.Component<FooProps> {
         <div className="left">
           <div>
             <span>Volume: </span>
-            <Slider callback={this.setMasterGain} />
+            <Slider
+              callback={(e: string) =>
+                (cubeBox.audioEngine.masterGain.gain.value = this.expon(e))
+              }
+            />
             <span>On/Off</span>
-            <Toggle callback={console.log} />
+            <Toggle
+              callback={(e: boolean) => {
+                cubeBox.masterControlState = e;
+              }}
+            />
           </div>
           <div>
             <span>Decay time</span>
-            <Slider callback={console.log} min={0.5} max={8.0} step={0.5} />
+            <Slider
+              callback={(e: string) =>
+                cubeBox.compositionEngine.setDecayTime(e)
+              }
+              min={0.5}
+              max={8.0}
+              step={0.5}
+            />
             <span>Octave</span>
-            <Slider callback={console.log} min={0} max={6} step={1} />
+            <Slider
+              callback={(e: number) =>
+                (cubeBox.compositionEngine.globalRoot = e)
+              }
+              min={0}
+              max={6}
+              step={1}
+            />
             <span>Vibrato Rate</span>
-            <Slider callback={console.log} min={0.0} max={1.0} step={0.01} />
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.setLfoFrequency(e);
+              }}
+              min={0.0}
+              max={1.0}
+              step={0.01}
+            />
           </div>
           <div>
             <span>Filter Envelope Q</span>
-            <Slider callback={console.log} min={0.0} max={20.0} step={0.01} />
+            <Slider
+              callback={(e: number) => {
+                cubeBox.audioEngine.filterEnvelopeQ = e;
+              }}
+              min={0.0}
+              max={20.0}
+              step={0.01}
+            />
             <span>Detune</span>
-            <Slider callback={console.log} min={0.0} max={50.0} step={1} />
+            <Slider
+              callback={(e: number) => {
+                cubeBox.compositionEngine.detune = e;
+              }}
+              min={0.0}
+              max={50.0}
+              step={1}
+            />
             <span>Filter Envelope</span>
-            <Slider callback={console.log} min={0.0} max={1.0} step={0.01} />
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e);
+              }}
+              min={0.0}
+              max={1.0}
+              step={0.01}
+            />
           </div>
           <div>
             <span>Vibrato Amount</span>
-            <Slider callback={console.log} min={0.0} max={10.0} step={0.01} />
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.frequencyModulationAmount = parseFloat(e);
+              }}
+              min={0.0}
+              max={10.0}
+              step={0.01}
+            />
             <span>amplitudeRelease</span>
-            <Slider callback={console.log} min={0.2} max={3} step={0.01} />
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.amplitudeRelease = parseFloat(e);
+              }}
+              min={0.2}
+              max={3}
+              step={0.01}
+            />
           </div>
         </div>
         <div className="right">
           <span>Current waveform: </span>
           <Select
-            callback={console.log}
+            callback={(e: string) => {
+              cubeBox.compositionEngine.oscialltorType = e;
+            }}
             options={["sine", "square", "sawtooth", "custom", "triangle"]}
           />
           <span>Current scale: </span>
@@ -78,7 +140,9 @@ class Foo extends React.Component<FooProps> {
           />
           <span>Blend Mode: </span>
           <Select
-            callback={this.cubeBox.graphicsEngine.setBlendMode}
+            callback={(e: string) => {
+              cubeBox.graphicsEngine.setBlendMode(e);
+            }}
             options={[
               "source-over",
               "source-in",
