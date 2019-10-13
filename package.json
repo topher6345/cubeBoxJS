@@ -1,8 +1,8 @@
 {
   "name": "cubeboxjs",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A music box. See colors blend as you hear the tones harmonize.",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/topher6345/cubeBoxJS.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Christopher Saunders",
+  "license": "Creative Commons Attribution-NonCommercial 4.0 International License",
   "bugs": {
     "url": "https://github.com/topher6345/cubeBoxJS/issues"
   },

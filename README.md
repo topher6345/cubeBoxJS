@@ -4,7 +4,7 @@ A music box.
 
 See colors blend as you hear the tones harmonize.
 
-React+Typescript+WebAudio+Canvas rewrite of https://github.com/topher6345/maxmsp-CubeBox
+React + Typescript + WebAudio + Canvas rewrite of https://github.com/topher6345/maxmsp-CubeBox
 
 (Not really cubes but squares)
 
