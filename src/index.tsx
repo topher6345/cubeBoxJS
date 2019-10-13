@@ -1,6 +1,8 @@
 import * as ReactDOM from "react-dom";
-import CubeBox from "./cube-box";
 import * as React from "react";
+
+import CubeBox from "./cube-box";
+
 import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
