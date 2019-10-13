@@ -117,7 +117,9 @@ class Controls extends React.Component {
           />
           <span>Current scale: </span>
           <Select
-            callback={cubeBox.updateScale}
+            callback={(e: string) => {
+              cubeBox.scale = e;
+            }}
             options={[
               "Ionian",
               "Lydian",

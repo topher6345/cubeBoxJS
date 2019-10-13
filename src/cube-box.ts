@@ -35,10 +35,6 @@ export default class CubeBox {
     this.graphicsEngine.draw();
   }
 
-  updateScale(scale: string) {
-    this.scale = scale;
-  }
-
   private play() {
     this.compositionEngine.chordVoices.forEach(
       (voice: Generator, index: number) => {
