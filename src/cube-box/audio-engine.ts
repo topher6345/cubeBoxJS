@@ -25,8 +25,8 @@ export default class AudioEngine {
   cosineTerms: Float32Array;
   customWaveform: PeriodicWave;
 
-  constructor() {
-    this.ctx = new AudioContext();
+  constructor(ctx: AudioContext) {
+    this.ctx = ctx;
     this.masterGain = <GainNode>this.ctx.createGain();
     this.masterGain.connect(this.ctx.destination);
     this.masterFilter = this.ctx.createBiquadFilter();

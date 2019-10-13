@@ -7,6 +7,10 @@ import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
 
+const audioContext = new AudioContext();
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const cubeBox = new CubeBox(canvas, audioContext);
+
 class Controls extends React.Component {
   constructor(props: any) {
     super(props);
@@ -177,8 +181,6 @@ class Controls extends React.Component {
     );
   }
 }
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const cubeBox = new CubeBox(canvas);
 
 function draw(now: number) {
   cubeBox.tick(now);

@@ -8,11 +8,12 @@ export default class CubeBox {
   compositionEngine: CompositionEngine;
   graphicsEngine: GraphicsEngine;
   masterControlState: boolean;
-  then: number;
   scale: string;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.audioEngine = new AudioEngine();
+  private then: number;
+
+  constructor(canvas: HTMLCanvasElement, ctx: AudioContext) {
+    this.audioEngine = new AudioEngine(ctx);
     this.graphicsEngine = new GraphicsEngine(canvas);
     this.compositionEngine = new CompositionEngine(this.audioEngine);
     this.masterControlState = true;
