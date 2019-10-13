@@ -3,17 +3,18 @@ import GraphicsEngine from "./cube-box/graphics-engine";
 import AudioEngine from "./cube-box/audio-engine";
 import CompositionEngine from "./cube-box/composition-engine";
 
+/**
+ *
+ * CubeBox
+ *
+ * Responsible for drawing to the screen and playing the sounds
+ *
+ * exposes subsystems to the UI for interaction
+ *
+ * exposes one public method tick() which can be called at 60fps
+ *
+ */
 export default class CubeBox {
-  /**
-   *
-   * Responsible for drawing to the screen and playing the sounds
-   *
-   * exposes subsystems to the UI for interaction
-   *
-   * exposes one public method tick() which can be called at 60fps
-   *
-   */
-
   audioEngine: AudioEngine;
   compositionEngine: CompositionEngine;
   graphicsEngine: GraphicsEngine;

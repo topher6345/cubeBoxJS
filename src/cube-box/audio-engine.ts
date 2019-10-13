@@ -1,17 +1,12 @@
+/**
+ * AudioEngine is a subsystem that handles interaction with the WebAudio API.
+ *
+ * An instance is initialized which wraps the global audio context.
+ *
+ * The instance exposes a method playTone() which plays the sound.
+ *
+ */
 export default class AudioEngine {
-  /**
-   * AudioEngine is a subsystem that handles interaction with the WebAudio API.
-   *
-   * An instance is initialized which wraps the global audio context.
-   *
-   * The instance exposes a method playTone() which plays the sound.
-   *
-   */
-
-  /**
-   * These properties can be hooked up to the UI
-   * */
-
   public filterEnvelopeQ: number;
   public filterEnvelopeStart: number;
   public frequencyModulationAmount: number;

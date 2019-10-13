@@ -1,18 +1,17 @@
 import Squares from "./graphics-engine/square";
-
+/**
+ *
+ * Wraps the Canvas context
+ *
+ * This class is responsible for laying out the squares on the canvas.
+ *
+ * Call draw() to draw to the canvas.
+ *
+ * It passes the canvas contex into `Squares`s
+ *
+ * `Squares`s draw themselves on the screen.
+ */
 class GraphicsEngine {
-  /**
-   *
-   * An instance wraps the Canvas context
-   *
-   * This class is responsible for laying out the squares on the canvas.
-   *
-   * Call draw() to draw to the canvas.
-   *
-   * It passes the canvas contex into `Squares`s
-   *
-   * `Squares`s draw themselves on the screen.
-   */
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private squareOrigin: [number, number];
