@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --open",
+    "dev": "webpack-dev-server --open",
+    "start": "node server.js",
     "build": "webpack",
     "doc": "typedoc --out doc src",
-    "visualize": "madge --image graph.svg src/index.tsx"
+    "visualize": "madge --image graph.svg src/index.tsx",
+    "heroku-postbuild": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "madge": "^3.4.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
