@@ -4,6 +4,16 @@ import AudioEngine from "./cube-box/audio-engine";
 import CompositionEngine from "./cube-box/composition-engine";
 
 export default class CubeBox {
+  /**
+   *
+   * Responsible for drawing to the screen and playing the sounds
+   *
+   * exposes subsystems to the UI for interaction
+   *
+   * exposes one public method tick() which can be called at 60fps
+   *
+   */
+
   audioEngine: AudioEngine;
   compositionEngine: CompositionEngine;
   graphicsEngine: GraphicsEngine;
@@ -21,10 +31,15 @@ export default class CubeBox {
     this.scale = "Ionian";
   }
 
+  /**
+   *
+   * Every chordSpeed milliseconds call play()
+   *
+   */
+
   tick(now: number) {
     if (!this.then) this.then = now;
 
-    // Every chordSpeed milliseconds
     if (
       !this.then ||
       (now - this.then > this.compositionEngine.chordSpeed &&
@@ -36,6 +51,13 @@ export default class CubeBox {
     this.graphicsEngine.draw();
   }
 
+  /**
+   *
+   * play the chord voices (sounds and colors)
+   *
+   * play the swipe voices (sounds and colors)
+   *
+   */
   private play() {
     this.compositionEngine.chordVoices.forEach(
       (voice: Generator, index: number) => {
