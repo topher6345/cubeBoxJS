@@ -37,5 +37,8 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "webpack-dev-server": "^3.8.2"
+  },
+  "engines": {
+    "node": "8.16.1"
   }
 }
