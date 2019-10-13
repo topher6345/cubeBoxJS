@@ -10,7 +10,6 @@
     "build": "webpack",
     "doc": "typedoc --out doc src",
     "visualize": "madge --image graph.svg src/index.tsx",
-    "postinstall": "npm run build-ts",
     "heroku-postbuild": "webpack -p"
   },
   "repository": {
@@ -24,7 +23,7 @@
   },
   "homepage": "https://github.com/topher6345/cubeBoxJS#readme",
   "devDependencies": {
-    "@types/reasct": "^16.9.5",
+    "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.0",
