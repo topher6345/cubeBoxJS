@@ -10,6 +10,7 @@
     "build": "webpack",
     "doc": "typedoc --out doc src",
     "visualize": "madge --image graph.svg src/index.tsx",
+    "postinstall": "npm run build-ts",
     "heroku-postbuild": "webpack -p"
   },
   "repository": {
