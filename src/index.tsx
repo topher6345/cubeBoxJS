@@ -21,6 +21,12 @@ class Controls extends React.Component {
             <Slider
               callback={(e: string) => cubeBox.audioEngine.setMasterGain(e)}
             />
+            <span>Filter Freq: </span>
+            <Slider
+              callback={(e: string) =>
+                cubeBox.audioEngine.setMasterFilterValue(e)
+              }
+            />
             <span>On/Off</span>
             <Toggle
               callback={(e: boolean) => {
@@ -89,8 +95,8 @@ class Controls extends React.Component {
           <div>
             <span>Vibrato Amount</span>
             <Slider
-              callback={(e: string) => {
-                cubeBox.audioEngine.frequencyModulationAmount = parseFloat(e);
+              callback={(e: number) => {
+                cubeBox.audioEngine.frequencyModulationAmount = e;
               }}
               min={0.0}
               max={10.0}
