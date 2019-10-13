@@ -22,14 +22,13 @@ export default class CompositionEngine {
   private noteFrequencies: Octave[];
   private audioEngine: AudioEngine;
 
-  constructor(audioEngine: AudioEngine, oscialltorType: string) {
+  constructor(audioEngine: AudioEngine) {
     this.noteFrequencies = noteFreq;
     this.decayTime = 4;
     this.chordSpeed = this.decayTime * 1000; //ms
     this.chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
     this.swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 
-    this.oscialltorType = oscialltorType;
     this.audioEngine = audioEngine;
     this.detune = 0;
     this.globalRoot = 3;

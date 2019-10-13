@@ -1,13 +1,15 @@
 import * as React from "react";
 
 interface SelectProps extends React.Props<any> {
-  callback: Function;
+  callback?: Function;
   options: string[];
+  onChange?: Function;
 }
 
 export default class Select extends React.Component<SelectProps> {
-  options: Array<any>;
+  options: Array<string>;
   callback: Function;
+  defaultValue: string;
 
   constructor(props: any) {
     super(props);

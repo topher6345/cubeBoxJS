@@ -5,19 +5,9 @@ import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
 
-interface FooProps extends React.Props<any> {
-  cubeBox: CubeBox;
-}
-class Foo extends React.Component<FooProps> {
-  cubeBox: CubeBox;
+class Controls extends React.Component {
   constructor(props: any) {
     super(props);
-    this.cubeBox = props.cubeBox;
-  }
-
-  private expon(x: string) {
-    // Must be in range 0.0-1.0
-    return -Math.sqrt(-parseFloat(x) + 1) + 1;
   }
 
   render() {
@@ -27,9 +17,7 @@ class Foo extends React.Component<FooProps> {
           <div>
             <span>Volume: </span>
             <Slider
-              callback={(e: string) =>
-                (cubeBox.audioEngine.masterGain.gain.value = this.expon(e))
-              }
+              callback={(e: string) => cubeBox.audioEngine.setMasterGain(e)}
             />
             <span>On/Off</span>
             <Toggle
@@ -127,7 +115,7 @@ class Foo extends React.Component<FooProps> {
           />
           <span>Current scale: </span>
           <Select
-            callback={this.cubeBox.updateScale}
+            callback={cubeBox.updateScale}
             options={[
               "Ionian",
               "Lydian",
@@ -186,4 +174,4 @@ function draw(now: number) {
 }
 
 requestAnimationFrame(draw);
-ReactDOM.render(<Foo cubeBox={cubeBox} />, document.getElementById("cubebox"));
+ReactDOM.render(<Controls />, document.getElementById("cubebox"));

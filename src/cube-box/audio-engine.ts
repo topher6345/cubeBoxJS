@@ -136,7 +136,6 @@ export default class AudioEngine {
   }
 
   setMasterGain(input: string) {
-    debugger;
     this.masterGain.gain.value = this.expon(input);
   }
 

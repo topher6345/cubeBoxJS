@@ -14,7 +14,7 @@ export default class CubeBox {
   constructor(canvas: HTMLCanvasElement) {
     this.audioEngine = new AudioEngine();
     this.graphicsEngine = new GraphicsEngine(canvas);
-    this.compositionEngine = new CompositionEngine(this.audioEngine, "square");
+    this.compositionEngine = new CompositionEngine(this.audioEngine);
     this.masterControlState = true;
     this.then = null;
     this.scale = "Ionian";
