@@ -92,6 +92,66 @@ class Controls extends React.Component {
               step={0.01}
             />
           </div>
+        </div>
+        <div className="right">
+          <div>
+            <span>Current waveform: </span>
+            <Select
+              callback={(e: string) => {
+                cubeBox.compositionEngine.oscialltorType = e;
+              }}
+              options={["sine", "square", "sawtooth", "custom", "triangle"]}
+            />
+            <span>Current scale: </span>
+            <Select
+              callback={(e: string) => {
+                cubeBox.scale = e;
+              }}
+              options={[
+                "Ionian",
+                "Lydian",
+                "Locrian",
+                "Phrygian",
+                "Aeolean",
+                "Dorian",
+                "Mixolydian"
+              ]}
+            />
+            <span>Blend Mode: </span>
+            <Select
+              callback={(e: string) => {
+                cubeBox.graphicsEngine.setBlendMode(e);
+              }}
+              options={[
+                "source-over",
+                "source-in",
+                "source-out",
+                "source-atop",
+                "destination-over",
+                "destination-in",
+                "destination-out",
+                "destination-atop",
+                "lighter",
+                "copy",
+                "xor",
+                "multiply",
+                "screen",
+                "overlay",
+                "darken",
+                "lighten",
+                "color-dodge",
+                "color-burn",
+                "hard-light",
+                "soft-light",
+                "difference",
+                "exclusion",
+                "hue",
+                "saturation",
+                "color",
+                "luminosity"
+              ]}
+            />
+          </div>
           <div>
             <span>Vibrato Amount</span>
             <Slider
@@ -112,64 +172,6 @@ class Controls extends React.Component {
               step={0.01}
             />
           </div>
-        </div>
-        <div className="right">
-          <span>Current waveform: </span>
-          <Select
-            callback={(e: string) => {
-              cubeBox.compositionEngine.oscialltorType = e;
-            }}
-            options={["sine", "square", "sawtooth", "custom", "triangle"]}
-          />
-          <span>Current scale: </span>
-          <Select
-            callback={(e: string) => {
-              cubeBox.scale = e;
-            }}
-            options={[
-              "Ionian",
-              "Lydian",
-              "Locrian",
-              "Phrygian",
-              "Aeolean",
-              "Dorian",
-              "Mixolydian"
-            ]}
-          />
-          <span>Blend Mode: </span>
-          <Select
-            callback={(e: string) => {
-              cubeBox.graphicsEngine.setBlendMode(e);
-            }}
-            options={[
-              "source-over",
-              "source-in",
-              "source-out",
-              "source-atop",
-              "destination-over",
-              "destination-in",
-              "destination-out",
-              "destination-atop",
-              "lighter",
-              "copy",
-              "xor",
-              "multiply",
-              "screen",
-              "overlay",
-              "darken",
-              "lighten",
-              "color-dodge",
-              "color-burn",
-              "hard-light",
-              "soft-light",
-              "difference",
-              "exclusion",
-              "hue",
-              "saturation",
-              "color",
-              "luminosity"
-            ]}
-          />
         </div>
       </>
     );
