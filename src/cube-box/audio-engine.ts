@@ -17,13 +17,13 @@ export default class AudioEngine {
   public frequencyModulationAmount: number;
   public amplitudeRelease: number;
 
-  private lfoFreq: number;
-  private masterFilter: BiquadFilterNode;
-  private masterGain: GainNode;
-  private ctx: AudioContext;
-  private sineTerms: Float32Array;
-  private cosineTerms: Float32Array;
-  private customWaveform: PeriodicWave;
+  lfoFreq: number;
+  masterFilter: BiquadFilterNode;
+  masterGain: GainNode;
+  ctx: AudioContext;
+  sineTerms: Float32Array;
+  cosineTerms: Float32Array;
+  customWaveform: PeriodicWave;
 
   constructor() {
     this.ctx = new AudioContext();
@@ -136,6 +136,7 @@ export default class AudioEngine {
   }
 
   setMasterGain(input: string) {
+    debugger;
     this.masterGain.gain.value = this.expon(input);
   }
 

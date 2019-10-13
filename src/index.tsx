@@ -5,10 +5,6 @@ import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
 
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const cubeBox = new CubeBox(canvas);
-debugger;
-
 interface FooProps extends React.Props<any> {
   cubeBox: CubeBox;
 }
@@ -19,14 +15,24 @@ class Foo extends React.Component<FooProps> {
     this.cubeBox = props.cubeBox;
   }
 
+  setMasterGain(input: string, cubeBox: CubeBox) {
+    cubeBox.audioEngine.masterGain.gain.value = this.expon(input);
+  }
+
+  private expon(x: string) {
+    // Must be in range 0.0-1.0
+    return -Math.sqrt(-parseFloat(x) + 1) + 1;
+  }
+
   render() {
     return (
       <>
         <div className="left">
           <div>
             <span>Volume: </span>
-            <Slider callback={console.log} />
-            <Toggle callback={console.log} /> On/Off
+            <Slider callback={this.setMasterGain} />
+            <span>On/Off</span>
+            <Toggle callback={console.log} />
           </div>
           <div>
             <span>Decay time</span>
@@ -107,6 +113,8 @@ class Foo extends React.Component<FooProps> {
     );
   }
 }
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const cubeBox = new CubeBox(canvas);
 
 function draw(now: number) {
   cubeBox.tick(now);
