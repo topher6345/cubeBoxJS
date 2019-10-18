@@ -175,6 +175,15 @@ class Foo extends React.Component {
               max={3}
               step={0.01}
             />
+            <span>Swipe Space</span>
+            <Slider
+              callback={(e: string) => {
+                cubeBox.swipeFrequency = parseFloat(e);
+              }}
+              min={0.2}
+              max={3}
+              step={0.1}
+            />
           </div>
         </div>
       </>

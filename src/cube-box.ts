@@ -20,6 +20,7 @@ export default class CubeBox {
   graphicsEngine: GraphicsEngine;
   masterControlState: boolean;
   scale: string;
+  swipeFrequency: number;
 
   private then: number;
 
@@ -30,6 +31,7 @@ export default class CubeBox {
     this.masterControlState = true;
     this.then = null;
     this.scale = "Ionian";
+    this.swipeFrequency = 0.4;
   }
 
   /**
@@ -79,11 +81,11 @@ export default class CubeBox {
           const colorIndex = Scales[this.scale][scaleDegree];
           this.compositionEngine.notePressed(
             colorIndex,
-            index * swipeFrequency
+            index * this.swipeFrequency
           );
           setTimeout(
             () => this.graphicsEngine.play(index + 4, colorIndex),
-            index * swipeFrequency * 1000
+            index * this.swipeFrequency * 1000
           );
         }
       }

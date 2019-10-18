@@ -136,7 +136,7 @@ export default class AudioEngine {
 
   setMasterFilterValue(input: string) {
     this.masterFilter.frequency.setValueAtTime(
-      this.exponOver(input, 18500, 400),
+      this.exponOver(input, 18500, 20),
       this.currentTime()
     );
   }
