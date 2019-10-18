@@ -23,6 +23,8 @@ export default class CubeBox {
   swipeFrequency: number;
   chordOctave: number;
   swipeOctave: number;
+  swipeVelocity: number;
+  chordVelocity: number;
 
   private then: number;
 
@@ -36,6 +38,8 @@ export default class CubeBox {
     this.swipeFrequency = 0.4;
     this.chordOctave = 3;
     this.swipeOctave = 3;
+    this.chordVelocity = 1.0;
+    this.swipeVelocity = 1.0;
   }
 
   /**
@@ -71,7 +75,12 @@ export default class CubeBox {
         const scaleDegree = voice.next().value;
         if (scaleDegree) {
           const colorIndex = Scales[this.scale][scaleDegree];
-          this.compositionEngine.notePressed(colorIndex, this.chordOctave, 0);
+          this.compositionEngine.notePressed(
+            colorIndex,
+            this.chordOctave,
+            0,
+            this.chordVelocity
+          );
           this.graphicsEngine.play(index, colorIndex);
         }
       }
@@ -85,7 +94,8 @@ export default class CubeBox {
           this.compositionEngine.notePressed(
             colorIndex,
             this.swipeOctave,
-            index * this.swipeFrequency
+            index * this.swipeFrequency,
+            this.swipeVelocity
           );
           setTimeout(
             () => this.graphicsEngine.play(index + 4, colorIndex),

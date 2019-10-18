@@ -53,7 +53,8 @@ export default class AudioEngine {
     detune: number,
     delay: number,
     decayTime: number,
-    oscialltorType: string
+    oscialltorType: string,
+    velocity: number
   ) {
     /**
      * Every playTone() invocation creates a new oscialltor and destroys it when the note is done.
@@ -101,6 +102,11 @@ export default class AudioEngine {
     biquadFilter.type = "lowpass";
     biquadFilter.Q.value = this.filterEnvelopeQ;
 
+    const velocityGain = this.ctx.createGain();
+
+    // velocity = velocity > 1.0 ? 1.0 : velocity;
+    velocityGain.gain.setValueAtTime(velocity, currentTime + delay);
+
     // Filter Frequency Pre-Attack
     biquadFilter.frequency.setValueAtTime(
       this.filterEnvelopeStart,
@@ -117,12 +123,13 @@ export default class AudioEngine {
     //            |
     //          frequency
     //            |
-    //           osc -> amplitudeEnvelope -> biquadFilter -> masterFilter
+    //           osc -> amplitudeEnvelope -> biquadFilter -> velocityGain -> masterFilter
     frequencyModulation.connect(frequencyModulationGain);
     frequencyModulationGain.connect(oscillator.frequency);
     oscillator.connect(amplitudeEnvelope);
     amplitudeEnvelope.connect(biquadFilter);
-    biquadFilter.connect(this.masterFilter);
+    biquadFilter.connect(velocityGain);
+    velocityGain.connect(this.masterFilter);
 
     frequencyModulation.start(currentTime + delay);
     oscillator.start(currentTime + delay);

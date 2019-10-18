@@ -190,6 +190,24 @@ class Foo extends React.Component {
                 max={6}
                 step={1}
               />
+              <span>chord vel.</span>
+              <Slider
+                callback={(e: string) =>
+                  (cubeBox.chordVelocity = parseFloat(e))
+                }
+                min={0.0}
+                max={1.0}
+                step={0.01}
+              />
+              <span>swipe vel.</span>
+              <Slider
+                callback={(e: string) => {
+                  cubeBox.swipeVelocity = parseFloat(e);
+                }}
+                min={0.0}
+                max={1.0}
+                step={0.01}
+              />
             </div>
           </div>
         </div>
