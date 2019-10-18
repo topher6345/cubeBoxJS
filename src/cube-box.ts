@@ -81,7 +81,7 @@ export default class CubeBox {
             0,
             this.chordVelocity
           );
-          this.graphicsEngine.play(index, colorIndex);
+          this.graphicsEngine.play(index, colorIndex, this.chordVelocity * 100);
         }
       }
     );
@@ -98,7 +98,12 @@ export default class CubeBox {
             this.swipeVelocity
           );
           setTimeout(
-            () => this.graphicsEngine.play(index + 4, colorIndex),
+            () =>
+              this.graphicsEngine.play(
+                index + 4,
+                colorIndex,
+                this.chordVelocity * 100
+              ),
             index * this.swipeFrequency * 1000
           );
         }

@@ -19,6 +19,7 @@ export default class AudioEngine {
   sineTerms: Float32Array;
   cosineTerms: Float32Array;
   customWaveform: PeriodicWave;
+  exponentialEnvelope: boolean;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
@@ -46,6 +47,7 @@ export default class AudioEngine {
     );
 
     this.frequencyModulationAmount = 3;
+    this.exponentialEnvelope = true;
   }
 
   playTone(
@@ -91,10 +93,18 @@ export default class AudioEngine {
       currentTime + delay + amplitudeAttack
     );
     // Amplitude Decay
-    amplitudeEnvelope.gain.exponentialRampToValueAtTime(
-      expZero,
-      currentTime + delay + decayTime + this.amplitudeRelease
-    );
+    if (this.exponentialEnvelope) {
+      amplitudeEnvelope.gain.exponentialRampToValueAtTime(
+        expZero,
+        currentTime + delay + decayTime + this.amplitudeRelease
+      );
+    } else {
+      // Amplitude Decay
+      amplitudeEnvelope.gain.linearRampToValueAtTime(
+        0,
+        currentTime + delay + decayTime + this.amplitudeRelease
+      );
+    }
 
     const biquadFilter = this.ctx.createBiquadFilter();
     const filterEnvelopeSustain = 1000; // TODO: hook this up to UI

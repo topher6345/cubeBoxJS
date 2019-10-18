@@ -208,6 +208,12 @@ class Foo extends React.Component {
                 max={1.0}
                 step={0.01}
               />
+              <span>Sustain</span>
+              <Toggle
+                callback={(e: boolean) => {
+                  cubeBox.audioEngine.exponentialEnvelope = !e;
+                }}
+              />
             </div>
           </div>
         </div>

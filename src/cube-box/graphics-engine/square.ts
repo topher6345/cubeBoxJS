@@ -44,8 +44,8 @@ export default class Square {
     this.ctx.fillRect(x, y, xw, yw);
   }
 
-  play(degree: number) {
-    this.alpha = 70;
+  play(degree: number, velocity: number) {
+    this.alpha = Math.round(velocity);
     this.note = degree;
   }
 }

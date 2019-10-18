@@ -122,8 +122,8 @@ class GraphicsEngine {
     this.squares.forEach(cube => cube.draw());
   }
 
-  play(index: number, colorIndex: number) {
-    this.squares[index].play(colorIndex);
+  play(index: number, colorIndex: number, velocity: number) {
+    this.squares[index].play(colorIndex, velocity);
   }
 }
 
