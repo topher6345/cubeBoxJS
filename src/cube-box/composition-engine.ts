@@ -39,9 +39,9 @@ export default class CompositionEngine {
     this.chordSpeed = this.decayTime * 1000; //ms
   }
 
-  notePressed(note: number, delay: number) {
-    const stringNote = this.getStringNote(note);
-    const frequency = this.getNoteFrequencies(stringNote);
+  notePressed(note: number, octave: number, delay: number) {
+    const stringNote = this.getStringNote(note, octave);
+    const frequency = this.getNoteFrequencies(stringNote, octave);
 
     this.audioEngine.playTone(
       frequency,
@@ -59,11 +59,11 @@ export default class CompositionEngine {
     );
   }
 
-  private getStringNote(note: number) {
-    return Object.keys(this.noteFrequencies[this.globalRoot])[note];
+  private getStringNote(note: number, octave: number) {
+    return Object.keys(this.noteFrequencies[octave])[note];
   }
 
-  private getNoteFrequencies(note: string) {
-    return this.noteFrequencies[this.globalRoot][note];
+  private getNoteFrequencies(note: string, octave: number) {
+    return this.noteFrequencies[octave][note];
   }
 }

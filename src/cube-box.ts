@@ -21,6 +21,8 @@ export default class CubeBox {
   masterControlState: boolean;
   scale: string;
   swipeFrequency: number;
+  chordOctave: number;
+  swipeOctave: number;
 
   private then: number;
 
@@ -30,8 +32,10 @@ export default class CubeBox {
     this.compositionEngine = new CompositionEngine(this.audioEngine);
     this.masterControlState = true;
     this.then = null;
-    this.scale = "Ionian";
+    this.scale = "Lydian";
     this.swipeFrequency = 0.4;
+    this.chordOctave = 3;
+    this.swipeOctave = 3;
   }
 
   /**
@@ -67,7 +71,7 @@ export default class CubeBox {
         const scaleDegree = voice.next().value;
         if (scaleDegree) {
           const colorIndex = Scales[this.scale][scaleDegree];
-          this.compositionEngine.notePressed(colorIndex, 0);
+          this.compositionEngine.notePressed(colorIndex, this.chordOctave, 0);
           this.graphicsEngine.play(index, colorIndex);
         }
       }
@@ -76,11 +80,11 @@ export default class CubeBox {
     this.compositionEngine.swipeVoices.forEach(
       (voice: Generator, index: number) => {
         const scaleDegree = voice.next().value;
-        const swipeFrequency = 0.4;
         if (scaleDegree) {
           const colorIndex = Scales[this.scale][scaleDegree];
           this.compositionEngine.notePressed(
             colorIndex,
+            this.swipeOctave,
             index * this.swipeFrequency
           );
           setTimeout(

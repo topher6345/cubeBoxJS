@@ -21,11 +21,11 @@ class Foo extends React.Component {
       <>
         <div className="left">
           <div>
-            <span>Volume: </span>
+            <span>vol</span>
             <Slider
               callback={(e: string) => cubeBox.audioEngine.setMasterGain(e)}
             />
-            <span>Filter Freq: </span>
+            <span>fltr</span>
             <Slider
               callback={(e: string) =>
                 cubeBox.audioEngine.setMasterFilterValue(e)
@@ -39,7 +39,7 @@ class Foo extends React.Component {
             />
           </div>
           <div>
-            <span>Decay time</span>
+            <span>speed</span>
             <Slider
               callback={(e: string) =>
                 cubeBox.compositionEngine.setDecayTime(e)
@@ -48,16 +48,14 @@ class Foo extends React.Component {
               max={8.0}
               step={0.5}
             />
-            <span>Octave</span>
+            <span>chord oct.</span>
             <Slider
-              callback={(e: number) =>
-                (cubeBox.compositionEngine.globalRoot = e)
-              }
+              callback={(e: string) => (cubeBox.chordOctave = parseInt(e))}
               min={0}
               max={6}
               step={1}
             />
-            <span>Vibrato Rate</span>
+            <span>vib. rate</span>
             <Slider
               callback={(e: string) => {
                 cubeBox.audioEngine.setLfoFrequency(e);
@@ -68,7 +66,7 @@ class Foo extends React.Component {
             />
           </div>
           <div>
-            <span>Filter Envelope Q</span>
+            <span>fltr Q</span>
             <Slider
               callback={(e: number) => {
                 cubeBox.audioEngine.filterEnvelopeQ = e;
@@ -86,7 +84,7 @@ class Foo extends React.Component {
               max={50.0}
               step={1}
             />
-            <span>Filter Envelope</span>
+            <span>fltr env</span>
             <Slider
               callback={(e: string) => {
                 cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e);
@@ -99,21 +97,21 @@ class Foo extends React.Component {
         </div>
         <div className="right">
           <div>
-            <span>Current waveform: </span>
+            <span>wave</span>
             <Select
               callback={(e: string) => {
                 cubeBox.compositionEngine.oscialltorType = e;
               }}
-              options={["sine", "square", "sawtooth", "custom", "triangle"]}
+              options={["square", "sawtooth", "custom", "triangle", "sine"]}
             />
-            <span>Current scale: </span>
+            <span>scale</span>
             <Select
               callback={(e: string) => {
                 cubeBox.scale = e;
               }}
               options={[
-                "Ionian",
                 "Lydian",
+                "Ionian",
                 "Locrian",
                 "Phrygian",
                 "Aeolean",
@@ -121,7 +119,7 @@ class Foo extends React.Component {
                 "Mixolydian"
               ]}
             />
-            <span>Blend Mode: </span>
+            <span>blend</span>
             <Select
               callback={(e: string) => {
                 cubeBox.graphicsEngine.setBlendMode(e);
@@ -157,7 +155,7 @@ class Foo extends React.Component {
             />
           </div>
           <div>
-            <span>Vibrato Amount</span>
+            <span>vib. depth</span>
             <Slider
               callback={(e: number) => {
                 cubeBox.audioEngine.frequencyModulationAmount = e;
@@ -166,7 +164,7 @@ class Foo extends React.Component {
               max={10.0}
               step={0.01}
             />
-            <span>amplitudeRelease</span>
+            <span>apm rel</span>
             <Slider
               callback={(e: string) => {
                 cubeBox.audioEngine.amplitudeRelease = parseFloat(e);
@@ -175,7 +173,7 @@ class Foo extends React.Component {
               max={3}
               step={0.01}
             />
-            <span>Swipe Space</span>
+            <span>swipe speed</span>
             <Slider
               callback={(e: string) => {
                 cubeBox.swipeFrequency = parseFloat(e);
@@ -184,6 +182,15 @@ class Foo extends React.Component {
               max={3}
               step={0.1}
             />
+            <div>
+              <span>swipe oct.</span>
+              <Slider
+                callback={(e: string) => (cubeBox.swipeOctave = parseInt(e))}
+                min={0}
+                max={6}
+                step={1}
+              />
+            </div>
           </div>
         </div>
       </>
