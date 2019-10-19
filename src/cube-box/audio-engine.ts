@@ -12,7 +12,7 @@ import AmplitudeEnvelope from "./audio-engine/amplitude-envelope";
 import Oscillator from "./audio-engine/oscillator";
 import FequencyModulation from "./audio-engine/frequency-modulation";
 import Velocity from "./audio-engine/velocity";
-import { exponOver, expon } from "./audio-engine/expon";
+import exponOver from "./audio-engine/expon";
 
 export default class AudioEngine {
   public filterEnvelopeQ: number;
@@ -108,7 +108,7 @@ export default class AudioEngine {
   }
 
   setMasterGain(input: string): void {
-    this.masterGain.gain.value = expon(input);
+    this.masterGain.gain.value = exponOver(input, 1.0, 0.0);
   }
 
   setMasterFilterValue(input: string): void {
