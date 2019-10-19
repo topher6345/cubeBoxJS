@@ -1,4 +1,4 @@
-export class EnvelopeFilter {
+export default class EnvelopeFilter {
   ctx: AudioContext;
   currentTime: number;
 

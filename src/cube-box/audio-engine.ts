@@ -6,6 +6,8 @@
  * The instance exposes a method playTone() which plays the sound.
  *
  */
+
+import EnvelopeFilter from "./audio-engine/envelope-filter";
 export default class AudioEngine {
   public filterEnvelopeQ: number;
   public filterEnvelopeStart: number;
@@ -109,22 +111,11 @@ export default class AudioEngine {
       );
     }
 
-    const biquadFilter = this.ctx.createBiquadFilter();
-    const filterEnvelopeSustain = 1000; // TODO: hook this up to UI
-
-    biquadFilter.type = "lowpass";
-    biquadFilter.Q.value = this.filterEnvelopeQ;
-
-    // Filter Frequency Pre-Attack
-    biquadFilter.frequency.setValueAtTime(
+    const biquadFilter = new EnvelopeFilter(this.ctx).node(
       this.filterEnvelopeStart,
-      currentTime
-    );
-
-    // Filter Frequency Decay
-    biquadFilter.frequency.exponentialRampToValueAtTime(
-      filterEnvelopeSustain, // Filter Frequency Sustain
-      currentTime + delay + 1
+      this.filterEnvelopeQ,
+      this.filterEnvelopeSustain,
+      currentTime + delay
     );
 
     const velocityGain = this.ctx.createGain();
