@@ -16,13 +16,9 @@ export default class EnvelopeFilter {
 
     biquadFilter.type = "lowpass";
     biquadFilter.Q.value = Q;
-
-    // Filter Frequency Initialization
     biquadFilter.frequency.setValueAtTime(start, currentTime);
-
-    // Filter Frequency Decay
     biquadFilter.frequency.exponentialRampToValueAtTime(
-      sustain, // Filter Frequency Sustain
+      sustain,
       currentTime + delay + 1
     );
 
