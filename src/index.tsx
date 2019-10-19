@@ -100,12 +100,22 @@ class Foo extends React.Component {
               callback={(e: string) => {
                 cubeBox.audioEngine.frequencyModulationType = e;
               }}
-              options={["square", "sawtooth", "triangle", "sine"]}
+              options={["sawtooth", "square", "triangle", "sine"]}
             />
             <span>amp attack</span>
             <Slider
               callback={(e: string) => {
                 cubeBox.audioEngine.amplitudeAttack = parseFloat(e);
+              }}
+              min={0.01}
+              max={0.5}
+              step={0.01}
+            />
+
+            <span>fltr sustain</span>
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.setFilterEnvelopeSustain(e);
               }}
               min={0.01}
               max={0.5}

@@ -36,7 +36,7 @@ export default class AudioEngine {
 
     this.masterFilter = this.ctx.createBiquadFilter();
     this.masterFilter.type = "lowpass";
-    this.masterFilter.frequency.setValueAtTime(12000, this.ctx.currentTime);
+    this.masterFilter.frequency.setValueAtTime(8000, this.ctx.currentTime);
     this.masterFilter.Q.value = 0.01;
     this.masterFilter.connect(this.masterGain);
 
@@ -49,7 +49,7 @@ export default class AudioEngine {
 
     this.filterEnvelopeSustain = 1000;
     this.frequencyModulationType = "sine";
-    this.amplitudeAttack = 0.01;
+    this.amplitudeAttack = 0.15;
   }
 
   playTone(
@@ -126,5 +126,9 @@ export default class AudioEngine {
 
   setFilterEnvelopeStartFrequency(input: string): void {
     this.filterEnvelopeStart = exponOver(input, 18500, 1000);
+  }
+
+  setFilterEnvelopeSustain(input: string): void {
+    this.filterEnvelopeSustain = exponOver(input, 18500, 10);
   }
 }

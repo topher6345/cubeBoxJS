@@ -32,6 +32,8 @@ export default class CompositionEngine {
     this.audioEngine = audioEngine;
     this.detune = 0;
     this.globalRoot = 3;
+
+    this.oscialltorType = "sawtooth";
   }
 
   setDecayTime(decayTime: string) {
