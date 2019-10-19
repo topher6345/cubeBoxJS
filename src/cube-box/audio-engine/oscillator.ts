@@ -19,8 +19,10 @@ export default class Oscillator {
     oscialltorType: string,
     freq: number,
     detune: number,
-    delay: number
+    delay: number,
+    decayTime: number
   ): OscillatorNode {
+    const currentTime = this.ctx.currentTime;
     const oscillator = this.ctx.createOscillator();
 
     if (oscialltorType == "custom") {
@@ -30,7 +32,11 @@ export default class Oscillator {
     }
 
     oscillator.frequency.value = freq;
-    oscillator.detune.setValueAtTime(detune, this.ctx.currentTime + delay);
+    oscillator.detune.setValueAtTime(detune, currentTime + delay);
+
+    oscillator.start(currentTime + delay);
+    oscillator.stop(currentTime + decayTime + delay);
+
     return oscillator;
   }
 }

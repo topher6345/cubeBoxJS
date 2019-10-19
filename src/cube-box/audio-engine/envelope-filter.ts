@@ -9,19 +9,21 @@ export default class EnvelopeFilter {
     start: number,
     Q: number,
     sustain: number,
-    time: number
+    delay: number
   ): BiquadFilterNode {
+    const currentTime = this.ctx.currentTime;
     const biquadFilter = this.ctx.createBiquadFilter();
+
     biquadFilter.type = "lowpass";
     biquadFilter.Q.value = Q;
 
-    // Filter Frequency Pre-Attack
-    biquadFilter.frequency.setValueAtTime(start, this.ctx.currentTime);
+    // Filter Frequency Initialization
+    biquadFilter.frequency.setValueAtTime(start, currentTime);
 
     // Filter Frequency Decay
     biquadFilter.frequency.exponentialRampToValueAtTime(
       sustain, // Filter Frequency Sustain
-      time + 1
+      currentTime + delay + 1
     );
 
     return biquadFilter;

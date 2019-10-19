@@ -10,6 +10,8 @@
 import EnvelopeFilter from "./audio-engine/envelope-filter";
 import AmplitudeEnvelope from "./audio-engine/amplitude-envelope";
 import Oscillator from "./audio-engine/oscillator";
+import FequencyModulation from "./audio-engine/frequency-modulation";
+import Velocity from "./audio-engine/velocity";
 
 export default class AudioEngine {
   public filterEnvelopeQ: number;
@@ -60,55 +62,45 @@ export default class AudioEngine {
      *
      * We can do this because playTone requires a decayTime known ahead of time.
      */
-    const currentTime = this.ctx.currentTime;
-    const oscillator = new Oscillator(this.ctx).node(
+    const osc = new Oscillator(this.ctx).node(
       oscialltorType,
       freq,
       detune,
-      delay
+      delay,
+      decayTime
     );
 
-    const frequencyModulation = this.ctx.createOscillator();
-    frequencyModulation.type = "sine"; // TODO: hook this up to UI
-    frequencyModulation.frequency.value = this.lfoFreq;
+    const lfo = new FequencyModulation(this.ctx).node(
+      this.lfoFreq,
+      this.frequencyModulationAmount,
+      delay,
+      decayTime
+    );
 
-    const frequencyModulationGain = this.ctx.createGain();
-    frequencyModulationGain.gain.value = this.frequencyModulationAmount;
-
-    const amplitudeEnvelope = new AmplitudeEnvelope(this.ctx).node(
+    const ampEnv = new AmplitudeEnvelope(this.ctx).node(
       delay,
       this.exponentialEnvelope,
       decayTime,
       this.amplitudeRelease
     );
 
-    const biquadFilter = new EnvelopeFilter(this.ctx).node(
+    const filterEnv = new EnvelopeFilter(this.ctx).node(
       this.filterEnvelopeStart,
       this.filterEnvelopeQ,
       this.filterEnvelopeSustain,
-      currentTime + delay
+      delay
     );
 
-    const velocityGain = this.ctx.createGain();
-    velocityGain.gain.setValueAtTime(velocity, currentTime + delay);
+    const velocityGain = new Velocity(this.ctx).node(velocity, delay);
+    // lfo
+    //  |
+    // osc -> ampEnv -> filterEnv -> velocityGain -> masterFilter
 
-    // sine -> sineGain
-    //            |
-    //          frequency
-    //            |
-    //           osc -> amplitudeEnvelope -> biquadFilter -> velocityGain -> masterFilter
-    frequencyModulation.connect(frequencyModulationGain);
-    frequencyModulationGain.connect(oscillator.frequency);
-    oscillator.connect(amplitudeEnvelope);
-    amplitudeEnvelope.connect(biquadFilter);
-    biquadFilter.connect(velocityGain);
+    lfo.connect(osc.frequency);
+    osc.connect(ampEnv);
+    ampEnv.connect(filterEnv);
+    filterEnv.connect(velocityGain);
     velocityGain.connect(this.masterFilter);
-
-    frequencyModulation.start(currentTime + delay);
-    frequencyModulation.stop(currentTime + decayTime + delay);
-
-    oscillator.start(currentTime + delay);
-    oscillator.stop(currentTime + decayTime + delay);
   }
 
   setMasterGain(input: string): void {
@@ -118,7 +110,7 @@ export default class AudioEngine {
   setMasterFilterValue(input: string): void {
     this.masterFilter.frequency.setValueAtTime(
       this.exponOver(input, 18500, 20),
-      this.currentTime()
+      this.ctx.currentTime
     );
   }
 
@@ -129,7 +121,7 @@ export default class AudioEngine {
   setFilterEnvelopeStartFrequency(input: string): void {
     this.masterFilter.frequency.setValueAtTime(
       this.exponOver(input, 18500, 1000),
-      this.currentTime()
+      this.ctx.currentTime
     );
   }
 
@@ -140,9 +132,5 @@ export default class AudioEngine {
   private expon(x: string) {
     // Must be in range 0.0-1.0
     return -Math.sqrt(-parseFloat(x) + 1) + 1;
-  }
-
-  private currentTime(): number {
-    return this.ctx.currentTime;
   }
 }
