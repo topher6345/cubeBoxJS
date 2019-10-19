@@ -1,4 +1,4 @@
-export function* urnJB(length: number) {
+export default function* urnJB(length: number) {
   let array = randArray(length);
   let index = 0;
 

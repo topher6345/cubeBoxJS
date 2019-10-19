@@ -1,5 +1,5 @@
-import { urnJB } from "./composition-engine/random";
-import { noteFreq, Octave } from "./composition-engine/note-table";
+import urnJB from "./composition-engine/random";
+import NoteTable from "./composition-engine/note-table";
 import AudioEngine from "./audio-engine";
 
 export default class CompositionEngine {
@@ -19,17 +19,18 @@ export default class CompositionEngine {
   public decayTime: number;
   public detune: number;
 
-  private noteFrequencies: Octave[];
+  private noteTable: NoteTable;
   private audioEngine: AudioEngine;
 
   constructor(audioEngine: AudioEngine) {
-    this.noteFrequencies = noteFreq;
     this.decayTime = 4;
     this.chordSpeed = this.decayTime * 1000; //ms
     this.chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
     this.swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
 
     this.audioEngine = audioEngine;
+
+    this.noteTable = new NoteTable();
     this.detune = 0;
     this.globalRoot = 3;
 
@@ -47,8 +48,7 @@ export default class CompositionEngine {
     startTime: number,
     velocity: number
   ) {
-    const stringNote = this.getStringNote(note, octave);
-    const frequency = this.getNoteFrequencies(stringNote, octave);
+    const frequency = this.noteTable.getNoteFrequency(note, octave);
 
     this.audioEngine.playTone(
       startTime,
@@ -66,13 +66,5 @@ export default class CompositionEngine {
       this.oscialltorType,
       velocity
     );
-  }
-
-  private getStringNote(note: number, octave: number) {
-    return Object.keys(this.noteFrequencies[octave])[note];
-  }
-
-  private getNoteFrequencies(note: string, octave: number) {
-    return this.noteFrequencies[octave][note];
   }
 }

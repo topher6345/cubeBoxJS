@@ -100,13 +100,11 @@ export default class AudioEngine {
     const velocityGain = new Velocity(this.ctx).node(startTime, velocity);
 
     lfo.connect(osc.frequency);
-    osc.connect(ampEnv);
-    ampEnv.connect(filterEnv);
-    filterEnv.connect(velocityGain);
-    velocityGain.connect(this.masterFilter);
-    // lfo
-    //  |
-    // osc -> ampEnv -> filterEnv -> velocityGain -> masterFilter
+    osc
+      .connect(ampEnv)
+      .connect(filterEnv)
+      .connect(velocityGain)
+      .connect(this.masterFilter);
   }
 
   setMasterGain(input: string): void {
