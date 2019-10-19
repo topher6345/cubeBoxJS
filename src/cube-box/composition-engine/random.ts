@@ -1,12 +1,14 @@
 export function* urnJB(length: number) {
   let array = randArray(length);
-  let i = 0;
+  let index = 0;
+
   while (true) {
-    yield array[i];
-    i = i + 1;
-    if (i === length) {
+    yield array[index];
+    index = index + 1;
+
+    if (index === length) {
       array = randArray(length);
-      i = 0;
+      index = 0;
     }
   }
 }
