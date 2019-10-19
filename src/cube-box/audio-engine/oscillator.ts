@@ -1,9 +1,8 @@
 export default class Oscillator {
-  ctx: AudioContext;
-  currentTime: number;
-  sineTerms: Float32Array;
-  cosineTerms: Float32Array;
-  customWaveform: PeriodicWave;
+  private ctx: AudioContext;
+  private sineTerms: Float32Array;
+  private cosineTerms: Float32Array;
+  private customWaveform: PeriodicWave;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;

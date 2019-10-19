@@ -1,5 +1,5 @@
 export default class Velocity {
-  ctx: AudioContext;
+  private ctx: AudioContext;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;

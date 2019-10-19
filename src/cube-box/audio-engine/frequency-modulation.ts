@@ -1,5 +1,5 @@
 export default class FequencyModulation {
-  ctx: AudioContext;
+  private ctx: AudioContext;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;

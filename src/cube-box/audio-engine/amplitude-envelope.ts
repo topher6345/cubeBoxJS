@@ -1,7 +1,7 @@
 const expZero = 0.00000001;
 
 export default class AmplitudeEnvelope {
-  ctx: AudioContext;
+  private ctx: AudioContext;
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
   }
@@ -13,29 +13,30 @@ export default class AmplitudeEnvelope {
     amplitudeRelease: number
   ): GainNode {
     const currentTime = this.ctx.currentTime;
+    const playTime = currentTime + startTime;
     const amplitudeEnvelope = this.ctx.createGain();
     const amplitudeAttack = 0.1; // TODO: hook this up to UI
 
     // Amplitude Pre-Attack
-    amplitudeEnvelope.gain.cancelScheduledValues(currentTime + startTime);
-    amplitudeEnvelope.gain.setValueAtTime(0, currentTime + startTime);
+    amplitudeEnvelope.gain.cancelScheduledValues(playTime);
+    amplitudeEnvelope.gain.setValueAtTime(0, playTime);
 
     // Amplitude Attack
     amplitudeEnvelope.gain.linearRampToValueAtTime(
       1,
-      currentTime + startTime + amplitudeAttack
+      playTime + amplitudeAttack
     );
 
     // Amplitude Decay
     if (sustain) {
       amplitudeEnvelope.gain.exponentialRampToValueAtTime(
         expZero,
-        currentTime + startTime + decayTime + amplitudeRelease
+        playTime + decayTime + amplitudeRelease
       );
     } else {
       amplitudeEnvelope.gain.linearRampToValueAtTime(
         0,
-        currentTime + startTime + decayTime + amplitudeRelease
+        playTime + decayTime + amplitudeRelease
       );
     }
 
