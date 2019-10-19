@@ -14,7 +14,7 @@ export default class FequencyModulation {
     const currentTime = this.ctx.currentTime;
     const frequencyModulation = this.ctx.createOscillator();
 
-    frequencyModulation.type = "sine"; // TODO: hook this up to UI
+    frequencyModulation.type = <OscillatorType>frequencyModulationType;
     frequencyModulation.frequency.value = lfoFreq;
 
     frequencyModulation.start(currentTime + startTime);

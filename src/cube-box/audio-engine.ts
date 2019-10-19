@@ -18,6 +18,8 @@ export default class AudioEngine {
   public filterEnvelopeQ: number;
   public frequencyModulationAmount: number;
   public amplitudeRelease: number;
+  public amplitudeAttack: number;
+  public frequencyModulationType: string;
 
   ctx: AudioContext;
   masterGain: GainNode;
@@ -26,7 +28,6 @@ export default class AudioEngine {
   exponentialEnvelope: boolean;
   filterEnvelopeSustain: number;
   filterEnvelopeStart: number;
-  frequencyModulationType: string;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
@@ -48,6 +49,7 @@ export default class AudioEngine {
 
     this.filterEnvelopeSustain = 1000;
     this.frequencyModulationType = "sine";
+    this.amplitudeAttack = 0.01;
   }
 
   playTone(
@@ -83,7 +85,8 @@ export default class AudioEngine {
       startTime,
       decayTime,
       this.exponentialEnvelope,
-      this.amplitudeRelease
+      this.amplitudeRelease,
+      this.amplitudeAttack
     );
 
     const filterEnv = new EnvelopeFilter(this.ctx).node(

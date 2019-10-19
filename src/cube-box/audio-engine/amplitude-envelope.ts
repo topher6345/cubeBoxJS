@@ -10,12 +10,12 @@ export default class AmplitudeEnvelope {
     startTime: number,
     decayTime: number,
     sustain: boolean,
-    amplitudeRelease: number
+    amplitudeRelease: number,
+    amplitudeAttack: number
   ): GainNode {
     const currentTime = this.ctx.currentTime;
     const playTime = currentTime + startTime;
     const amplitudeEnvelope = this.ctx.createGain();
-    const amplitudeAttack = 0.1; // TODO: hook this up to UI
 
     // Amplitude Pre-Attack
     amplitudeEnvelope.gain.cancelScheduledValues(playTime);

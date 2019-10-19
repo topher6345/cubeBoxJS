@@ -102,6 +102,15 @@ class Foo extends React.Component {
               }}
               options={["square", "sawtooth", "triangle", "sine"]}
             />
+            <span>amp attack</span>
+            <Slider
+              callback={(e: string) => {
+                cubeBox.audioEngine.amplitudeAttack = parseFloat(e);
+              }}
+              min={0.01}
+              max={0.5}
+              step={0.01}
+            />
           </div>
         </div>
         <div className="right">
