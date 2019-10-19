@@ -16,7 +16,7 @@ export default class Oscillator {
   }
 
   node(
-    delay: number,
+    startTime: number,
     decayTime: number,
     oscialltorType: string,
     freq: number,
@@ -32,10 +32,10 @@ export default class Oscillator {
     }
 
     oscillator.frequency.value = freq;
-    oscillator.detune.setValueAtTime(detune, currentTime + delay);
+    oscillator.detune.setValueAtTime(detune, currentTime + startTime);
 
-    oscillator.start(currentTime + delay);
-    oscillator.stop(currentTime + decayTime + delay);
+    oscillator.start(currentTime + startTime);
+    oscillator.stop(currentTime + decayTime + startTime);
 
     return oscillator;
   }

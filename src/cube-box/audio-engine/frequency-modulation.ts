@@ -5,7 +5,7 @@ export default class FequencyModulation {
     this.ctx = ctx;
   }
   node(
-    delay: number,
+    startTime: number,
     decayTime: number,
     lfoFreq: number,
     frequencyModulationAmount: number
@@ -16,8 +16,8 @@ export default class FequencyModulation {
     frequencyModulation.type = "sine"; // TODO: hook this up to UI
     frequencyModulation.frequency.value = lfoFreq;
 
-    frequencyModulation.start(currentTime + delay);
-    frequencyModulation.stop(currentTime + decayTime + delay);
+    frequencyModulation.start(currentTime + startTime);
+    frequencyModulation.stop(currentTime + decayTime + startTime);
 
     const frequencyModulationGain = this.ctx.createGain();
     frequencyModulationGain.gain.value = frequencyModulationAmount;

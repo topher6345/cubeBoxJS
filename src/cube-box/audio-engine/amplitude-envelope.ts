@@ -7,7 +7,7 @@ export default class AmplitudeEnvelope {
   }
 
   node(
-    delay: number,
+    startTime: number,
     decayTime: number,
     sustain: boolean,
     amplitudeRelease: number
@@ -17,25 +17,25 @@ export default class AmplitudeEnvelope {
     const amplitudeAttack = 0.1; // TODO: hook this up to UI
 
     // Amplitude Pre-Attack
-    amplitudeEnvelope.gain.cancelScheduledValues(currentTime + delay);
-    amplitudeEnvelope.gain.setValueAtTime(0, currentTime + delay);
+    amplitudeEnvelope.gain.cancelScheduledValues(currentTime + startTime);
+    amplitudeEnvelope.gain.setValueAtTime(0, currentTime + startTime);
 
     // Amplitude Attack
     amplitudeEnvelope.gain.linearRampToValueAtTime(
       1,
-      currentTime + delay + amplitudeAttack
+      currentTime + startTime + amplitudeAttack
     );
 
     // Amplitude Decay
     if (sustain) {
       amplitudeEnvelope.gain.exponentialRampToValueAtTime(
         expZero,
-        currentTime + delay + decayTime + amplitudeRelease
+        currentTime + startTime + decayTime + amplitudeRelease
       );
     } else {
       amplitudeEnvelope.gain.linearRampToValueAtTime(
         0,
-        currentTime + delay + decayTime + amplitudeRelease
+        currentTime + startTime + decayTime + amplitudeRelease
       );
     }
 

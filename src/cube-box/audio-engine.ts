@@ -16,7 +16,6 @@ import { exponOver, expon } from "./audio-engine/expon";
 
 export default class AudioEngine {
   public filterEnvelopeQ: number;
-  public filterEnvelopeStart: number;
   public frequencyModulationAmount: number;
   public amplitudeRelease: number;
 
@@ -26,6 +25,7 @@ export default class AudioEngine {
   lfoFreq: number;
   exponentialEnvelope: boolean;
   filterEnvelopeSustain: number;
+  filterEnvelopeStart: number;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
@@ -49,10 +49,10 @@ export default class AudioEngine {
   }
 
   playTone(
+    startTime: number,
+    decayTime: number,
     freq: number,
     detune: number,
-    delay: number,
-    decayTime: number,
     oscialltorType: string,
     velocity: number
   ) {
@@ -62,7 +62,7 @@ export default class AudioEngine {
      * We can do this because playTone requires a decayTime known ahead of time.
      */
     const osc = new Oscillator(this.ctx).node(
-      delay,
+      startTime,
       decayTime,
       oscialltorType,
       freq,
@@ -70,37 +70,37 @@ export default class AudioEngine {
     );
 
     const lfo = new FequencyModulation(this.ctx).node(
-      delay,
+      startTime,
       decayTime,
       this.lfoFreq,
       this.frequencyModulationAmount
     );
 
     const ampEnv = new AmplitudeEnvelope(this.ctx).node(
-      delay,
+      startTime,
       decayTime,
       this.exponentialEnvelope,
       this.amplitudeRelease
     );
 
     const filterEnv = new EnvelopeFilter(this.ctx).node(
-      delay,
+      startTime,
       decayTime,
       this.filterEnvelopeStart,
       this.filterEnvelopeQ,
       this.filterEnvelopeSustain
     );
 
-    const velocityGain = new Velocity(this.ctx).node(delay, velocity);
-    // lfo
-    //  |
-    // osc -> ampEnv -> filterEnv -> velocityGain -> masterFilter
+    const velocityGain = new Velocity(this.ctx).node(startTime, velocity);
 
     lfo.connect(osc.frequency);
     osc.connect(ampEnv);
     ampEnv.connect(filterEnv);
     filterEnv.connect(velocityGain);
     velocityGain.connect(this.masterFilter);
+    // lfo
+    //  |
+    // osc -> ampEnv -> filterEnv -> velocityGain -> masterFilter
   }
 
   setMasterGain(input: string): void {

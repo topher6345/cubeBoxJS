@@ -39,23 +39,28 @@ export default class CompositionEngine {
     this.chordSpeed = this.decayTime * 1000; //ms
   }
 
-  notePressed(note: number, octave: number, delay: number, velocity: number) {
+  notePressed(
+    note: number,
+    octave: number,
+    startTime: number,
+    velocity: number
+  ) {
     const stringNote = this.getStringNote(note, octave);
     const frequency = this.getNoteFrequencies(stringNote, octave);
 
     this.audioEngine.playTone(
+      startTime,
+      this.decayTime,
       frequency,
       -this.detune,
-      delay,
-      this.decayTime,
       this.oscialltorType,
       velocity
     );
     this.audioEngine.playTone(
+      startTime,
+      this.decayTime,
       frequency,
       this.detune,
-      delay,
-      this.decayTime,
       this.oscialltorType,
       velocity
     );
