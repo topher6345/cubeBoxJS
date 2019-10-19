@@ -12,6 +12,7 @@ import AmplitudeEnvelope from "./audio-engine/amplitude-envelope";
 import Oscillator from "./audio-engine/oscillator";
 import FequencyModulation from "./audio-engine/frequency-modulation";
 import Velocity from "./audio-engine/velocity";
+import { exponOver, expon } from "./audio-engine/expon";
 
 export default class AudioEngine {
   public filterEnvelopeQ: number;
@@ -19,12 +20,10 @@ export default class AudioEngine {
   public frequencyModulationAmount: number;
   public amplitudeRelease: number;
 
-  lfoFreq: number;
-  masterFilter: BiquadFilterNode;
-  masterGain: GainNode;
   ctx: AudioContext;
-  sineTerms: Float32Array;
-  cosineTerms: Float32Array;
+  masterGain: GainNode;
+  masterFilter: BiquadFilterNode;
+  lfoFreq: number;
   exponentialEnvelope: boolean;
   filterEnvelopeSustain: number;
 
@@ -105,33 +104,21 @@ export default class AudioEngine {
   }
 
   setMasterGain(input: string): void {
-    this.masterGain.gain.value = this.expon(input);
+    this.masterGain.gain.value = expon(input);
   }
 
   setMasterFilterValue(input: string): void {
     this.masterFilter.frequency.setValueAtTime(
-      this.exponOver(input, 18500, 20),
+      exponOver(input, 18500, 20),
       this.ctx.currentTime
     );
   }
 
   setLfoFrequency(input: string): void {
-    this.lfoFreq = this.exponOver(input, 8, 0.001);
+    this.lfoFreq = exponOver(input, 8, 0.001);
   }
 
   setFilterEnvelopeStartFrequency(input: string): void {
-    this.masterFilter.frequency.setValueAtTime(
-      this.exponOver(input, 18500, 1000),
-      this.ctx.currentTime
-    );
-  }
-
-  private exponOver(input: string, max: number, floor: number) {
-    return this.expon(input) * max + floor;
-  }
-
-  private expon(x: string) {
-    // Must be in range 0.0-1.0
-    return -Math.sqrt(-parseFloat(x) + 1) + 1;
+    this.filterEnvelopeStart = exponOver(input, 18500, 1000);
   }
 }
