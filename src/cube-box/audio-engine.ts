@@ -20,6 +20,7 @@ export default class AudioEngine {
   cosineTerms: Float32Array;
   customWaveform: PeriodicWave;
   exponentialEnvelope: boolean;
+  filterEnvelopeSustain: number;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
@@ -48,6 +49,8 @@ export default class AudioEngine {
 
     this.frequencyModulationAmount = 3;
     this.exponentialEnvelope = true;
+
+    this.filterEnvelopeSustain = 1000;
   }
 
   playTone(
@@ -112,11 +115,6 @@ export default class AudioEngine {
     biquadFilter.type = "lowpass";
     biquadFilter.Q.value = this.filterEnvelopeQ;
 
-    const velocityGain = this.ctx.createGain();
-
-    // velocity = velocity > 1.0 ? 1.0 : velocity;
-    velocityGain.gain.setValueAtTime(velocity, currentTime + delay);
-
     // Filter Frequency Pre-Attack
     biquadFilter.frequency.setValueAtTime(
       this.filterEnvelopeStart,
@@ -128,6 +126,11 @@ export default class AudioEngine {
       filterEnvelopeSustain, // Filter Frequency Sustain
       currentTime + delay + 1
     );
+
+    const velocityGain = this.ctx.createGain();
+
+    // velocity = velocity > 1.0 ? 1.0 : velocity;
+    velocityGain.gain.setValueAtTime(velocity, currentTime + delay);
 
     // sine -> sineGain
     //            |
@@ -147,22 +150,22 @@ export default class AudioEngine {
     frequencyModulation.stop(currentTime + decayTime + delay);
   }
 
-  setMasterGain(input: string) {
+  setMasterGain(input: string): void {
     this.masterGain.gain.value = this.expon(input);
   }
 
-  setMasterFilterValue(input: string) {
+  setMasterFilterValue(input: string): void {
     this.masterFilter.frequency.setValueAtTime(
       this.exponOver(input, 18500, 20),
       this.currentTime()
     );
   }
 
-  setLfoFrequency(input: string) {
+  setLfoFrequency(input: string): void {
     this.lfoFreq = this.exponOver(input, 8, 0.001);
   }
 
-  setFilterEnvelopeStartFrequency(input: string) {
+  setFilterEnvelopeStartFrequency(input: string): void {
     this.masterFilter.frequency.setValueAtTime(
       this.exponOver(input, 18500, 1000),
       this.currentTime()
