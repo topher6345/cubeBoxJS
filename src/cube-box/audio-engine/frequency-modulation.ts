@@ -8,7 +8,8 @@ export default class FequencyModulation {
     startTime: number,
     decayTime: number,
     lfoFreq: number,
-    frequencyModulationAmount: number
+    frequencyModulationAmount: number,
+    frequencyModulationType: string
   ) {
     const currentTime = this.ctx.currentTime;
     const frequencyModulation = this.ctx.createOscillator();

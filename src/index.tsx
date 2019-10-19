@@ -94,6 +94,15 @@ class Foo extends React.Component {
               step={0.01}
             />
           </div>
+          <div>
+            <span>vib shape</span>
+            <Select
+              callback={(e: string) => {
+                cubeBox.audioEngine.frequencyModulationType = e;
+              }}
+              options={["square", "sawtooth", "triangle", "sine"]}
+            />
+          </div>
         </div>
         <div className="right">
           <div>

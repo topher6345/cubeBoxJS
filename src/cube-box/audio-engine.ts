@@ -26,6 +26,7 @@ export default class AudioEngine {
   exponentialEnvelope: boolean;
   filterEnvelopeSustain: number;
   filterEnvelopeStart: number;
+  frequencyModulationType: string;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
@@ -46,6 +47,7 @@ export default class AudioEngine {
     this.exponentialEnvelope = true;
 
     this.filterEnvelopeSustain = 1000;
+    this.frequencyModulationType = "sine";
   }
 
   playTone(
@@ -73,7 +75,8 @@ export default class AudioEngine {
       startTime,
       decayTime,
       this.lfoFreq,
-      this.frequencyModulationAmount
+      this.frequencyModulationAmount,
+      this.frequencyModulationType
     );
 
     const ampEnv = new AmplitudeEnvelope(this.ctx).node(
