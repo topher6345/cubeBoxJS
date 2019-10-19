@@ -5,10 +5,10 @@ export default class FequencyModulation {
     this.ctx = ctx;
   }
   node(
-    lfoFreq: number,
-    frequencyModulationAmount: number,
     delay: number,
-    decayTime: number
+    decayTime: number,
+    lfoFreq: number,
+    frequencyModulationAmount: number
   ) {
     const currentTime = this.ctx.currentTime;
     const frequencyModulation = this.ctx.createOscillator();

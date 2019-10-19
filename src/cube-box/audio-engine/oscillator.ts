@@ -16,11 +16,11 @@ export default class Oscillator {
   }
 
   node(
+    delay: number,
+    decayTime: number,
     oscialltorType: string,
     freq: number,
-    detune: number,
-    delay: number,
-    decayTime: number
+    detune: number
   ): OscillatorNode {
     const currentTime = this.ctx.currentTime;
     const oscillator = this.ctx.createOscillator();

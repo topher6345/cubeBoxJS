@@ -63,35 +63,36 @@ export default class AudioEngine {
      * We can do this because playTone requires a decayTime known ahead of time.
      */
     const osc = new Oscillator(this.ctx).node(
+      delay,
+      decayTime,
       oscialltorType,
       freq,
-      detune,
-      delay,
-      decayTime
+      detune
     );
 
     const lfo = new FequencyModulation(this.ctx).node(
-      this.lfoFreq,
-      this.frequencyModulationAmount,
       delay,
-      decayTime
+      decayTime,
+      this.lfoFreq,
+      this.frequencyModulationAmount
     );
 
     const ampEnv = new AmplitudeEnvelope(this.ctx).node(
       delay,
-      this.exponentialEnvelope,
       decayTime,
+      this.exponentialEnvelope,
       this.amplitudeRelease
     );
 
     const filterEnv = new EnvelopeFilter(this.ctx).node(
+      delay,
+      decayTime,
       this.filterEnvelopeStart,
       this.filterEnvelopeQ,
-      this.filterEnvelopeSustain,
-      delay
+      this.filterEnvelopeSustain
     );
 
-    const velocityGain = new Velocity(this.ctx).node(velocity, delay);
+    const velocityGain = new Velocity(this.ctx).node(delay, velocity);
     // lfo
     //  |
     // osc -> ampEnv -> filterEnv -> velocityGain -> masterFilter

@@ -6,10 +6,11 @@ export default class EnvelopeFilter {
   }
 
   node(
+    delay: number,
+    decayTime: number,
     start: number,
     Q: number,
-    sustain: number,
-    delay: number
+    sustain: number
   ): BiquadFilterNode {
     const currentTime = this.ctx.currentTime;
     const biquadFilter = this.ctx.createBiquadFilter();
@@ -19,7 +20,7 @@ export default class EnvelopeFilter {
     biquadFilter.frequency.setValueAtTime(start, currentTime);
     biquadFilter.frequency.exponentialRampToValueAtTime(
       sustain,
-      currentTime + delay + 1
+      currentTime + delay + decayTime
     );
 
     return biquadFilter;

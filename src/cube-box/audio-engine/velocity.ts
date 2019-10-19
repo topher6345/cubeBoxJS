@@ -5,7 +5,7 @@ export default class Velocity {
     this.ctx = ctx;
   }
 
-  node(velocity: number, delay: number): GainNode {
+  node(delay: number, velocity: number): GainNode {
     const velocityGain = this.ctx.createGain();
     velocityGain.gain.setValueAtTime(velocity, this.ctx.currentTime + delay);
     return velocityGain;

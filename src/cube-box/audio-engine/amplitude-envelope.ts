@@ -8,8 +8,8 @@ export default class AmplitudeEnvelope {
 
   node(
     delay: number,
-    sustain: boolean,
     decayTime: number,
+    sustain: boolean,
     amplitudeRelease: number
   ): GainNode {
     const currentTime = this.ctx.currentTime;
