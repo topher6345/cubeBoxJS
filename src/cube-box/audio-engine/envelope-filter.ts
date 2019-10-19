@@ -1,10 +1,8 @@
 export default class EnvelopeFilter {
   ctx: AudioContext;
-  currentTime: number;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
-    this.currentTime = this.ctx.currentTime;
   }
 
   node(
@@ -18,7 +16,7 @@ export default class EnvelopeFilter {
     biquadFilter.Q.value = Q;
 
     // Filter Frequency Pre-Attack
-    biquadFilter.frequency.setValueAtTime(start, this.currentTime);
+    biquadFilter.frequency.setValueAtTime(start, this.ctx.currentTime);
 
     // Filter Frequency Decay
     biquadFilter.frequency.exponentialRampToValueAtTime(

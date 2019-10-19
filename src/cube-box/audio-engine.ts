@@ -8,6 +8,9 @@
  */
 
 import EnvelopeFilter from "./audio-engine/envelope-filter";
+import AmplitudeEnvelope from "./audio-engine/amplitude-envelope";
+import Oscillator from "./audio-engine/oscillator";
+
 export default class AudioEngine {
   public filterEnvelopeQ: number;
   public filterEnvelopeStart: number;
@@ -20,7 +23,6 @@ export default class AudioEngine {
   ctx: AudioContext;
   sineTerms: Float32Array;
   cosineTerms: Float32Array;
-  customWaveform: PeriodicWave;
   exponentialEnvelope: boolean;
   filterEnvelopeSustain: number;
 
@@ -28,27 +30,17 @@ export default class AudioEngine {
     this.ctx = ctx;
     this.masterGain = <GainNode>this.ctx.createGain();
     this.masterGain.connect(this.ctx.destination);
+
     this.masterFilter = this.ctx.createBiquadFilter();
     this.masterFilter.type = "lowpass";
     this.masterFilter.frequency.setValueAtTime(12000, this.ctx.currentTime);
     this.masterFilter.Q.value = 0.01;
-
-    this.masterFilter.connect(this.masterGain);
-
-    this.sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-    this.cosineTerms = new Float32Array(this.sineTerms.length);
     this.masterFilter.connect(this.masterGain);
 
     this.lfoFreq = 0.01;
     this.filterEnvelopeQ = 0.01;
-
     this.filterEnvelopeStart = 12000;
     this.amplitudeRelease = 0.2;
-
-    this.customWaveform = <PeriodicWave>(
-      this.ctx.createPeriodicWave(this.cosineTerms, this.sineTerms)
-    );
-
     this.frequencyModulationAmount = 3;
     this.exponentialEnvelope = true;
 
@@ -69,16 +61,12 @@ export default class AudioEngine {
      * We can do this because playTone requires a decayTime known ahead of time.
      */
     const currentTime = this.ctx.currentTime;
-    const expZero = 0.00000001;
-
-    const oscillator: OscillatorNode = this.ctx.createOscillator();
-    if (oscialltorType == "custom") {
-      oscillator.setPeriodicWave(this.customWaveform); // TODO: Add more custom Waveforms
-    } else {
-      oscillator.type = <OscillatorType>oscialltorType;
-    }
-    oscillator.frequency.value = freq;
-    oscillator.detune.setValueAtTime(detune, currentTime + delay);
+    const oscillator = new Oscillator(this.ctx).node(
+      oscialltorType,
+      freq,
+      detune,
+      delay
+    );
 
     const frequencyModulation = this.ctx.createOscillator();
     frequencyModulation.type = "sine"; // TODO: hook this up to UI
@@ -87,29 +75,12 @@ export default class AudioEngine {
     const frequencyModulationGain = this.ctx.createGain();
     frequencyModulationGain.gain.value = this.frequencyModulationAmount;
 
-    const amplitudeEnvelope = this.ctx.createGain();
-    const amplitudeAttack = 0.1; // TODO: hook this up to UI
-    // Amplitude Pre-Attack
-    amplitudeEnvelope.gain.cancelScheduledValues(currentTime + delay);
-    amplitudeEnvelope.gain.setValueAtTime(0, currentTime + delay);
-    // Amplitude Attack
-    amplitudeEnvelope.gain.linearRampToValueAtTime(
-      1,
-      currentTime + delay + amplitudeAttack
+    const amplitudeEnvelope = new AmplitudeEnvelope(this.ctx).node(
+      delay,
+      this.exponentialEnvelope,
+      decayTime,
+      this.amplitudeRelease
     );
-    // Amplitude Decay
-    if (this.exponentialEnvelope) {
-      amplitudeEnvelope.gain.exponentialRampToValueAtTime(
-        expZero,
-        currentTime + delay + decayTime + this.amplitudeRelease
-      );
-    } else {
-      // Amplitude Decay
-      amplitudeEnvelope.gain.linearRampToValueAtTime(
-        0,
-        currentTime + delay + decayTime + this.amplitudeRelease
-      );
-    }
 
     const biquadFilter = new EnvelopeFilter(this.ctx).node(
       this.filterEnvelopeStart,
@@ -119,8 +90,6 @@ export default class AudioEngine {
     );
 
     const velocityGain = this.ctx.createGain();
-
-    // velocity = velocity > 1.0 ? 1.0 : velocity;
     velocityGain.gain.setValueAtTime(velocity, currentTime + delay);
 
     // sine -> sineGain
@@ -136,9 +105,10 @@ export default class AudioEngine {
     velocityGain.connect(this.masterFilter);
 
     frequencyModulation.start(currentTime + delay);
+    frequencyModulation.stop(currentTime + decayTime + delay);
+
     oscillator.start(currentTime + delay);
     oscillator.stop(currentTime + decayTime + delay);
-    frequencyModulation.stop(currentTime + decayTime + delay);
   }
 
   setMasterGain(input: string): void {
