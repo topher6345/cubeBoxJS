@@ -243,6 +243,17 @@ class Foo extends React.Component {
                 }}
               />
             </div>
+            <div>
+              <span>distortion amount</span>
+              <Slider
+                callback={(e: string) => {
+                  cubeBox.audioEngine.setDistortionAmount(e);
+                }}
+                min={0.0}
+                max={10}
+                step={0.01}
+              />
+            </div>
           </div>
         </div>
       </>

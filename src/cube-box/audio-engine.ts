@@ -13,11 +13,13 @@ import Oscillator from "./audio-engine/oscillator";
 import FequencyModulation from "./audio-engine/frequency-modulation";
 import Velocity from "./audio-engine/velocity";
 import exponOver from "./audio-engine/expon";
+import makeDistortionCurve from "./audio-engine/distortion";
 
 export default class AudioEngine {
   private ctx: AudioContext;
 
   public masterFilter: BiquadFilterNode;
+  public distortion: WaveShaperNode;
   private compressor: DynamicsCompressorNode;
   public masterGain: GainNode;
 
@@ -41,6 +43,11 @@ export default class AudioEngine {
     this.masterFilter.frequency.setValueAtTime(18500, this.ctx.currentTime);
     this.masterFilter.Q.value = 0.01;
 
+    this.distortion = ctx.createWaveShaper();
+
+    this.distortion.curve = makeDistortionCurve(0);
+    this.distortion.oversample = "4x";
+
     this.compressor = ctx.createDynamicsCompressor();
     this.compressor.threshold.setValueAtTime(-50, ctx.currentTime);
     this.compressor.knee.setValueAtTime(40, ctx.currentTime);
@@ -50,7 +57,8 @@ export default class AudioEngine {
 
     this.masterGain = <GainNode>this.ctx.createGain();
 
-    this.masterFilter
+    this.distortion
+      .connect(this.masterFilter)
       .connect(this.compressor)
       .connect(this.masterGain)
       .connect(this.ctx.destination);
@@ -120,7 +128,7 @@ export default class AudioEngine {
       .connect(ampEnv)
       .connect(filterEnv)
       .connect(velocityGain)
-      .connect(this.masterFilter);
+      .connect(this.distortion);
   }
 
   setMasterGain(input: string): void {
@@ -144,5 +152,9 @@ export default class AudioEngine {
 
   setFilterEnvelopeSustain(input: string): void {
     this.filterEnvelopeSustain = exponOver(input, 18500, 10);
+  }
+
+  setDistortionAmount(input: string): void {
+    this.distortion.curve = makeDistortionCurve(exponOver(input, 1.0, 0.0));
   }
 }
