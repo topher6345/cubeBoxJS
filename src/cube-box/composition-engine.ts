@@ -23,7 +23,7 @@ export default class CompositionEngine {
   private audioEngine: AudioEngine;
 
   constructor(audioEngine: AudioEngine) {
-    this.decayTime = 4;
+    this.decayTime = 2;
     this.chordSpeed = this.decayTime * 1000; //ms
     this.chordVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
     this.swipeVoices = [urnJB(7), urnJB(7), urnJB(7), urnJB(7)];
@@ -32,7 +32,7 @@ export default class CompositionEngine {
 
     this.noteTable = new NoteTable();
     this.detune = 0;
-    this.globalRoot = 3;
+    this.globalRoot = 2;
 
     this.oscialltorType = "sawtooth";
   }

@@ -6,24 +6,23 @@ export default class FequencyModulation {
   }
   node(
     startTime: number,
-    decayTime: number,
+    noteLength: number,
     lfoFreq: number,
-    frequencyModulationAmount: number,
-    frequencyModulationType: string
+    lfoAmount: number,
+    lfoWave: string
   ) {
     const currentTime = this.ctx.currentTime;
-    const frequencyModulation = this.ctx.createOscillator();
+    const lfo = this.ctx.createOscillator();
 
-    frequencyModulation.type = <OscillatorType>frequencyModulationType;
-    frequencyModulation.frequency.value = lfoFreq;
+    lfo.type = <OscillatorType>lfoWave;
+    lfo.frequency.value = lfoFreq;
 
-    frequencyModulation.start(currentTime + startTime);
-    frequencyModulation.stop(currentTime + decayTime + startTime);
+    lfo.start(currentTime + startTime);
+    lfo.stop(currentTime + noteLength + startTime);
 
-    const frequencyModulationGain = this.ctx.createGain();
-    frequencyModulationGain.gain.value = frequencyModulationAmount;
-    frequencyModulation.connect(frequencyModulationGain);
+    const gainNode = this.ctx.createGain();
+    gainNode.gain.value = lfoAmount;
 
-    return frequencyModulationGain;
+    return lfo.connect(gainNode);
   }
 }

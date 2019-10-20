@@ -15,41 +15,57 @@ import Velocity from "./audio-engine/velocity";
 import exponOver from "./audio-engine/expon";
 
 export default class AudioEngine {
-  public filterEnvelopeQ: number;
-  public frequencyModulationAmount: number;
-  public amplitudeRelease: number;
-  public amplitudeAttack: number;
-  public frequencyModulationType: string;
+  private ctx: AudioContext;
 
-  ctx: AudioContext;
-  masterGain: GainNode;
-  masterFilter: BiquadFilterNode;
-  lfoFreq: number;
-  exponentialEnvelope: boolean;
-  filterEnvelopeSustain: number;
-  filterEnvelopeStart: number;
+  public masterFilter: BiquadFilterNode;
+  private compressor: DynamicsCompressorNode;
+  public masterGain: GainNode;
+
+  public lfoAmount: number;
+  public lfoWave: string;
+  public lfoFreq: number;
+
+  public filterEnvelopeQ: number;
+  public filterEnvelopeSustain: number;
+  public filterEnvelopeStart: number;
+
+  public amplitudeRelease: number;
+  public sustain: boolean;
+  public amplitudeAttack: number;
 
   constructor(ctx: AudioContext) {
     this.ctx = ctx;
-    this.masterGain = <GainNode>this.ctx.createGain();
-    this.masterGain.connect(this.ctx.destination);
 
     this.masterFilter = this.ctx.createBiquadFilter();
     this.masterFilter.type = "lowpass";
-    this.masterFilter.frequency.setValueAtTime(8000, this.ctx.currentTime);
+    this.masterFilter.frequency.setValueAtTime(18500, this.ctx.currentTime);
     this.masterFilter.Q.value = 0.01;
-    this.masterFilter.connect(this.masterGain);
 
-    this.lfoFreq = 0.01;
-    this.filterEnvelopeQ = 0.01;
-    this.filterEnvelopeStart = 12000;
-    this.amplitudeRelease = 0.2;
-    this.frequencyModulationAmount = 3;
-    this.exponentialEnvelope = true;
+    this.compressor = ctx.createDynamicsCompressor();
+    this.compressor.threshold.setValueAtTime(-50, ctx.currentTime);
+    this.compressor.knee.setValueAtTime(40, ctx.currentTime);
+    this.compressor.ratio.setValueAtTime(12, ctx.currentTime);
+    this.compressor.attack.setValueAtTime(0, ctx.currentTime);
+    this.compressor.release.setValueAtTime(0.25, ctx.currentTime);
 
-    this.filterEnvelopeSustain = 1000;
-    this.frequencyModulationType = "sine";
-    this.amplitudeAttack = 0.15;
+    this.masterGain = <GainNode>this.ctx.createGain();
+
+    this.masterFilter
+      .connect(this.compressor)
+      .connect(this.masterGain)
+      .connect(this.ctx.destination);
+
+    this.lfoFreq = 0.1;
+    this.lfoAmount = 2;
+    this.lfoWave = "sine";
+
+    this.filterEnvelopeQ = 0.1;
+    this.filterEnvelopeStart = 18500;
+    this.filterEnvelopeSustain = 300;
+
+    this.amplitudeAttack = 0.25;
+    this.sustain = true;
+    this.amplitudeRelease = 0.4;
   }
 
   playTone(
@@ -77,14 +93,14 @@ export default class AudioEngine {
       startTime,
       decayTime,
       this.lfoFreq,
-      this.frequencyModulationAmount,
-      this.frequencyModulationType
+      this.lfoAmount,
+      this.lfoWave
     );
 
     const ampEnv = new AmplitudeEnvelope(this.ctx).node(
       startTime,
       decayTime,
-      this.exponentialEnvelope,
+      this.sustain,
       this.amplitudeRelease,
       this.amplitudeAttack
     );

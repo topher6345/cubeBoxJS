@@ -32,7 +32,7 @@ export default class CubeBox {
     this.audioEngine = new AudioEngine(ctx);
     this.graphicsEngine = new GraphicsEngine(canvas);
     this.compositionEngine = new CompositionEngine(this.audioEngine);
-    this.masterControlState = true;
+    this.masterControlState = false;
     this.then = null;
     this.scale = "Lydian";
     this.swipeFrequency = 0.4;

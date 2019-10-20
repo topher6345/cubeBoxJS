@@ -98,7 +98,7 @@ class Foo extends React.Component {
             <span>vib shape</span>
             <Select
               callback={(e: string) => {
-                cubeBox.audioEngine.frequencyModulationType = e;
+                cubeBox.audioEngine.lfoWave = e;
               }}
               options={["sawtooth", "square", "triangle", "sine"]}
             />
@@ -186,7 +186,7 @@ class Foo extends React.Component {
             <span>vib. depth</span>
             <Slider
               callback={(e: number) => {
-                cubeBox.audioEngine.frequencyModulationAmount = e;
+                cubeBox.audioEngine.lfoAmount = e;
               }}
               min={0.0}
               max={10.0}
@@ -239,7 +239,7 @@ class Foo extends React.Component {
               <span>Sustain</span>
               <Toggle
                 callback={(e: boolean) => {
-                  cubeBox.audioEngine.exponentialEnvelope = !e;
+                  cubeBox.audioEngine.sustain = !e;
                 }}
               />
             </div>

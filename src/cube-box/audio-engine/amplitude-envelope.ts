@@ -8,38 +8,35 @@ export default class AmplitudeEnvelope {
 
   node(
     startTime: number,
-    decayTime: number,
+    noteLength: number,
     sustain: boolean,
     amplitudeRelease: number,
     amplitudeAttack: number
   ): GainNode {
     const currentTime = this.ctx.currentTime;
     const playTime = currentTime + startTime;
-    const amplitudeEnvelope = this.ctx.createGain();
+    const gainNode = this.ctx.createGain();
 
     // Amplitude Pre-Attack
-    amplitudeEnvelope.gain.cancelScheduledValues(playTime);
-    amplitudeEnvelope.gain.setValueAtTime(0, playTime);
+    gainNode.gain.cancelScheduledValues(playTime);
+    gainNode.gain.setValueAtTime(0, playTime);
 
     // Amplitude Attack
-    amplitudeEnvelope.gain.linearRampToValueAtTime(
-      1,
-      playTime + amplitudeAttack
-    );
+    gainNode.gain.linearRampToValueAtTime(1, playTime + amplitudeAttack);
 
     // Amplitude Decay
     if (sustain) {
-      amplitudeEnvelope.gain.exponentialRampToValueAtTime(
+      gainNode.gain.exponentialRampToValueAtTime(
         expZero,
-        playTime + decayTime + amplitudeRelease
+        playTime + noteLength + amplitudeRelease
       );
     } else {
-      amplitudeEnvelope.gain.linearRampToValueAtTime(
+      gainNode.gain.linearRampToValueAtTime(
         0,
-        playTime + decayTime + amplitudeRelease
+        playTime + noteLength + amplitudeRelease
       );
     }
 
-    return amplitudeEnvelope;
+    return gainNode;
   }
 }
