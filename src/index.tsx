@@ -43,7 +43,7 @@ const route = (state: ControlValues) => {
 };
 route(hashStorage.state());
 
-class Foo extends React.Component {
+class ControlPanel extends React.Component {
   constructor(props: any) {
     super(props);
   }
@@ -295,10 +295,10 @@ window.addEventListener(
   "hashchange",
   () => {
     route(hashStorage.state());
-    ReactDOM.render(<Foo />, root);
+    ReactDOM.render(<ControlPanel />, root);
   },
   false
 );
 
 const root = document.getElementById("cubebox");
-ReactDOM.render(<Foo />, root);
+ReactDOM.render(<ControlPanel />, root);
