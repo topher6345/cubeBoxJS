@@ -26,6 +26,7 @@ type ControlValues = {
   setFilterEnvelopeSustain: string;
   oscialltorType: string;
   scale: string;
+  setBlendMode: string;
 };
 
 class HashStorage {
@@ -45,7 +46,8 @@ class HashStorage {
         amplitudeAttack: 0.04,
         setFilterEnvelopeSustain: "300",
         oscialltorType: "square",
-        scale: "Lydian"
+        scale: "Lydian",
+        setBlendMode: "source-over"
       });
     }
   }
@@ -98,7 +100,7 @@ const hashChange = () => {
   cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
   cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
   cubeBox.scale = state.scale;
-
+  cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
 };
 hashChange();
 
@@ -243,7 +245,7 @@ class Foo extends React.Component {
             <span>blend</span>
             <Select
               callback={(e: string) => {
-                cubeBox.graphicsEngine.setBlendMode(e);
+                hashStorage.update({ setBlendMode: e });
               }}
               options={[
                 "source-over",

@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import throttled from "../cube-box/throttled"
 interface SliderProps extends React.Props<any> {
   callback: Function;
   min?: number;
@@ -7,6 +7,7 @@ interface SliderProps extends React.Props<any> {
   step?: number;
 }
 
+const ThrottleRate = 1000;
 class Slider extends React.Component<SliderProps> {
   private callback: Function;
   private min: number;
@@ -34,7 +35,7 @@ class Slider extends React.Component<SliderProps> {
         min={this.min.toString()}
         max={this.max.toString()}
         step={this.step.toString()}
-        onChange={e => this.callback(e.target.value)}
+        onChange={throttled(ThrottleRate, (e:any) => this.callback(e.target.value))  }
       />
     );
   }
