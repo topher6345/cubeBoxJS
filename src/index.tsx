@@ -29,12 +29,14 @@ type ControlValues = {
   setBlendMode: string;
   lfoAmount: number;
   amplitudeRelease: number;
+  swipeFrequency: number;
+  swipeOctave: number;
+  chordVelocity: number;
+  swipeVelocity: number;
+  sustain: boolean;
 };
 
-class HashStorage {
-  constructor() {
-    if (this.isEmpty(this.decode(window.location.hash))) {
-      window.location.hash = this.encode({
+const INIT_CONTROL_VALUES: ControlValues = {
         masterGain: "1.0",
         setMasterFilterValue: "1.0",
         masterControlState: false,
@@ -51,8 +53,18 @@ class HashStorage {
         scale: "Lydian",
         setBlendMode: "source-over",
         lfoAmount: 0.1,
-        amplitudeRelease: 0.1
-      });
+        amplitudeRelease: 0.1,
+        swipeFrequency: 0.1,
+        swipeOctave: 3,
+        chordVelocity: 0.1,
+        swipeVelocity: 0.1,
+        sustain: false
+      }
+
+class HashStorage {
+  constructor() {
+    if (this.isEmpty(this.decode(window.location.hash))) {
+      window.location.hash = this.encode(INIT_CONTROL_VALUES);
     }
   }
 
@@ -107,6 +119,11 @@ const hashChange = () => {
   cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
   cubeBox.audioEngine.lfoAmount = state.lfoAmount;
   cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
+  cubeBox.swipeFrequency = state.swipeFrequency;
+  cubeBox.swipeOctave = state.swipeOctave;
+  cubeBox.chordVelocity = state.chordVelocity
+  cubeBox.swipeVelocity = state.swipeVelocity;
+  cubeBox.audioEngine.sustain = state.sustain;
 };
 hashChange();
 
@@ -304,8 +321,8 @@ class Foo extends React.Component {
             />
             <span>swipe speed</span>
             <Slider
-              callback={(e: string) => {
-                cubeBox.swipeFrequency = parseFloat(e);
+              callback={(e: number) => {
+                hashStorage.update({ swipeFrequency: e });
               }}
               min={0.2}
               max={3}
@@ -314,15 +331,16 @@ class Foo extends React.Component {
             <div>
               <span>swipe oct.</span>
               <Slider
-                callback={(e: string) => (cubeBox.swipeOctave = parseInt(e))}
+                callback={(e: string) =>
+                  hashStorage.update({ swipeOctave: parseInt(e) })}
                 min={0}
                 max={6}
                 step={1}
               />
               <span>chord vel.</span>
               <Slider
-                callback={(e: string) =>
-                  (cubeBox.chordVelocity = parseFloat(e))
+                callback={(e: number) =>
+                  hashStorage.update({ chordVelocity: e })
                 }
                 min={0.0}
                 max={1.0}
@@ -330,8 +348,8 @@ class Foo extends React.Component {
               />
               <span>swipe vel.</span>
               <Slider
-                callback={(e: string) => {
-                  cubeBox.swipeVelocity = parseFloat(e);
+                callback={(e: number) => {
+                  hashStorage.update({ swipeVelocity: e })
                 }}
                 min={0.0}
                 max={1.0}
@@ -340,7 +358,7 @@ class Foo extends React.Component {
               <span>Sustain</span>
               <Toggle
                 callback={(e: boolean) => {
-                  cubeBox.audioEngine.sustain = !e;
+                  hashStorage.update({ sustain: !e })
                 }}
               />
             </div>
