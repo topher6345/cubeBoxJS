@@ -20,6 +20,8 @@ type ControlValues = {
   setLfoFrequency: string;
   filterEnvelopeQ: number;
   detune: number;
+  setFilterEnvelopeStartFrequency: string;
+  lfoWave: string;
 };
 
 class HashStorage {
@@ -33,7 +35,9 @@ class HashStorage {
         chordOctave: 4,
         setLfoFrequency: "0.1",
         filterEnvelopeQ: 0.1,
-        detune: 0.0
+        detune: 0.0,
+        setFilterEnvelopeStartFrequency: "100",
+        lfoWave: "square"
       });
     }
   }
@@ -80,6 +84,8 @@ const hashChange = () => {
   cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
   cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
   cubeBox.compositionEngine.detune = state.detune;
+  cubeBox.audioEngine.setFilterEnvelopeStartFrequency(state.setFilterEnvelopeStartFrequency);
+  cubeBox.audioEngine.lfoWave = state.lfoWave;
 
 };
 hashChange();
@@ -162,7 +168,7 @@ class Foo extends React.Component {
             <span>fltr env</span>
             <Slider
               callback={(e: string) => {
-                cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e);
+                hashStorage.update({ setFilterEnvelopeStartFrequency: e });
               }}
               min={0.0}
               max={1.0}
@@ -173,7 +179,8 @@ class Foo extends React.Component {
             <span>vib shape</span>
             <Select
               callback={(e: string) => {
-                cubeBox.audioEngine.lfoWave = e;
+                hashStorage.update({ lfoWave: e });
+                
               }}
               options={["sawtooth", "square", "triangle", "sine"]}
             />
