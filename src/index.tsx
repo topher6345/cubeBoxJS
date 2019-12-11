@@ -37,29 +37,29 @@ type ControlValues = {
 };
 
 const INIT_CONTROL_VALUES: ControlValues = {
-        masterGain: "1.0",
-        setMasterFilterValue: "1.0",
-        masterControlState: false,
-        setDecayTime: "1.0",
-        chordOctave: 4,
-        setLfoFrequency: "0.1",
-        filterEnvelopeQ: 0.1,
-        detune: 0.0,
-        setFilterEnvelopeStartFrequency: "100",
-        lfoWave: "sawtooth",
-        amplitudeAttack: 0.04,
-        setFilterEnvelopeSustain: "300",
-        oscialltorType: "square",
-        scale: "Lydian",
-        setBlendMode: "source-over",
-        lfoAmount: 0.1,
-        amplitudeRelease: 0.1,
-        swipeFrequency: 0.1,
-        swipeOctave: 3,
-        chordVelocity: 0.1,
-        swipeVelocity: 0.1,
-        sustain: false
-      }
+  masterGain: "1.0",
+  setMasterFilterValue: "1.0",
+  masterControlState: false,
+  setDecayTime: "1.0",
+  chordOctave: 4,
+  setLfoFrequency: "0.1",
+  filterEnvelopeQ: 0.1,
+  detune: 0.0,
+  setFilterEnvelopeStartFrequency: "100",
+  lfoWave: "sawtooth",
+  amplitudeAttack: 0.04,
+  setFilterEnvelopeSustain: "300",
+  oscialltorType: "square",
+  scale: "Lydian",
+  setBlendMode: "source-over",
+  lfoAmount: 0.1,
+  amplitudeRelease: 0.1,
+  swipeFrequency: 0.1,
+  swipeOctave: 3,
+  chordVelocity: 0.1,
+  swipeVelocity: 0.1,
+  sustain: false
+};
 
 class HashStorage {
   constructor() {
@@ -110,7 +110,9 @@ const hashChange = () => {
   cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
   cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
   cubeBox.compositionEngine.detune = state.detune;
-  cubeBox.audioEngine.setFilterEnvelopeStartFrequency(state.setFilterEnvelopeStartFrequency);
+  cubeBox.audioEngine.setFilterEnvelopeStartFrequency(
+    state.setFilterEnvelopeStartFrequency
+  );
   cubeBox.audioEngine.lfoWave = state.lfoWave;
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
   cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
@@ -121,7 +123,7 @@ const hashChange = () => {
   cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
   cubeBox.swipeFrequency = state.swipeFrequency;
   cubeBox.swipeOctave = state.swipeOctave;
-  cubeBox.chordVelocity = state.chordVelocity
+  cubeBox.chordVelocity = state.chordVelocity;
   cubeBox.swipeVelocity = state.swipeVelocity;
   cubeBox.audioEngine.sustain = state.sustain;
 };
@@ -332,7 +334,8 @@ class Foo extends React.Component {
               <span>swipe oct.</span>
               <Slider
                 callback={(e: string) =>
-                  hashStorage.update({ swipeOctave: parseInt(e) })}
+                  hashStorage.update({ swipeOctave: parseInt(e) })
+                }
                 min={0}
                 max={6}
                 step={1}
@@ -349,7 +352,7 @@ class Foo extends React.Component {
               <span>swipe vel.</span>
               <Slider
                 callback={(e: number) => {
-                  hashStorage.update({ swipeVelocity: e })
+                  hashStorage.update({ swipeVelocity: e });
                 }}
                 min={0.0}
                 max={1.0}
@@ -358,7 +361,7 @@ class Foo extends React.Component {
               <span>Sustain</span>
               <Toggle
                 callback={(e: boolean) => {
-                  hashStorage.update({ sustain: !e })
+                  hashStorage.update({ sustain: !e });
                 }}
               />
             </div>
