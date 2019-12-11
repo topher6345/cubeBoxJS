@@ -28,6 +28,7 @@ type ControlValues = {
   scale: string;
   setBlendMode: string;
   lfoAmount: number;
+  amplitudeRelease: number;
 };
 
 class HashStorage {
@@ -49,7 +50,8 @@ class HashStorage {
         oscialltorType: "square",
         scale: "Lydian",
         setBlendMode: "source-over",
-        lfoAmount: 0.1
+        lfoAmount: 0.1,
+        amplitudeRelease: 0.1
       });
     }
   }
@@ -104,6 +106,7 @@ const hashChange = () => {
   cubeBox.scale = state.scale;
   cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
   cubeBox.audioEngine.lfoAmount = state.lfoAmount;
+  cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
 };
 hashChange();
 
@@ -292,8 +295,8 @@ class Foo extends React.Component {
             />
             <span>apm rel</span>
             <Slider
-              callback={(e: string) => {
-                cubeBox.audioEngine.amplitudeRelease = parseFloat(e);
+              callback={(e: number) => {
+                hashStorage.update({ amplitudeRelease: e });
               }}
               min={0.2}
               max={3}
