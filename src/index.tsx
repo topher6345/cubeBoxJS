@@ -25,6 +25,7 @@ type ControlValues = {
   amplitudeAttack: number;
   setFilterEnvelopeSustain: string;
   oscialltorType: string;
+  scale: string;
 };
 
 class HashStorage {
@@ -43,7 +44,8 @@ class HashStorage {
         lfoWave: "sawtooth",
         amplitudeAttack: 0.04,
         setFilterEnvelopeSustain: "300",
-        oscialltorType: "square"
+        oscialltorType: "square",
+        scale: "Lydian"
       });
     }
   }
@@ -95,6 +97,8 @@ const hashChange = () => {
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
   cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
   cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
+  cubeBox.scale = state.scale;
+
 };
 hashChange();
 
@@ -224,7 +228,7 @@ class Foo extends React.Component {
             <span>scale</span>
             <Select
               callback={(e: string) => {
-                cubeBox.scale = e;
+                hashStorage.update({ scale: e });
               }}
               options={[
                 "Lydian",
