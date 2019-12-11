@@ -23,7 +23,8 @@ type ControlValues = {
   setFilterEnvelopeStartFrequency: string;
   lfoWave: string;
   amplitudeAttack: number;
-  setFilterEnvelopeSustain: number;
+  setFilterEnvelopeSustain: string;
+  oscialltorType: string;
 };
 
 class HashStorage {
@@ -39,9 +40,10 @@ class HashStorage {
         filterEnvelopeQ: 0.1,
         detune: 0.0,
         setFilterEnvelopeStartFrequency: "100",
-        lfoWave: "square",
+        lfoWave: "sawtooth",
         amplitudeAttack: 0.04,
-        setFilterEnvelopeSustain: 300
+        setFilterEnvelopeSustain: "300",
+        oscialltorType: "square"
       });
     }
   }
@@ -92,6 +94,7 @@ const hashChange = () => {
   cubeBox.audioEngine.lfoWave = state.lfoWave;
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
   cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
+  cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
 };
 hashChange();
 
@@ -214,7 +217,7 @@ class Foo extends React.Component {
             <span>wave</span>
             <Select
               callback={(e: string) => {
-                cubeBox.compositionEngine.oscialltorType = e;
+                hashStorage.update({ oscialltorType: e });
               }}
               options={["square", "sawtooth", "custom", "triangle", "sine"]}
             />
