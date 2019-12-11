@@ -1,5 +1,5 @@
 import * as React from "react";
-import throttled from "../cube-box/throttled"
+import throttled from "../cube-box/throttled";
 interface SliderProps extends React.Props<any> {
   callback: Function;
   value?: number;
@@ -22,7 +22,7 @@ class Slider extends React.Component<SliderProps> {
     this.min = props.min;
     this.max = props.max;
     this.step = props.step;
-    this.value = props.value
+    this.value = props.value;
   }
 
   static defaultProps = {
@@ -38,8 +38,10 @@ class Slider extends React.Component<SliderProps> {
         min={this.min.toString()}
         max={this.max.toString()}
         step={this.step.toString()}
-        value= {this.value}
-        onChange={throttled(ThrottleRate, (e:any) => this.callback(e.target.value))  }
+        defaultValue={this.value}
+        onChange={throttled(ThrottleRate, (e: any) =>
+          this.callback(e.target.value)
+        )}
       />
     );
   }

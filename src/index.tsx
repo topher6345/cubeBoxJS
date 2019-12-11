@@ -69,8 +69,32 @@ interface ControlPanelProps extends React.Props<any> {
 }
 
 class ControlPanel extends React.Component<ControlPanelProps> {
+  masterGain: string;
+  setMasterFilterValue: string;
+  masterControlState: boolean;
+  setDecayTime: string;
+  chordOctave: number;
+  setLfoFrequency: string;
+  filterEnvelopeQ: number;
+  detune: number;
+  setFilterEnvelopeStartFrequency: string;
+  lfoWave: string;
+  amplitudeAttack: number;
+  setFilterEnvelopeSustain: string;
+  oscialltorType: string;
+  scale: string;
+  setBlendMode: string;
+  lfoAmount: number;
+  amplitudeRelease: number;
+  swipeFrequency: number;
+  swipeOctave: number;
+  chordVelocity: number;
+  swipeVelocity: number;
+  sustain: boolean;
+
   constructor(props: any) {
     super(props);
+    this.masterGain = props.masterGain;
   }
 
   render() {
@@ -81,6 +105,7 @@ class ControlPanel extends React.Component<ControlPanelProps> {
             <span>vol</span>
             <Slider
               callback={(e: string) => hashStorage.update({ masterGain: e })}
+              value={parseFloat(this.masterGain)}
             />
             <span>fltr</span>
             <Slider
