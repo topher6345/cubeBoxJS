@@ -31,6 +31,7 @@ export default class AmplitudeEnvelope {
         playTime + noteLength + amplitudeRelease
       );
     } else {
+      debugger;
       gainNode.gain.linearRampToValueAtTime(
         0,
         playTime + noteLength + amplitudeRelease

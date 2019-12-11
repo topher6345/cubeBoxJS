@@ -43,8 +43,6 @@ const route = (state: ControlValues) => {
 };
 route(hashStorage.state());
 
-window.addEventListener("hashchange", () => route(hashStorage.state()), false);
-
 class Foo extends React.Component {
   constructor(props: any) {
     super(props);
@@ -228,8 +226,8 @@ class Foo extends React.Component {
             />
             <span>apm rel</span>
             <Slider
-              callback={(e: number) => {
-                hashStorage.update({ amplitudeRelease: e });
+              callback={(e: string) => {
+                hashStorage.update({ amplitudeRelease: parseFloat(e) });
               }}
               min={0.2}
               max={3}
@@ -292,4 +290,15 @@ function draw(now: number) {
 }
 
 requestAnimationFrame(draw);
-ReactDOM.render(<Foo />, document.getElementById("cubebox"));
+
+window.addEventListener(
+  "hashchange",
+  () => {
+    route(hashStorage.state());
+    ReactDOM.render(<Foo />, root);
+  },
+  false
+);
+
+const root = document.getElementById("cubebox");
+ReactDOM.render(<Foo />, root);
