@@ -22,6 +22,8 @@ type ControlValues = {
   detune: number;
   setFilterEnvelopeStartFrequency: string;
   lfoWave: string;
+  amplitudeAttack: number;
+  setFilterEnvelopeSustain: number;
 };
 
 class HashStorage {
@@ -37,7 +39,9 @@ class HashStorage {
         filterEnvelopeQ: 0.1,
         detune: 0.0,
         setFilterEnvelopeStartFrequency: "100",
-        lfoWave: "square"
+        lfoWave: "square",
+        amplitudeAttack: 0.04,
+        setFilterEnvelopeSustain: 300
       });
     }
   }
@@ -86,7 +90,8 @@ const hashChange = () => {
   cubeBox.compositionEngine.detune = state.detune;
   cubeBox.audioEngine.setFilterEnvelopeStartFrequency(state.setFilterEnvelopeStartFrequency);
   cubeBox.audioEngine.lfoWave = state.lfoWave;
-
+  cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
+  cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
 };
 hashChange();
 
@@ -180,14 +185,13 @@ class Foo extends React.Component {
             <Select
               callback={(e: string) => {
                 hashStorage.update({ lfoWave: e });
-                
               }}
               options={["sawtooth", "square", "triangle", "sine"]}
             />
             <span>amp attack</span>
             <Slider
               callback={(e: string) => {
-                cubeBox.audioEngine.amplitudeAttack = parseFloat(e);
+                hashStorage.update({ amplitudeAttack: parseFloat(e) });
               }}
               min={0.01}
               max={0.5}
@@ -197,7 +201,7 @@ class Foo extends React.Component {
             <span>fltr sustain</span>
             <Slider
               callback={(e: string) => {
-                cubeBox.audioEngine.setFilterEnvelopeSustain(e);
+                hashStorage.update({ setFilterEnvelopeSustain: e });
               }}
               min={0.01}
               max={0.5}
