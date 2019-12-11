@@ -11,6 +11,68 @@ const audioContext = new AudioContext();
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const cubeBox = new CubeBox(canvas, audioContext);
 
+type ControlValues = {
+  masterGain: string;
+  setMasterFilterValue: string;
+  masterControlState: boolean;
+  setDecayTime: string;
+};
+
+class HashStorage {
+  constructor() {
+    if (this.isEmpty(this.decode(window.location.hash))) {
+      window.location.hash = this.encode({
+        masterGain: "1.0",
+        setMasterFilterValue: "1.0",
+        masterControlState: false,
+        setDecayTime: "1.0"
+      });
+    }
+  }
+
+  isEqual = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+  isEmpty = (a: any) => a.length === 0;
+  state(): ControlValues {
+    return this.decode(window.location.hash);
+  }
+
+  encode(state: ControlValues) {
+    return btoa(JSON.stringify(state));
+  }
+  decode(hash: any): any {
+    return JSON.parse(atob(hash.substring(1)));
+  }
+
+  update(data: any) {
+    const _state = this.state();
+    const updated = { ..._state, ...data };
+    if (this.isEqual(updated, _state)) {
+      return false;
+    } else {
+      window.location.hash = this.encode(updated);
+      return updated;
+    }
+  }
+
+  setMasterGain(e: string) {
+    this.update({ masterGain: e });
+  }
+}
+
+const hashStorage = new HashStorage();
+
+const hashChange = () => {
+  const state = hashStorage.state();
+  console.log(state);
+  cubeBox.audioEngine.setMasterGain(state.masterGain);
+  cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
+  cubeBox.masterControlState = state.masterControlState;
+  cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
+};
+hashChange();
+
+window.addEventListener("hashchange", hashChange, false);
+
 class Foo extends React.Component {
   constructor(props: any) {
     super(props);
@@ -23,27 +85,25 @@ class Foo extends React.Component {
           <div>
             <span>vol</span>
             <Slider
-              callback={(e: string) => cubeBox.audioEngine.setMasterGain(e)}
+              callback={(e: string) => hashStorage.update({ masterGain: e })}
             />
             <span>fltr</span>
             <Slider
               callback={(e: string) =>
-                cubeBox.audioEngine.setMasterFilterValue(e)
+                hashStorage.update({ setMasterFilterValue: e })
               }
             />
             <span>On/Off</span>
             <Toggle
               callback={(e: boolean) => {
-                cubeBox.masterControlState = e;
+                hashStorage.update({ masterControlState: e });
               }}
             />
           </div>
           <div>
             <span>speed</span>
             <Slider
-              callback={(e: string) =>
-                cubeBox.compositionEngine.setDecayTime(e)
-              }
+              callback={(e: string) => hashStorage.update({ setDecayTime: e })}
               min={0.5}
               max={8.0}
               step={0.5}
