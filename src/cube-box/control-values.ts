@@ -51,12 +51,12 @@ const INIT_CONTROL_VALUES: ControlValues = {
 export class HashStorage {
   constructor() {
     try {
-    if (this.isEmpty(this.decode(window.location.hash))) {
+      if (this.isEmpty(this.decode(window.location.hash))) {
+        window.location.hash = this.encode(INIT_CONTROL_VALUES);
+      }
+    } catch (e) {
       window.location.hash = this.encode(INIT_CONTROL_VALUES);
     }
-  } catch (e) {
-    window.location.hash = this.encode(INIT_CONTROL_VALUES);
-  }
   }
 
   isEqual = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
@@ -87,4 +87,3 @@ export class HashStorage {
     this.update({ masterGain: e });
   }
 }
-
