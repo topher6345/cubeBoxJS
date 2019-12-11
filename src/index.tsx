@@ -6,7 +6,7 @@ import CubeBox from "./cube-box";
 import Slider from "./components/slider";
 import Select from "./components/select";
 import Toggle from "./components/toggle";
-import { ControlValues, HashStorage } from "./cube-box/control-values"
+import { ControlValues, HashStorage } from "./cube-box/control-values";
 
 const audioContext = new AudioContext();
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -14,8 +14,7 @@ const cubeBox = new CubeBox(canvas, audioContext);
 
 const hashStorage = new HashStorage();
 
-const hashChange = () => {
-  const state = hashStorage.state();
+const route = (state: ControlValues) => {
   console.log(state);
   cubeBox.audioEngine.setMasterGain(state.masterGain);
   cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
@@ -42,9 +41,9 @@ const hashChange = () => {
   cubeBox.swipeVelocity = state.swipeVelocity;
   cubeBox.audioEngine.sustain = state.sustain;
 };
-hashChange();
+route(hashStorage.state());
 
-window.addEventListener("hashchange", hashChange, false);
+window.addEventListener("hashchange", () => route(hashStorage.state()), false);
 
 class Foo extends React.Component {
   constructor(props: any) {
