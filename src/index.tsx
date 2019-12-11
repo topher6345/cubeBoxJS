@@ -27,6 +27,7 @@ type ControlValues = {
   oscialltorType: string;
   scale: string;
   setBlendMode: string;
+  lfoAmount: number;
 };
 
 class HashStorage {
@@ -47,7 +48,8 @@ class HashStorage {
         setFilterEnvelopeSustain: "300",
         oscialltorType: "square",
         scale: "Lydian",
-        setBlendMode: "source-over"
+        setBlendMode: "source-over",
+        lfoAmount: 0.1
       });
     }
   }
@@ -101,6 +103,7 @@ const hashChange = () => {
   cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
   cubeBox.scale = state.scale;
   cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
+  cubeBox.audioEngine.lfoAmount = state.lfoAmount;
 };
 hashChange();
 
@@ -281,7 +284,7 @@ class Foo extends React.Component {
             <span>vib. depth</span>
             <Slider
               callback={(e: number) => {
-                cubeBox.audioEngine.lfoAmount = e;
+                hashStorage.update({ lfoAmount: e });
               }}
               min={0.0}
               max={10.0}
