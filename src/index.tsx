@@ -17,6 +17,9 @@ type ControlValues = {
   masterControlState: boolean;
   setDecayTime: string;
   chordOctave: number;
+  setLfoFrequency: string;
+  filterEnvelopeQ: number;
+  detune: number;
 };
 
 class HashStorage {
@@ -27,7 +30,10 @@ class HashStorage {
         setMasterFilterValue: "1.0",
         masterControlState: false,
         setDecayTime: "1.0",
-        chordOctave: 4
+        chordOctave: 4,
+        setLfoFrequency: "0.1",
+        filterEnvelopeQ: 0.1,
+        detune: 0.0
       });
     }
   }
@@ -71,6 +77,10 @@ const hashChange = () => {
   cubeBox.masterControlState = state.masterControlState;
   cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
   cubeBox.chordOctave = state.chordOctave;
+  cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
+  cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
+  cubeBox.compositionEngine.detune = state.detune;
+
 };
 hashChange();
 
@@ -123,7 +133,7 @@ class Foo extends React.Component {
             <span>vib. rate</span>
             <Slider
               callback={(e: string) => {
-                cubeBox.audioEngine.setLfoFrequency(e);
+                hashStorage.update({ setLfoFrequency: e });
               }}
               min={0.0}
               max={1.0}
@@ -134,7 +144,7 @@ class Foo extends React.Component {
             <span>fltr Q</span>
             <Slider
               callback={(e: number) => {
-                cubeBox.audioEngine.filterEnvelopeQ = e;
+                hashStorage.update({ filterEnvelopeQ: e });
               }}
               min={0.0}
               max={20.0}
@@ -143,7 +153,7 @@ class Foo extends React.Component {
             <span>Detune</span>
             <Slider
               callback={(e: number) => {
-                cubeBox.compositionEngine.detune = e;
+                hashStorage.update({ detune: e });
               }}
               min={0.0}
               max={50.0}
