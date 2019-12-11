@@ -16,6 +16,7 @@ type ControlValues = {
   setMasterFilterValue: string;
   masterControlState: boolean;
   setDecayTime: string;
+  chordOctave: number;
 };
 
 class HashStorage {
@@ -25,7 +26,8 @@ class HashStorage {
         masterGain: "1.0",
         setMasterFilterValue: "1.0",
         masterControlState: false,
-        setDecayTime: "1.0"
+        setDecayTime: "1.0",
+        chordOctave: 4
       });
     }
   }
@@ -68,6 +70,7 @@ const hashChange = () => {
   cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
   cubeBox.masterControlState = state.masterControlState;
   cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
+  cubeBox.chordOctave = state.chordOctave;
 };
 hashChange();
 
@@ -110,7 +113,9 @@ class Foo extends React.Component {
             />
             <span>chord oct.</span>
             <Slider
-              callback={(e: string) => (cubeBox.chordOctave = parseInt(e))}
+              callback={(e: string) =>
+                hashStorage.update({ chordOctave: parseInt(e) })
+              }
               min={0}
               max={6}
               step={1}
