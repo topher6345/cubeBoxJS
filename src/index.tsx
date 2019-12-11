@@ -43,7 +43,32 @@ const route = (state: ControlValues) => {
 };
 route(hashStorage.state());
 
-class ControlPanel extends React.Component {
+interface ControlPanelProps extends React.Props<any> {
+  masterGain: string;
+  setMasterFilterValue: string;
+  masterControlState: boolean;
+  setDecayTime: string;
+  chordOctave: number;
+  setLfoFrequency: string;
+  filterEnvelopeQ: number;
+  detune: number;
+  setFilterEnvelopeStartFrequency: string;
+  lfoWave: string;
+  amplitudeAttack: number;
+  setFilterEnvelopeSustain: string;
+  oscialltorType: string;
+  scale: string;
+  setBlendMode: string;
+  lfoAmount: number;
+  amplitudeRelease: number;
+  swipeFrequency: number;
+  swipeOctave: number;
+  chordVelocity: number;
+  swipeVelocity: number;
+  sustain: boolean;
+}
+
+class ControlPanel extends React.Component<ControlPanelProps> {
   constructor(props: any) {
     super(props);
   }
@@ -294,11 +319,12 @@ requestAnimationFrame(draw);
 window.addEventListener(
   "hashchange",
   () => {
-    route(hashStorage.state());
-    ReactDOM.render(<ControlPanel />, root);
+    const state = hashStorage.state();
+    route(state);
+    ReactDOM.render(<ControlPanel {...state} />, root);
   },
   false
 );
 
 const root = document.getElementById("cubebox");
-ReactDOM.render(<ControlPanel />, root);
+ReactDOM.render(<ControlPanel {...hashStorage.state()} />, root);
