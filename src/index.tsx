@@ -131,60 +131,73 @@ onClick(swipeVelocity, () => {});
 const sustain = sel("input[name='sustain']");
 onClick(sustain, () => {});
 
-const masterGainHandler = (e: string) => hashStorage.update({ masterGain: e });
-const etMasterFilterValueHandler = (e: string) =>
-  hashStorage.update({ setMasterFilterValue: e });
-const asterControlStateHandler = (e: boolean) => {
-  hashStorage.update({ masterControlState: e });
+const masterGainHandler = (elem: HTMLElement, ev: MouseEvent) => {
+  debugger;
+  hashStorage.update({ masterGain: elem });
 };
-const setDecayTimeHandler = (e: string) =>
-  hashStorage.update({ setDecayTime: e });
-const chordOctaveHandler = (e: string) =>
-  hashStorage.update({ chordOctave: parseInt(e) });
-const setLfoFrequencyHandler = (e: string) => {
-  hashStorage.update({ setLfoFrequency: e });
-};
-const filterEnvelopeQHandler = (e: number) => {
-  hashStorage.update({ filterEnvelopeQ: e });
-};
-const detuneHandler = (e: number) => {
-  hashStorage.update({ detune: e });
-};
-const FilterEnvelopeStartFrequencyHandler = (e: string) => {
-  hashStorage.update({ setFilterEnvelopeStartFrequency: e });
-};
-const lfoWaveHandler = (e: string) => {
-  hashStorage.update({ lfoWave: e });
-};
-const amplitudeAttackHandler = (e: string) => {
-  hashStorage.update({ amplitudeAttack: parseFloat(e) });
-};
-const FilterEnvelopeSustainHandler = (e: string) => {
-  hashStorage.update({ setFilterEnvelopeSustain: e });
-};
-const oscialltorTypeHandler = (e: string) => {
-  hashStorage.update({ oscialltorType: e });
-};
-const scaleHandler = (e: string) => {
-  hashStorage.update({ scale: e });
-};
-const setBlendModeHandler = (e: string) => {
-  hashStorage.update({ setBlendMode: e });
-};
-const lfoAmountHandler = (e: number) => {
-  hashStorage.update({ lfoAmount: e });
-};
-const mplitudeReleaseHandler = (e: string) => {
-  hashStorage.update({ amplitudeRelease: parseFloat(e) });
-};
-const swipeFrequencyHandler = (e: number) => {
-  hashStorage.update({ swipeFrequency: e });
-};
-const swipeOctaveHandler = (e: string) =>
-  hashStorage.update({ swipeOctave: parseInt(e) });
-const chordVelocityHandler = (e: number) =>
-  hashStorage.update({ chordVelocity: e });
-const swipeVelocityHandler = (e: number) => {
-  hashStorage.update({ swipeVelocity: e });
-};
-// const sustainHandler = (e: boolean) =>  hashStorage.update({ sustain: !e })
+function setMasterFilterValueHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ setMasterFilterValue: elem });
+}
+function setMasterControlStateHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ masterControlState: elem });
+}
+function setDecayTimeHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ setDecayTime: elem });
+}
+function chordOctaveHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ chordOctave: parseInt(elem as any) });
+}
+function setLfoFrequencyHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ setLfoFrequency: elem });
+}
+function filterEnvelopeQHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ filterEnvelopeQ: elem });
+}
+function detuneHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ detune: elem });
+}
+function etFilterEnvelopeStartFrequencyHandler(
+  elem: HTMLElement,
+  ev: MouseEvent
+) {
+  hashStorage.update({ setFilterEnvelopeStartFrequency: elem });
+}
+function lfoWaveHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ lfoWave: elem });
+}
+function amplitudeAttackHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ amplitudeAttack: parseFloat(elem as any) });
+}
+function setFilterEnvelopeSustainHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ setFilterEnvelopeSustain: elem });
+}
+function oscialltorTypeHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ oscialltorType: elem });
+}
+function scaleHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ scale: elem });
+}
+function setBlendModeHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ setBlendMode: elem });
+}
+function lfoAmountHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ lfoAmount: elem });
+}
+function mplitudeReleaseHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ amplitudeRelease: parseFloat(elem as any) });
+}
+function swipeFrequencyHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ swipeFrequency: elem });
+}
+function swipeOctaveHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ swipeOctave: parseInt(elem as any) });
+}
+function chordVelocityHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ chordVelocity: elem });
+}
+function swipeVelocityHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ swipeVelocity: elem });
+}
+function sustainHandler(elem: HTMLElement, ev: MouseEvent) {
+  hashStorage.update({ sustain: !elem });
+}
