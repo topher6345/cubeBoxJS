@@ -341,15 +341,31 @@ function draw(now: number) {
 
 requestAnimationFrame(draw);
 
-window.addEventListener(
-  "hashchange",
-  () => {
-    const state = hashStorage.state();
-    route(state);
-    ReactDOM.render(<ControlPanel {...state} />, root);
-  },
-  false
-);
-
+// const sel = (a: string) => document.querySelector(a);
 const root = document.getElementById("cubebox");
+
+const sel = (a:string) => document.querySelector(a);
+const masterGain =  sel("input[name='']");
+const etMasterFilterValue =  sel("input[name='']");
+const asterControlState =  sel("input[name='']");
+const setDecayTime =  sel("input[name='']");
+const chordOctave =  sel("input[name='']");
+const setLfoFrequency =  sel("input[name='']");
+const filterEnvelopeQ =  sel("input[name='']");
+const detune =  sel("input[name='']");
+const etFilterEnvelopeStartFrequency =  sel("input[name='']");
+const lfoWave =  sel("input[name='']");
+const amplitudeAttack =  sel("input[name='']");
+const etFilterEnvelopeSustain =  sel("input[name='']");
+const oscialltorType =  sel("input[name='']");
+const scale =  sel("input[name='']");
+const setBlendMode =  sel("input[name='']");
+const lfoAmount =  sel("input[name='']");
+const mplitudeRelease =  sel("input[name='']");
+const swipeFrequency =  sel("input[name='']");
+const swipeOctave =  sel("input[name='']");
+const chordVelocity =  sel("input[name='']");
+const swipeVelocity =  sel("input[name='']");
+const sustain =  sel("input[name='']");
+
 ReactDOM.render(<ControlPanel {...hashStorage.state()} />, root);

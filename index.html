@@ -121,7 +121,71 @@
     </style>
   </head>
   <body>
-    <div id="cubebox" class="settingsBar"></div>
+    <!-- <div id="cubebox" class="settingsBar"></div> -->
+    <div class="settingsBar"></div>
+    <div className="left">
+      <div>
+        <span>vol</span>
+        <input type="range" callback={(e: string) => hashStorage.update({ masterGain: e })}></input>
+        <span>fltr</span>
+        <input type="range" callback={(e: string) => hashStorage.update({setMasterFilterValue: e }) }></input>
+        <span>On/Off</span>
+        <Toggle callback={(e: boolean) => { hashStorage.update({masterControlState: e }); }}></input>
+      </div>
+      <div>
+        <span>speed</span>
+        <input type="range" callback={(e: string) => hashStorage.update({ setDecayTime: e })} min={0.5} max={8.0} step={0.5}></input>
+        <span>chord oct.</span>
+        <input type="range" callback={(e: string) => hashStorage.update({ chordOctave: parseInt(e) }) } min={0} max={6} step={1}></input>
+        <span>vib. rate</span>
+        <input type="range" callback={(e: string) => { hashStorage.update({ setLfoFrequency: e }); }} min={0.0} max={1.0} step={0.01}></input>
+      </div>
+      <div>
+        <span>fltr Q</span>
+        <input type="range" callback={(e: number) => { hashStorage.update({ filterEnvelopeQ: e }); }} min={0.0} max={20.0} step={0.01}></input>
+        <span>Detune</span>
+        <input type="range" callback={(e: number) => { hashStorage.update({ detune: e }); }} min={0.0} max={50.0} step={1}></input>
+        <span>fltr env</span>
+        <input type="range" callback={(e: string) => { hashStorage.update({setFilterEnvelopeStartFrequency: e }); }} min={0.0} max={1.0}
+        step={0.01}></input>
+      </div>
+      <div>
+        <span>vib shape</span>
+        <Select callback={(e: string) => { hashStorage.update({ lfoWave: e }); }} options={["sawtooth", "square", "triangle", "sine"]}></input>
+        <span>amp attack</span>
+        <input type="range" callback={(e: string) => { hashStorage.update({ amplitudeAttack: parseFloat(e) }); }} min={0.01} max={0.5} step={0.01}></input>
+        <span>fltr sustain</span>
+        <input type="range" callback={(e: string) => { hashStorage.update({setFilterEnvelopeSustain: e }); }} min={0.01} max={0.5} step={0.01}></input>
+      </div>
+    </div>
+    <div className="right">
+      <div>
+        <span>wave</span>
+        <select callback={(e: string) => { hashStorage.update({ oscialltorType: e }); }} options={["square", "sawtooth", "custom", "triangle", "sine"]} ></select>
+        <span>scale</span>
+        <select callback={(e: string) => { hashStorage.update({ scale: e }); }} options={[ "Lydian", "Ionian", "Locrian", "Phrygian", "Aeolean", "Dorian", "Mixolydian" ]}></select>
+        <span>blend</span>
+        <select callback={(e: string) => { hashStorage.update({ setBlendMode: e }); }} options={[ "source-over", "source-in", "source-out", "source-atop", "destination-over", "destination-in", "destination-out", "destination-atop", "lighter", "copy", "xor", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity" ]}></select> 
+      </div>
+      <div>
+        <span>vib. depth</span>
+        <input type="range" callback={(e: number) => { hashStorage.update({ lfoAmount: e }); }} min={0.0} max={10.0} step={0.01}></input>
+        <span>apm rel</span>
+        <input type="range" callback={(e: string) => { hashStorage.update({amplitudeRelease: parseFloat(e) }); }} min={0.2} max={3} step={0.01}></input>
+        <span>swipe speed</span>
+        <input type="range" callback={(e: number) => { hashStorage.update({ swipeFrequency: e }); }} min={0.2} max={3} step={0.1}></input>
+        <div>
+          <span>swipe oct.</span>
+          <input type="range" callback={(e: string) => hashStorage.update({ swipeOctave: parseInt(e) }) } min={0} max={6} step={1}></input>
+          <span>chord vel.</span>
+          <input type="range" callback={(e: number) => hashStorage.update({ chordVelocity: e }) } min={0.0} max={1.0} step={0.01}></input>
+          <span>swipe vel.</span>
+          <input type="range" callback={(e: number) => { hashStorage.update({ swipeVelocity: e }); }} min={0.0} max={1.0} step={0.01}></input>
+          <span>Sustain</span>
+          <Toggle callback={(e: boolean) => { hashStorage.update({ sustain: !e }); }} />
+        </div>
+      </div>
+    </div>
     <canvas id="canvas"></canvas>
     <script src="./node_modules/react/umd/react.development.js"></script>
     <script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
