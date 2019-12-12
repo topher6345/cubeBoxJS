@@ -126,42 +126,46 @@
     <div className="left">
       <div>
         <span>vol</span>
-        <input  name="masterGain" type="range" callback={(e: string) => hashStorage.update({ masterGain: e })}></input>
+        <input  name="masterGain" type="range" ></input>
         <span>fltr</span>
-        <input  name="setMasterFilterValue" type="range" callback={(e: string) => hashStorage.update({ setMasterFilterValue: e }) }></input>
+        <input  name="setMasterFilterValue" type="range" ></input>
         <span>On/Off</span>
-        <Toggle name="masterControlState"  callback={(e: boolean) => { hashStorage.update({ masterControlState: e }); }}></input>
+        <Toggle name="masterControlState"></input>
       </div>
       <div>
         <span>speed</span>
-        <input  name="setDecayTime" type="range" callback={(e: string) => hashStorage.update({ setDecayTime: e })} min={0.5} max={8.0} step={0.5}></input>
+        <input  name="setDecayTime" type="range" ><!-- min={0.5} max={8.0} step={0.5} --></input>
         <span>chord oct.</span>
-        <input  name="chordOctave" type="range" callback={(e: string) => hashStorage.update({ chordOctave: parseInt(e) }) } min={0} max={6} step={1}></input>
+        <input  name="chordOctave" type="range" ><!-- min={0} max={6} step={1} --></input>
         <span>vib. rate</span>
-        <input  name="setLfoFrequency" type="range" callback={(e: string) => { hashStorage.update({ setLfoFrequency: e }); }} min={0.0} max={1.0} step={0.01}></input>
+        <input  name="setLfoFrequency" type="range"><!-- min={0.0} max={1.0} step={0.01} --></input>
       </div>
       <div>
         <span>fltr Q</span>
-        <input  name="filterEnvelopeQ" type="range" callback={(e: number) => { hashStorage.update({ filterEnvelopeQ: e }); }} min={0.0} max={20.0} step={0.01}></input>
+        <input  name="filterEnvelopeQ" type="range" ><!-- min={0.0} max={20.0} step={0.01} --></input>
         <span>Detune</span>
-        <input  name="detune" type="range" callback={(e: number) => { hashStorage.update({ detune: e }); }} min={0.0} max={50.0} step={1}></input>
+        <input  name="detune" type="range" ><!-- min={0.0} max={50.0} step={1} --></input>
         <span>fltr env</span>
-        <input  name="setFilterEnvelopeStartFrequency" type="range" callback={(e: string) => { hashStorage.update({ setFilterEnvelopeStartFrequency: e }); }} min={0.0} max={1.0}
-        step={0.01}></input>
+        <input  name="setFilterEnvelopeStartFrequency" type="range"><!-- min={0.0} max={1.0} step={0.01} --></input>
       </div>
       <div>
         <span>vib shape</span>
-        <Select name="lfoWave"  callback={(e: string) => { hashStorage.update({ lfoWave: e }); }} options={["sawtooth", "square", "triangle", "sine"]}></input>
+        <select name="lfoWave">
+          <option value='sawtooth'>sawtooth</option>
+          <option value='square'>square</option>
+          <option value='triangle'>triangle</option>
+          <option value='sine'>sine</option>
+        </select>
         <span>amp attack</span>
-        <input  name="amplitudeAttack" type="range" callback={(e: string) => { hashStorage.update({ amplitudeAttack: parseFloat(e) }); }} min={0.01} max={0.5} step={0.01}></input>
+        <input  name="amplitudeAttack" type="range"><!-- min={0.01} max={0.5} step={0.01} --></input>
         <span>fltr sustain</span>
-        <input  name="setFilterEnvelopeSustain" type="range" callback={(e: string) => { hashStorage.update({ setFilterEnvelopeSustain: e }); }} min={0.01} max={0.5} step={0.01}></input>
+        <input  name="setFilterEnvelopeSustain" type="range"><!-- min={0.01} max={0.5} step={0.01} --></input>
       </div>
     </div>
     <div className="right">
       <div>
         <span>wave</span>
-        <select name="oscialltorType"  callback={(e: string) => { hashStorage.update({ oscialltorType: e }); }} >
+        <select name="oscialltorType">
           <option value='square'>square</option>
           <option value='sawtooth'>sawtooth</option>
           <option value='custom'>custom</option>
@@ -210,20 +214,20 @@
       </div>
       <div>
         <span>vib. depth</span>
-        <input  name="lfoAmount" type="range" callback={(e: number) => { hashStorage.update({ lfoAmount: e }); }} min={0.0} max={10.0} step={0.01}></input>
+        <input  name="lfoAmount" type="range" ><!-- min={0.0} max={10.0} step={0.01} --> </input>
         <span>apm rel</span>
-        <input  name="amplitudeRelease" type="range" callback={(e: string) => { hashStorage.update({ amplitudeRelease: parseFloat(e) }); }} min={0.2} max={3} step={0.01}></input>
+        <input  name="amplitudeRelease" type="range"><!-- min={0.2} max={3} step={0.01} --></input>
         <span>swipe speed</span>
-        <input  name="swipeFrequency" type="range" callback={(e: number) => { hashStorage.update({ swipeFrequency: e }); }} min={0.2} max={3} step={0.1}></input>
+        <input  name="swipeFrequency" type="range"><!-- min={0.2} max={3} step={0.1} --></input>
         <div>
           <span>swipe oct.</span>
-          <input  name="swipeOctave" type="range" callback={(e: string) => hashStorage.update({ swipeOctave: parseInt(e) }) } min={0} max={6} step={1}></input>
+          <input  name="swipeOctave" type="range"><!-- min={0} max={6} step={1} --></input>
           <span>chord vel.</span>
-          <input  name="chordVelocity" type="range" callback={(e: number) => hashStorage.update({ chordVelocity: e }) } min={0.0} max={1.0} step={0.01}></input>
+          <input  name="chordVelocity" type="range"><!-- min={0.0} max={1.0} step={0.01} --></input>
           <span>swipe vel.</span>
-          <input  name="swipeVelocity" type="range" callback={(e: number) => { hashStorage.update({ swipeVelocity: e }); }} min={0.0} max={1.0} step={0.01}></input>
+          <input  name="swipeVelocity" type="range"><!-- min={0.0} max={1.0} step={0.01} --></input>
           <span>Sustain</span>
-          <Toggle name="sustain"  callback={(e: boolean) => { hashStorage.update({ sustain: !e }); }} />
+          <input type="checkbox" name="sustain"/>
         </div>
       </div>
     </div>
