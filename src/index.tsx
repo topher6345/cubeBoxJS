@@ -7,32 +7,8 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const cubeBox = new CubeBox(canvas, audioContext);
 const hashStorage = new HashStorage();
 
-const route = (state: ControlValues) => {
-  cubeBox.audioEngine.setMasterGain(state.masterGain);
-  cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
-  cubeBox.masterControlState = state.masterControlState;
-  cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
-  cubeBox.chordOctave = state.chordOctave;
-  cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
-  cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
-  cubeBox.compositionEngine.detune = state.detune;
-  cubeBox.audioEngine.setFilterEnvelopeStartFrequency(
-    state.setFilterEnvelopeStartFrequency
-  );
-  cubeBox.audioEngine.lfoWave = state.lfoWave;
-  cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
-  cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
-  cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
-  cubeBox.scale = state.scale;
-  cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
-  cubeBox.audioEngine.lfoAmount = state.lfoAmount;
-  cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
-  cubeBox.swipeFrequency = state.swipeFrequency;
-  cubeBox.swipeOctave = state.swipeOctave;
-  cubeBox.chordVelocity = state.chordVelocity;
-  cubeBox.swipeVelocity = state.swipeVelocity;
-  cubeBox.audioEngine.sustain = state.sustain;
-};
+
+const sel = (a: string): HTMLInputElement => document.querySelector(a);
 
 function draw(now: number) {
   cubeBox.tick(now);
@@ -41,7 +17,6 @@ function draw(now: number) {
 
 requestAnimationFrame(draw);
 
-const sel = (a: string): HTMLInputElement => document.querySelector(a);
 
 // function setMasterFilterValueHandler(elem: HTMLElement, ev: MouseEvent) {
 //   hashStorage.update({ setMasterFilterValue: elem });
@@ -138,7 +113,6 @@ slider(
 
 slider("input[name='masterControlState']",
   function(this: HTMLInputElement) {
-    console.log(this.value)
     cubeBox.masterControlState = !cubeBox.masterControlState
     hashStorage.update({ setMasterFilterValue: cubeBox.masterControlState });
   },
@@ -190,4 +164,33 @@ slider("input[name='masterControlState']",
 // const sustain = sel("input[name='sustain']");
 // onClick(sustain, () => {});
 
+
+const route = (state: ControlValues) => {
+  cubeBox.audioEngine.setMasterGain(state.masterGain);
+  sel("input[name='masterGain']").value = state.masterGain;
+
+  cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
+  cubeBox.masterControlState = state.masterControlState;
+  cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
+  cubeBox.chordOctave = state.chordOctave;
+  cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
+  cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
+  cubeBox.compositionEngine.detune = state.detune;
+  cubeBox.audioEngine.setFilterEnvelopeStartFrequency(
+    state.setFilterEnvelopeStartFrequency
+  );
+  cubeBox.audioEngine.lfoWave = state.lfoWave;
+  cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
+  cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
+  cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
+  cubeBox.scale = state.scale;
+  cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
+  cubeBox.audioEngine.lfoAmount = state.lfoAmount;
+  cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
+  cubeBox.swipeFrequency = state.swipeFrequency;
+  cubeBox.swipeOctave = state.swipeOctave;
+  cubeBox.chordVelocity = state.chordVelocity;
+  cubeBox.swipeVelocity = state.swipeVelocity;
+  cubeBox.audioEngine.sustain = state.sustain;
+};
 route(hashStorage.state());

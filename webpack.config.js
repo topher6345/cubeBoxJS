@@ -8,7 +8,7 @@ module.exports = {
   devServer: {
     contentBase: __dirname,
     publicPath: "/build/",
-    compress: true
+    compress: false
   },
   module: {
     rules: [
