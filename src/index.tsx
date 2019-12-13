@@ -118,7 +118,7 @@ ss(
 sl(
   "amplitudeAttack",
   (e: string) => hashStorage.update({ amplitudeAttack: parseFloat(e) }),
-  (e: string) => cubeBox.audioEngine.amplitudeAttack = parseFloat(e)
+  (e: string) => (cubeBox.audioEngine.amplitudeAttack = parseFloat(e))
 );
 
 sl(
@@ -185,6 +185,12 @@ sc(
   "sustain",
   (e: boolean) => hashStorage.update({ sustain: e }),
   (e: boolean) => (cubeBox.audioEngine.sustain = e)
+);
+
+sl(
+  "setLfoFrequency",
+  (e: string) => hashStorage.update({ setLfoFrequency: e }),
+  (e: string) => cubeBox.audioEngine.setLfoFrequency(e)
 );
 
 const route = (state: ControlValues) => {
