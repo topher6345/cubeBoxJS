@@ -193,4 +193,6 @@ const route = (state: ControlValues) => {
   cubeBox.swipeVelocity = state.swipeVelocity;
   cubeBox.audioEngine.sustain = state.sustain;
 };
+
 route(hashStorage.state());
+debugger;
