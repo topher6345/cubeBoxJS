@@ -4,7 +4,7 @@ A music box.
 
 See colors blend as you hear the tones harmonize.
 
-React + Typescript + WebAudio + Canvas rewrite of https://github.com/topher6345/maxmsp-CubeBox
+Typescript + WebAudio + Canvas rewrite of https://github.com/topher6345/maxmsp-CubeBox
 
 (Not really cubes but squares)
 
@@ -67,8 +67,5 @@ https://en.wikipedia.org/wiki/Clavier_%C3%A0_lumi%C3%A8res
 
 ## How the sliders and menus are hooked up
 
-React Components hook up user interface elements to an instance of `CubeBox` to change the sounds, scale, or blend mode.
-
-`CubeBox` exposes several properties that the React components can interact with via the UI components
-
-The `Controls` React component composes `Select`,`Slider` and `Toggle` components and connects the components to the `CubeBox` properties to change things like volume, the filter frequency, as well as the scale and blend mode.
+* TODO: explain hash
+* 
