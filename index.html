@@ -14,6 +14,11 @@
         margin: 0;
       }
 
+      h1 {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+      }
+
       canvas {
         height: 600px;
         width: 100%;
@@ -87,11 +92,20 @@
 
       .settingsBar div {
         background-color: #2d2d2d;
+        background: rgba(30, 30, 30, 0.9);
         flex-grow:1 ;
         border: 1px solid black;
         flex-grow: 1;
         padding-left: 3px;
+        padding-right: 3px;
       }
+
+      .settingsBar div:hover {
+        background: rgba(130, 130, 130, 0.9);
+        color: black;
+
+      }
+
       .settingsBar div span {
         vertical-align: middle;
       }
@@ -99,6 +113,13 @@
       .settingsBar div span:after {
         content: '\A';
         white-space: pre;
+      }
+
+      .settingsBar div input:hover {
+        cursor: pointer;
+      }
+      .settingsBar div input:selected {
+        cursor: grabbing;
       }
 
       .left {
@@ -133,12 +154,27 @@
       .right input {
         vertical-align: top;
       }
+
+      a.small {
+        font-size: .5em;
+        color: inherit;
+        text-decoration: inherit;
+        text-align: right;
+      }
     </style>
   </head>
   <body>
     <div class="settingsBar">
       <div>
-        <span>vol</span>
+        <h1>Color Synth</h1>
+        <a class='small' href='https://github.com/topher6345'>@topher6345</a>
+      </div>
+      <div>
+        <span>On/Off</span>
+        <input type="checkbox" name="masterControlState" autofocus/></input>
+      </div>
+      <div>
+        <span>master vol</span>
         <input  name="masterGain" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
@@ -146,52 +182,11 @@
         <input  name="setMasterFilterValue" type="range" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
-        <span>On/Off</span>
-        <input type="checkbox" name="masterControlState"/></input>
-      </div>
-      <div>
         <span>speed</span>
         <input  name="setDecayTime" type="range" min="0.5" max="8.0" step="0.5"></input>
       </div>
       <div>
-        <span>chord oct.</span>
-        <input  name="chordOctave" type="range" min="0" max="6" step="1" ></input>
-      </div>
-      <div>
-        <span>vib. rate</span>
-        <input  name="setLfoFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>fltr Q</span>
-        <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>Detune</span>
-        <input  name="detune" type="range" min="0.0" max="50.0" step="1"></input>
-      </div>
-      <div>
-        <span>fltr env</span>
-        <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>vib shape</span>
-        <select name="lfoWave">
-          <option value='sawtooth'>sawtooth</option>
-          <option value='square'>square</option>
-          <option value='triangle'>triangle</option>
-          <option value='sine'>sine</option>
-        </select>
-      </div>
-      <div>
-        <span>amp attack</span>
-        <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
-      </div>
-      <div>
-        <span>fltr sustain</span>
-        <input  name="setFilterEnvelopeSustain" type="range" min="0.01" max="0.5" step="0.01"></input>
-      </div>
-      <div>
-        <span>wave</span>
+        <span>osc wave</span>
         <select name="oscialltorType">
           <option value='square'>square</option>
           <option value='sawtooth'>sawtooth</option>
@@ -244,39 +239,73 @@
         </select>
       </div>
       <div>
+        <span>Detune</span>
+        <input  name="detune" type="range" min="0.0" max="50.0" step="1"></input>
+      </div>
+      <div>
+        <span>chord oct.</span>
+        <input  name="chordOctave" type="range" min="0" max="6" step="1" ></input>
+      </div>
+      <div>
+        <span>fltr Q</span>
+        <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
+      </div>
+
+      <div>
+        <span>fltr env</span>
+        <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
+      </div>
+      <div>
+        <span>vib shape</span>
+        <select name="lfoWave">
+          <option value='sawtooth'>sawtooth</option>
+          <option value='square'>square</option>
+          <option value='triangle'>triangle</option>
+          <option value='sine'>sine</option>
+        </select>
+      </div>
+      <div>
         <span>vib. depth</span>
         <input  name="lfoAmount" type="range" min="0.0" max="10.0" step="0.01"> </input>
+      </div>
+      <div>
+        <span>vib. rate</span>
+        <input  name="setLfoFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
+      </div>
+      <div>
+        <span>amp attack</span>
+        <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
+      </div>
+      <div>
+        <span>fltr sustain</span>
+        <input  name="setFilterEnvelopeSustain" type="range" min="0.01" max="0.5" step="0.01"></input>
       </div>
       <div>
         <span>apm rel</span>
         <input  name="amplitudeRelease" type="range" min="0.2" max="3" step="0.01"></input>
       </div>
-
       <div>
         <span>swipe speed</span>
         <input  name="swipeFrequency" type="range" min="0.2" max="3" step="0.1"></input>
       </div>
-        <div>
-          <span>swipe oct.</span>
-          <input  name="swipeOctave" type="range" min="0" max="6" step="1"></input>
-        </div>
-        <div>
-          <span>chord vel.</span>
-          <input  name="chordVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
-        </div>
-        <div>
-          <span>swipe vel.</span>
-          <input  name="swipeVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
-        </div>
-        <div>
-          <span>Sustain</span>
-          <input type="checkbox" name="sustain"/>
-        </div>
+      <div>
+        <span>swipe oct.</span>
+        <input  name="swipeOctave" type="range" min="0" max="6" step="1"></input>
+      </div>
+      <div>
+        <span>chord vel.</span>
+        <input  name="chordVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
+      </div>
+      <div>
+        <span>swipe vel.</span>
+        <input  name="swipeVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
+      </div>
+      <div>
+        <span>Sustain</span>
+        <input type="checkbox" name="sustain"/>
       </div>
     </div>
     <canvas id="canvas"></canvas>
-    <script src="./node_modules/react/umd/react.development.js"></script>
-    <script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="build/index.js"></script>
   </body>
 </html>
