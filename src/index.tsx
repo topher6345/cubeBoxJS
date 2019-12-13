@@ -16,107 +16,140 @@ function draw(now: number) {
 
 requestAnimationFrame(draw);
 
-// function setMasterFilterValueHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ setMasterFilterValue: elem });
-// }
-// function setMasterControlStateHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ masterControlState: elem });
-// }
-// function setDecayTimeHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ setDecayTime: elem });
-// }
-// function chordOctaveHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ chordOctave: parseInt(elem as any) });
-// }
-// function setLfoFrequencyHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ setLfoFrequency: elem });
-// }
-// function filterEnvelopeQHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ filterEnvelopeQ: elem });
-// }
-// function detuneHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ detune: elem });
-// }
-// function etFilterEnvelopeStartFrequencyHandler(
-//   elem: HTMLElement,
-//   ev: MouseEvent
-// ) {
-//   hashStorage.update({ setFilterEnvelopeStartFrequency: elem });
-// }
-// function lfoWaveHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ lfoWave: elem });
-// }
-// function amplitudeAttackHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ amplitudeAttack: parseFloat(elem as any) });
-// }
-// function setFilterEnvelopeSustainHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ setFilterEnvelopeSustain: elem });
-// }
-// function oscialltorTypeHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ oscialltorType: elem });
-// }
-// function scaleHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ scale: elem });
-// }
-// function setBlendModeHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ setBlendMode: elem });
-// }
-// function lfoAmountHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ lfoAmount: elem });
-// }
-// function mplitudeReleaseHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ amplitudeRelease: parseFloat(elem as any) });
-// }
-// function swipeFrequencyHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ swipeFrequency: elem });
-// }
-// function swipeOctaveHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ swipeOctave: parseInt(elem as any) });
-// }
-// function chordVelocityHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ chordVelocity: elem });
-// }
-// function swipeVelocityHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ swipeVelocity: elem });
-// }
-// function sustainHandler(elem: HTMLElement, ev: MouseEvent) {
-//   hashStorage.update({ sustain: !elem });
-// }
-
 const slider = (s: string, onInput: Function, onChange: Function) => {
   const elem = sel(s);
   elem.addEventListener("change", onInput as any, false);
   elem.addEventListener("input", onChange as any, false);
 };
 
-slider(
-  "input[name='masterGain']",
-  function(this: HTMLInputElement) {
-    hashStorage.update({ masterGain: this.value });
-  },
-  function(this: HTMLInputElement) {
-    cubeBox.audioEngine.setMasterGain(this.value);
-  }
-);
 
-slider(
-  "input[name='setMasterFilterValue']",
-  function(this: HTMLInputElement) {
-    hashStorage.update({ setMasterFilterValue: this.value });
-  },
-  function(this: HTMLInputElement) {
-    cubeBox.audioEngine.setMasterFilterValue(this.value);
-  }
-);
+const sl = (name: string, onInput:Function , onChange:Function) => {
+  slider(
+    `input[name='${name}']`,
+    function(this: HTMLInputElement) {
+      onInput(this.value)
+    },
+    function(this: HTMLInputElement) {
+      onChange(this.value)
+    }
+  );
+}
 
-slider(
-  "input[name='masterControlState']",
-  function(this: HTMLInputElement) {
-    cubeBox.masterControlState = this.checked;
-    hashStorage.update({ masterControlState: this.checked });
+const ss = (name: string, onInput:Function, onChange:Function) => {
+  slider(
+    `select[name='${name}']`,
+    function(this: HTMLInputElement) {
+      onInput(this.value)
+    },
+    function(this: HTMLInputElement) {
+      onChange(this.value)
+    }
+  );
+}
+
+
+sl("masterGain",
+  (e:string) => hashStorage.update({ masterGain: e }),
+  (e:string) => cubeBox.audioEngine.setMasterGain(e),
+ )
+
+sl("setMasterFilterValue",
+  (e:string) => hashStorage.update({ setMasterFilterValue: e }),
+  (e:string) => cubeBox.audioEngine.setMasterFilterValue(e),
+)
+
+sl("masterControlState",
+  (e:boolean) => {
+    cubeBox.masterControlState = e;
+    hashStorage.update({ masterControlState: e });
   },
-  () => {}
-);
+  () => {},
+)
+
+sl("filterEnvelopeQ",
+  (e:number) => hashStorage.update({ filterEnvelopeQ: e }),
+  (e:number) => cubeBox.audioEngine.filterEnvelopeQ = e,
+)
+
+sl("detune",
+  (e:number) => hashStorage.update({ detune: e }),
+  (e:number) => cubeBox.compositionEngine.detune = e,
+)
+
+sl("setFilterEnvelopeStartFrequency",
+  (e:number) => hashStorage.update({ setFilterEnvelopeStartFrequency: e }),
+  (e:number) => cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e.toString())
+)
+
+ss("lfoWave",
+  (e:string) => hashStorage.update({ lfoWave: e }),
+  (e:string) => cubeBox.audioEngine.lfoWave = e
+)
+
+sl("amplitudeAttack",
+  (e:number) => hashStorage.update({ amplitudeAttack: e }),
+  (e:number) => cubeBox.audioEngine.amplitudeAttack = e
+)
+
+sl("setFilterEnvelopeSustain",
+  (e:number) => hashStorage.update({ setFilterEnvelopeSustain: e }),
+  (e:number) => cubeBox.audioEngine.setFilterEnvelopeSustain(e.toString())
+)
+
+ss("oscialltorType",
+  (e:string) => hashStorage.update({ oscialltorType: e }),
+  (e:string) => cubeBox.compositionEngine.oscialltorType = e
+)
+
+ss("scale",
+  (e:string) => hashStorage.update({ scale: e }),
+  (e:string) => cubeBox.scale = e
+)
+
+ss("setBlendMode",
+  (e:string) => hashStorage.update({ setBlendMode: e }),
+  (e:string) => cubeBox.graphicsEngine.setBlendMode(e)
+)
+
+
+sl("lfoAmount",
+  (e:number) => hashStorage.update({ lfoAmount: e }),
+  (e:number) => cubeBox.audioEngine.lfoAmount = e
+)
+
+sl("amplitudeRelease",
+  (e:number) => hashStorage.update({ amplitudeRelease: e }),
+  (e:number) => cubeBox.audioEngine.amplitudeRelease = e
+)
+
+sl("swipeFrequency",
+  (e:number) => hashStorage.update({ swipeFrequency: e }),
+  (e:number) => cubeBox.swipeFrequency = e
+)
+
+sl("swipeOctave",
+  (e:number) => hashStorage.update({ swipeOctave: e }),
+  (e:number) => cubeBox.swipeOctave = e
+)
+
+sl("chordVelocity",
+  (e:number) => hashStorage.update({ chordVelocity: e }),
+  (e:number) => cubeBox.chordVelocity = e
+)
+
+sl("swipeVelocity",
+  (e:number) => hashStorage.update({ swipeVelocity: e }),
+  (e:number) => cubeBox.swipeVelocity = e
+)
+
+sl("sustain",
+  (e:boolean) => hashStorage.update({ sustain: e }),
+  (e:boolean) => cubeBox.audioEngine.sustain = e
+)
+
+
+
+
 
 const route = (state: ControlValues) => {
   cubeBox.audioEngine.setMasterGain(state.masterGain);
@@ -193,3 +226,4 @@ const route = (state: ControlValues) => {
 
 // route once on page load
 route(hashStorage.state());
+window.addEventListener('hashchange', () => route(hashStorage.state()), false);
