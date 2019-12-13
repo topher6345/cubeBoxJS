@@ -7,7 +7,6 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const cubeBox = new CubeBox(canvas, audioContext);
 const hashStorage = new HashStorage();
 
-
 const sel = (a: string): HTMLInputElement => document.querySelector(a);
 
 function draw(now: number) {
@@ -16,7 +15,6 @@ function draw(now: number) {
 }
 
 requestAnimationFrame(draw);
-
 
 // function setMasterFilterValueHandler(elem: HTMLElement, ev: MouseEvent) {
 //   hashStorage.update({ setMasterFilterValue: elem });
@@ -111,13 +109,14 @@ slider(
   }
 );
 
-slider("input[name='masterControlState']",
+slider(
+  "input[name='masterControlState']",
   function(this: HTMLInputElement) {
-    cubeBox.masterControlState = !cubeBox.masterControlState
-    hashStorage.update({ setMasterFilterValue: cubeBox.masterControlState });
+    cubeBox.masterControlState = this.checked;
+    hashStorage.update({ masterControlState: this.checked });
   },
   () => {}
- )
+);
 
 // const masterFilterValue = sel("input[name='masterFilterValue']");
 // // onClick(masterFilterValue, () => {});
@@ -164,13 +163,15 @@ slider("input[name='masterControlState']",
 // const sustain = sel("input[name='sustain']");
 // onClick(sustain, () => {});
 
-
 const route = (state: ControlValues) => {
   cubeBox.audioEngine.setMasterGain(state.masterGain);
   sel("input[name='masterGain']").value = state.masterGain;
 
   cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
   cubeBox.masterControlState = state.masterControlState;
+
+  sel("input[name='masterControlState']").checked = state.masterControlState;
+  debugger;
   cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
   cubeBox.chordOctave = state.chordOctave;
   cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
@@ -194,5 +195,5 @@ const route = (state: ControlValues) => {
   cubeBox.audioEngine.sustain = state.sustain;
 };
 
+// route once on page load
 route(hashStorage.state());
-debugger;
