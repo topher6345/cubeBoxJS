@@ -121,112 +121,115 @@
     </style>
   </head>
   <body>
-    <div class="settingsBar"></div>
-    <div class="left">
-      <div>
-        <span>vol</span>
-        <input  name="masterGain" type="range" min="0.0" max="1.0" step="0.01"></input>
-        <span>fltr</span>
-        <input  name="setMasterFilterValue" type="range" type="range" min="0.0" max="1.0" step="0.01"></input>
-        <span>On/Off</span>
-        <input type="checkbox" name="masterControlState"/></input>
-      </div>
-      <div>
-        <span>speed</span>
-        <input  name="setDecayTime" type="range" min="0.5" max="8.0" step="0.5"></input>
-        <span>chord oct.</span>
-        <input  name="chordOctave" type="range" min="0" max="6" step="1" ></input>
-        <span>vib. rate</span>
-        <input  name="setLfoFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>fltr Q</span>
-        <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
-        <span>Detune</span>
-        <input  name="detune" type="range" min="0.0" max="50.0" step="1"></input>
-        <span>fltr env</span>
-        <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>vib shape</span>
-        <select name="lfoWave">
-          <option value='sawtooth'>sawtooth</option>
-          <option value='square'>square</option>
-          <option value='triangle'>triangle</option>
-          <option value='sine'>sine</option>
-        </select>
-        <span>amp attack</span>
-        <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
-        <span>fltr sustain</span>
-        <input  name="setFilterEnvelopeSustain" type="range" min="0.01" max="0.5" step="0.01"></input>
-      </div>
-    </div>
-    <div class="right">
-      <div>
-        <span>wave</span>
-        <select name="oscialltorType">
-          <option value='square'>square</option>
-          <option value='sawtooth'>sawtooth</option>
-          <option value='custom'>custom</option>
-          <option value='triangle'>triangle</option>
-          <option value='sine'>sine</option>
-        </select>
-        <span>scale</span>
-        <select name="scale">
-          <option value='Lydian'>Lydian</option>
-          <option value='Ionian'>Ionian</option>
-          <option value='Locrian'>Locrian</option>
-          <option value='Phrygian'>Phrygian</option>
-          <option value='Aeolean'>Aeolean</option>
-          <option value='Dorian'>Dorian</option>
-          <option value='Mixolydian'>Mixolydian</option>
-        </select>
-        <span>blend</span>
-        <select name="setBlendMode">
-          <option value='source-over'>source-over</option>
-          <option value='source-in'>source-in</option>
-          <option value='source-out'>source-out</option>
-          <option value='source-atop'>source-atop</option>
-          <option value='destination-over'>destination-over</option>
-          <option value='destination-in'>destination-in</option>
-          <option value='destination-out'>destination-out</option>
-          <option value='destination-atop'>destination-atop</option>
-          <option value='lighter'>lighter</option>
-          <option value='copy'>copy</option>
-          <option value='xor'>xor</option>
-          <option value='multiply'>multiply</option>
-          <option value='screen'>screen</option>
-          <option value='overlay'>overlay</option>
-          <option value='darken'>darken</option>
-          <option value='lighten'>lighten</option>
-          <option value='color-dodge'>color-dodge</option>
-          <option value='color-burn'>color-burn</option>
-          <option value='hard-light'>hard-light</option>
-          <option value='soft-light'>soft-light</option>
-          <option value='difference'>difference</option>
-          <option value='exclusion'>exclusion</option>
-          <option value='hue'>hue</option>
-          <option value='saturation'>saturation</option>
-          <option value='color'>color</option>
-          <option value='luminosity'>luminosity</option>
-        </select>
-      </div>
-      <div>
-        <span>vib. depth</span>
-        <input  name="lfoAmount" type="range" min="0.0" max="10.0" step="0.01"> </input>
-        <span>apm rel</span>
-        <input  name="amplitudeRelease" type="range" min="0.2" max="3" step="0.01"></input>
-        <span>swipe speed</span>
-        <input  name="swipeFrequency" type="range" min="0.2" max="3" step="0.1"></input>
+    <div class="settingsBar">
+      <div class="left">
         <div>
-          <span>swipe oct.</span>
-          <input  name="swipeOctave" type="range" min="0" max="6" step="1"></input>
-          <span>chord vel.</span>
-          <input  name="chordVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
-          <span>swipe vel.</span>
-          <input  name="swipeVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
-          <span>Sustain</span>
-          <input type="checkbox" name="sustain"/>
+          <span>vol</span>
+          <input  name="masterGain" type="range" min="0.0" max="1.0" step="0.01"></input>
+          <span>fltr</span>
+          <input  name="setMasterFilterValue" type="range" type="range" min="0.0" max="1.0" step="0.01"></input>
+          <span>On/Off</span>
+          <input type="checkbox" name="masterControlState"/></input>
+        </div>
+        <div>
+          <span>speed</span>
+          <input  name="setDecayTime" type="range" min="0.5" max="8.0" step="0.5"></input>
+          <span>chord oct.</span>
+          <input  name="chordOctave" type="range" min="0" max="6" step="1" ></input>
+          <span>vib. rate</span>
+          <input  name="setLfoFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
+        </div>
+        <div>
+          <span>fltr Q</span>
+          <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
+          <span>Detune</span>
+          <input  name="detune" type="range" min="0.0" max="50.0" step="1"></input>
+          <span>fltr env</span>
+          <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
+        </div>
+        <div>
+          <span>vib shape</span>
+          <select name="lfoWave">
+            <option value='sawtooth'>sawtooth</option>
+            <option value='square'>square</option>
+            <option value='triangle'>triangle</option>
+            <option value='sine'>sine</option>
+          </select>
+          <span>amp attack</span>
+          <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
+          <span>fltr sustain</span>
+          <input  name="setFilterEnvelopeSustain" type="range" min="0.01" max="0.5" step="0.01"></input>
+        </div>
+      </div>
+      <div class="right">
+        <div>
+          <span>wave</span>
+          <select name="oscialltorType">
+            <option value='square'>square</option>
+            <option value='sawtooth'>sawtooth</option>
+            <option value='custom'>custom</option>
+            <option value='triangle'>triangle</option>
+            <option value='sine'>sine</option>
+          </select>
+          <span>scale</span>
+          <select name="scale">
+            <option value='Lydian'>Lydian</option>
+            <option value='Ionian'>Ionian</option>
+            <option value='Locrian'>Locrian</option>
+            <option value='Phrygian'>Phrygian</option>
+            <option value='Aeolean'>Aeolean</option>
+            <option value='Dorian'>Dorian</option>
+            <option value='Mixolydian'>Mixolydian</option>
+          </select>
+          <span>blend</span>
+          <select name="setBlendMode">
+            <option value='source-over'>source-over</option>
+            <option value='source-in'>source-in</option>
+            <option value='source-out'>source-out</option>
+            <option value='source-atop'>source-atop</option>
+            <option value='destination-over'>destination-over</option>
+            <option value='destination-in'>destination-in</option>
+            <option value='destination-out'>destination-out</option>
+            <option value='destination-atop'>destination-atop</option>
+            <option value='lighter'>lighter</option>
+            <option value='copy'>copy</option>
+            <option value='xor'>xor</option>
+            <option value='multiply'>multiply</option>
+            <option value='screen'>screen</option>
+            <option value='overlay'>overlay</option>
+            <option value='darken'>darken</option>
+            <option value='lighten'>lighten</option>
+            <option value='color-dodge'>color-dodge</option>
+            <option value='color-burn'>color-burn</option>
+            <option value='hard-light'>hard-light</option>
+            <option value='soft-light'>soft-light</option>
+            <option value='difference'>difference</option>
+            <option value='exclusion'>exclusion</option>
+            <option value='hue'>hue</option>
+            <option value='saturation'>saturation</option>
+            <option value='color'>color</option>
+            <option value='luminosity'>luminosity</option>
+          </select>
+        </div>
+        <div>
+          <span>vib. depth</span>
+          <input  name="lfoAmount" type="range" min="0.0" max="10.0" step="0.01"> </input>
+          <span>apm rel</span>
+          <input  name="amplitudeRelease" type="range" min="0.2" max="3" step="0.01"></input>
+          <span>swipe speed</span>
+          <input  name="swipeFrequency" type="range" min="0.2" max="3" step="0.1"></input>
+          <div>
+            <span>swipe oct.</span>
+            <input  name="swipeOctave" type="range" min="0" max="6" step="1"></input>
+            <span>chord vel.</span>
+            <input  name="chordVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
+            <span>swipe vel.</span>
+            <input  name="swipeVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
+          </div>
+          <div>
+            <span>Sustain</span>
+            <input type="checkbox" name="sustain"/>
+          </div>
         </div>
       </div>
     </div>
