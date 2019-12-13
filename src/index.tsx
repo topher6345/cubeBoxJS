@@ -118,7 +118,7 @@ ss(
 sl(
   "amplitudeAttack",
   (e: string) => hashStorage.update({ amplitudeAttack: parseFloat(e) }),
-  (e: number) => (cubeBox.audioEngine.amplitudeAttack = e)
+  (e: string) => cubeBox.audioEngine.amplitudeAttack = parseFloat(e)
 );
 
 sl(
@@ -221,6 +221,7 @@ const route = (state: ControlValues) => {
   cubeBox.audioEngine.lfoWave = state.lfoWave;
   sel("select[name='lfoWave']").value = state.lfoWave;
 
+  debugger;
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
   sel("input[name='amplitudeAttack']").value = state.amplitudeAttack.toString();
 
