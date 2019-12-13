@@ -122,6 +122,22 @@
         cursor: grabbing;
       }
 
+      @keyframes blink {
+        0% {opacity: 0}
+        49%{opacity: 0}
+        50% {opacity: 1}
+      }
+
+      .settingsBar div.onOff input {
+        animation: blink 1s infinite;
+
+      }
+
+      .settingsBar div.onOff input:checked {
+        animation: none;
+
+      }
+
       .left {
         width: 50%;
         position: absolute;
@@ -166,27 +182,33 @@
   <body>
     <div class="settingsBar">
       <div>
-        <h1>Color Synth</h1>
+<h1 title="Color synth is a music box.
+by @topher6345
+
+Turn it on and play with the sliders.
+All changes are saved in the URL.
+Copy the URL to share your patch.
+">Color Synth</h1>
         <a class='small' href='https://github.com/topher6345'>@topher6345</a>
       </div>
-      <div>
-        <span>On/Off</span>
+      <div class="onOff">
+        <span title="Turns the sound on or off.">On/Off</span>
         <input type="checkbox" name="masterControlState" autofocus/></input>
       </div>
       <div>
-        <span>master vol</span>
+        <span title='Sets the master volume for the whole synth'>master vol</span>
         <input  name="masterGain" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
-        <span>fltr</span>
+        <span title="Sets the cutoff frequency for the global lowpass filer">fltr</span>
         <input  name="setMasterFilterValue" type="range" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
-        <span>speed</span>
+        <span title="Sets the the overall tempo.">speed</span>
         <input  name="setDecayTime" type="range" min="0.5" max="8.0" step="0.5"></input>
       </div>
       <div>
-        <span>osc wave</span>
+        <span title="Sets the waveform of the oscillator.">osc wave</span>
         <select name="oscialltorType">
           <option value='square'>square</option>
           <option value='sawtooth'>sawtooth</option>
@@ -196,7 +218,7 @@
         </select>
       </div>
       <div>
-        <span>scale</span>
+        <span title="Sets the musical scale">scale</span>
         <select name="scale">
           <option value='Lydian'>Lydian</option>
           <option value='Ionian'>Ionian</option>
@@ -208,7 +230,7 @@
         </select>
       </div>
       <div>
-        <span>blend</span>
+        <span title='Controls how the colors blend together'>blend</span>
         <select name="setBlendMode">
           <option value='source-over'>source-over</option>
           <option value='source-in'>source-in</option>
@@ -239,24 +261,27 @@
         </select>
       </div>
       <div>
-        <span>Detune</span>
+        <span title="The amount of detune effect on the synth.">Detune</span>
         <input  name="detune" type="range" min="0.0" max="50.0" step="1"></input>
       </div>
       <div>
-        <span>chord oct.</span>
+        <span title="When checked, the notes decay in a linear way and ring out longer">Sustain</span>
+        <input type="checkbox" name="sustain"/>
+      </div>
+      <div>
+        <span title="Increase to smooth the attack of the synth">amp attack</span>
+        <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
+      </div>
+      <div>
+        <span title="Increate to make the sound of the synth ring out longer">apm rel</span>
+        <input  name="amplitudeRelease" type="range" min="0.2" max="3" step="0.01"></input>
+      </div>
+      <div>
+        <span title="Sets the octave of the left side">chord oct.</span>
         <input  name="chordOctave" type="range" min="0" max="6" step="1" ></input>
       </div>
       <div>
-        <span>fltr Q</span>
-        <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
-      </div>
-
-      <div>
-        <span>fltr env</span>
-        <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>vib shape</span>
+        <span title="Sets the shape of the LFO waveform">vib shape</span>
         <select name="lfoWave">
           <option value='sawtooth'>sawtooth</option>
           <option value='square'>square</option>
@@ -265,24 +290,24 @@
         </select>
       </div>
       <div>
-        <span>vib. depth</span>
+        <span title="Sets the amount of pitch vibrato" >vib. depth</span>
         <input  name="lfoAmount" type="range" min="0.0" max="10.0" step="0.01"> </input>
       </div>
       <div>
-        <span>vib. rate</span>
+        <span title="Sets the speed of the pitch vibrato.">vib. rate</span>
         <input  name="setLfoFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
-        <span>amp attack</span>
-        <input  name="amplitudeAttack" type="range" min="0.01" max="0.5" step="0.01"></input>
+        <span title="Sets the start frequency of the filter envelope">fltr env</span>
+        <input  name="setFilterEnvelopeStartFrequency" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
       <div>
-        <span>fltr sustain</span>
+        <span title="Sets the sustain frequency of the filter envelope">fltr sustain</span>
         <input  name="setFilterEnvelopeSustain" type="range" min="0.01" max="0.5" step="0.01"></input>
       </div>
       <div>
-        <span>apm rel</span>
-        <input  name="amplitudeRelease" type="range" min="0.2" max="3" step="0.01"></input>
+        <span title="Sets the ">fltr Q</span>
+        <input  name="filterEnvelopeQ" type="range" min="0.0" max="20.0" step="0.01"></input>
       </div>
       <div>
         <span>swipe speed</span>
@@ -299,10 +324,6 @@
       <div>
         <span>swipe vel.</span>
         <input  name="swipeVelocity" type="range" min="0.0" max="1.0" step="0.01"></input>
-      </div>
-      <div>
-        <span>Sustain</span>
-        <input type="checkbox" name="sustain"/>
       </div>
     </div>
     <canvas id="canvas"></canvas>
