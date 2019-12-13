@@ -136,6 +136,15 @@ slider(
   }
 );
 
+slider("input[name='masterControlState']",
+  function(this: HTMLInputElement) {
+    console.log(this.value)
+    cubeBox.masterControlState = !cubeBox.masterControlState
+    hashStorage.update({ setMasterFilterValue: cubeBox.masterControlState });
+  },
+  () => {}
+ )
+
 // const masterFilterValue = sel("input[name='masterFilterValue']");
 // // onClick(masterFilterValue, () => {});
 // const masterControlState = sel("input[name='masterControlState']");
