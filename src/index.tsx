@@ -118,81 +118,77 @@ slider(
   () => {}
 );
 
-// const masterFilterValue = sel("input[name='masterFilterValue']");
-// // onClick(masterFilterValue, () => {});
-// const masterControlState = sel("input[name='masterControlState']");
-// // onClick(masterControlState, () => {});
-// const setDecayTime = sel("input[name='setDecayTime']");
-// // onClick(setDecayTime, () => {});
-// const chordOctave = sel("input[name='chordOctave']");
-// // onClick(chordOctave, () => {});
-// const setLfoFrequency = sel("input[name='setLfoFrequency']");
-// // onClick(setLfoFrequency, () => {});
-// const filterEnvelopeQ = sel("input[name='filterEnvelopeQ']");
-// // onClick(filterEnvelopeQ, () => {});
-// const detune = sel("input[name='detune']");
-// // onClick(detune, () => {});
-// const etFilterEnvelopeStartFrequency = sel(
-//   "input[name='etFilterEnvelopeStartFrequency']"
-// );
-// // onClick(etFilterEnvelopeStartFrequency, () => {});
-// const lfoWave = sel("input[name='lfoWave']");
-// // onClick(lfoWave, () => {});
-// const amplitudeAttack = sel("input[name='amplitudeAttack']");
-// // onClick(amplitudeAttack, () => {});
-// const setFilterEnvelopeSustain = sel("input[name='setFilterEnvelopeSustain']");
-// // onClick(setFilterEnvelopeSustain, () => {});
-// const oscialltorType = sel("input[name='oscialltorType']");
-// // onClick(oscialltorType, () => {});
-// const scale = sel("input[name='scale']");
-// // onClick(scale, () => {});
-// const setBlendMode = sel("input[name='setBlendMode']");
-// // onClick(setBlendMode, () => {});
-// const lfoAmount = sel("input[name='lfoAmount']");
-// // onClick(lfoAmount, () => {});
-// const amplitudeRelease = sel("input[name='amplitudeRelease']");
-// // onClick(amplitudeRelease, () => {});
-// const swipeFrequency = sel("input[name='swipeFrequency']");
-// // onClick(swipeFrequency, () => {});
-// const swipeOctave = sel("input[name='swipeOctave']");
-// // onClick(swipeOctave, () => {});
-// const chordVelocity = sel("input[name='chordVelocity']");
-// // onClick(chordVelocity, () => {});
-// const swipeVelocity = sel("input[name='swipeVelocity']");
-// // onClick(swipeVelocity, () => {});
-// const sustain = sel("input[name='sustain']");
-// onClick(sustain, () => {});
-
 const route = (state: ControlValues) => {
   cubeBox.audioEngine.setMasterGain(state.masterGain);
   sel("input[name='masterGain']").value = state.masterGain;
 
   cubeBox.audioEngine.setMasterFilterValue(state.setMasterFilterValue);
-  cubeBox.masterControlState = state.masterControlState;
+  sel("input[name='setMasterFilterValue']").value = state.setMasterFilterValue;
 
+  cubeBox.masterControlState = state.masterControlState;
   sel("input[name='masterControlState']").checked = state.masterControlState;
-  debugger;
+
   cubeBox.compositionEngine.setDecayTime(state.setDecayTime);
+  sel("input[name='setDecayTime']").value = state.setDecayTime;
+
   cubeBox.chordOctave = state.chordOctave;
+  sel("input[name='chordOctave']").value = state.chordOctave.toString();
+
   cubeBox.audioEngine.setLfoFrequency(state.setLfoFrequency);
+  sel("input[name='setLfoFrequency']").value = state.setLfoFrequency;
+
   cubeBox.audioEngine.filterEnvelopeQ = state.filterEnvelopeQ;
+  sel("input[name='filterEnvelopeQ']").value = state.filterEnvelopeQ.toString();
+
   cubeBox.compositionEngine.detune = state.detune;
+  sel("input[name='detune']").value = state.detune.toString();
+
   cubeBox.audioEngine.setFilterEnvelopeStartFrequency(
     state.setFilterEnvelopeStartFrequency
   );
+  sel("input[name='setFilterEnvelopeStartFrequency']").value =
+    state.setFilterEnvelopeStartFrequency;
+
   cubeBox.audioEngine.lfoWave = state.lfoWave;
+  sel("select[name='lfoWave']").value = state.lfoWave;
+
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
+  sel("input[name='amplitudeAttack']").value = state.amplitudeAttack.toString();
+
   cubeBox.audioEngine.setFilterEnvelopeSustain(state.setFilterEnvelopeSustain);
+  sel(
+    "input[name='setFilterEnvelopeSustain']"
+  ).value = state.setFilterEnvelopeSustain.toString();
+
   cubeBox.compositionEngine.oscialltorType = state.oscialltorType;
+  sel("select[name='oscialltorType']").value = state.oscialltorType;
+
   cubeBox.scale = state.scale;
+  sel("select[name='scale']").value = state.scale;
+
   cubeBox.graphicsEngine.setBlendMode(state.setBlendMode);
+  sel("select[name='setBlendMode']").value = state.setBlendMode;
+
   cubeBox.audioEngine.lfoAmount = state.lfoAmount;
+  sel("input[name='lfoAmount']").value = state.lfoAmount.toString();
+
   cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
+  sel("input[name='amplitudeRelease']").value = state.amplitudeRelease.toString();
+
   cubeBox.swipeFrequency = state.swipeFrequency;
+  sel("input[name='swipeFrequency']").value = state.swipeFrequency.toString();
+
   cubeBox.swipeOctave = state.swipeOctave;
+  sel("input[name='swipeOctave']").value = state.swipeOctave.toString();
+
   cubeBox.chordVelocity = state.chordVelocity;
+  sel("input[name='chordVelocity']").value = state.chordVelocity.toString();
+
   cubeBox.swipeVelocity = state.swipeVelocity;
+  sel("input[name='swipeVelocity']").value = state.swipeVelocity.toString();
+
   cubeBox.audioEngine.sustain = state.sustain;
+  sel("input[name='sustain']").value = state.sustain.toString();
 };
 
 // route once on page load
