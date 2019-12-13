@@ -79,6 +79,7 @@ export class HashStorage {
       return false;
     } else {
       window.location.hash = this.encode(updated);
+      console.log(_state)
       return updated;
     }
   }

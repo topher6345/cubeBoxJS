@@ -22,134 +22,170 @@ const slider = (s: string, onInput: Function, onChange: Function) => {
   elem.addEventListener("input", onChange as any, false);
 };
 
-
-const sl = (name: string, onInput:Function , onChange:Function) => {
+const sl = (name: string, onInput: Function, onChange: Function) => {
   slider(
     `input[name='${name}']`,
     function(this: HTMLInputElement) {
-      onInput(this.value)
+      onInput(this.value);
     },
     function(this: HTMLInputElement) {
-      onChange(this.value)
+      onChange(this.value);
     }
   );
-}
+};
 
-const ss = (name: string, onInput:Function, onChange:Function) => {
+const ss = (name: string, onInput: Function, onChange: Function) => {
   slider(
     `select[name='${name}']`,
     function(this: HTMLInputElement) {
-      onInput(this.value)
+      onInput(this.value);
     },
     function(this: HTMLInputElement) {
-      onChange(this.value)
+      onChange(this.value);
     }
   );
-}
+};
 
+const sc = (name: string, onInput: Function, onChange: Function) => {
+  slider(
+    `input[name='${name}']`,
+    function(this: HTMLInputElement) {
+      onInput(this.checked);
+    },
+    function(this: HTMLInputElement) {
+      onChange(this.checked);
+    }
+  );
+};
 
-sl("masterGain",
-  (e:string) => hashStorage.update({ masterGain: e }),
-  (e:string) => cubeBox.audioEngine.setMasterGain(e),
- )
+sl(
+  "masterGain",
+  (e: string) => hashStorage.update({ masterGain: e }),
+  (e: string) => cubeBox.audioEngine.setMasterGain(e)
+);
 
-sl("setMasterFilterValue",
-  (e:string) => hashStorage.update({ setMasterFilterValue: e }),
-  (e:string) => cubeBox.audioEngine.setMasterFilterValue(e),
-)
+sl(
+  "setMasterFilterValue",
+  (e: string) => hashStorage.update({ setMasterFilterValue: e }),
+  (e: string) => cubeBox.audioEngine.setMasterFilterValue(e)
+);
 
-sl("masterControlState",
-  (e:boolean) => {
+sc(
+  "masterControlState",
+  (e: boolean) => {
     cubeBox.masterControlState = e;
     hashStorage.update({ masterControlState: e });
   },
-  () => {},
-)
+  () => {}
+);
 
-sl("filterEnvelopeQ",
-  (e:number) => hashStorage.update({ filterEnvelopeQ: e }),
-  (e:number) => cubeBox.audioEngine.filterEnvelopeQ = e,
-)
+sl(
+  "chordOctave",
+  (e: number) => hashStorage.update({ chordOctave: e }),
+  (e: number) => (cubeBox.chordOctave = e)
+);
 
-sl("detune",
-  (e:number) => hashStorage.update({ detune: e }),
-  (e:number) => cubeBox.compositionEngine.detune = e,
-)
+sl(
+  "setDecayTime",
+  (e: number) => hashStorage.update({ setDecayTime: e }),
+  (e: number) => cubeBox.compositionEngine.setDecayTime(e.toString())
+);
+sl(
+  "filterEnvelopeQ",
+  (e: number) => hashStorage.update({ filterEnvelopeQ: e }),
+  (e: number) => (cubeBox.audioEngine.filterEnvelopeQ = e)
+);
 
-sl("setFilterEnvelopeStartFrequency",
-  (e:number) => hashStorage.update({ setFilterEnvelopeStartFrequency: e }),
-  (e:number) => cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e.toString())
-)
+sl(
+  "detune",
+  (e: number) => hashStorage.update({ detune: e }),
+  (e: number) => (cubeBox.compositionEngine.detune = e)
+);
 
-ss("lfoWave",
-  (e:string) => hashStorage.update({ lfoWave: e }),
-  (e:string) => cubeBox.audioEngine.lfoWave = e
-)
+sl(
+  "setFilterEnvelopeStartFrequency",
+  (e: number) => hashStorage.update({ setFilterEnvelopeStartFrequency: e }),
+  (e: number) =>
+    cubeBox.audioEngine.setFilterEnvelopeStartFrequency(e.toString())
+);
 
-sl("amplitudeAttack",
-  (e:number) => hashStorage.update({ amplitudeAttack: e }),
-  (e:number) => cubeBox.audioEngine.amplitudeAttack = e
-)
+ss(
+  "lfoWave",
+  (e: string) => hashStorage.update({ lfoWave: e }),
+  (e: string) => (cubeBox.audioEngine.lfoWave = e)
+);
 
-sl("setFilterEnvelopeSustain",
-  (e:number) => hashStorage.update({ setFilterEnvelopeSustain: e }),
-  (e:number) => cubeBox.audioEngine.setFilterEnvelopeSustain(e.toString())
-)
+sl(
+  "amplitudeAttack",
+  (e: string) => hashStorage.update({ amplitudeAttack: parseFloat(e) }),
+  (e: number) => (cubeBox.audioEngine.amplitudeAttack = e)
+);
 
-ss("oscialltorType",
-  (e:string) => hashStorage.update({ oscialltorType: e }),
-  (e:string) => cubeBox.compositionEngine.oscialltorType = e
-)
+sl(
+  "setFilterEnvelopeSustain",
+  (e: number) => hashStorage.update({ setFilterEnvelopeSustain: e }),
+  (e: number) => cubeBox.audioEngine.setFilterEnvelopeSustain(e.toString())
+);
 
-ss("scale",
-  (e:string) => hashStorage.update({ scale: e }),
-  (e:string) => cubeBox.scale = e
-)
+ss(
+  "oscialltorType",
+  (e: string) => hashStorage.update({ oscialltorType: e }),
+  (e: string) => (cubeBox.compositionEngine.oscialltorType = e)
+);
 
-ss("setBlendMode",
-  (e:string) => hashStorage.update({ setBlendMode: e }),
-  (e:string) => cubeBox.graphicsEngine.setBlendMode(e)
-)
+ss(
+  "scale",
+  (e: string) => hashStorage.update({ scale: e }),
+  (e: string) => (cubeBox.scale = e)
+);
 
+ss(
+  "setBlendMode",
+  (e: string) => hashStorage.update({ setBlendMode: e }),
+  (e: string) => cubeBox.graphicsEngine.setBlendMode(e)
+);
 
-sl("lfoAmount",
-  (e:number) => hashStorage.update({ lfoAmount: e }),
-  (e:number) => cubeBox.audioEngine.lfoAmount = e
-)
+sl(
+  "lfoAmount",
+  (e: number) => hashStorage.update({ lfoAmount: e }),
+  (e: number) => (cubeBox.audioEngine.lfoAmount = e)
+);
 
-sl("amplitudeRelease",
-  (e:number) => hashStorage.update({ amplitudeRelease: e }),
-  (e:number) => cubeBox.audioEngine.amplitudeRelease = e
-)
+sl(
+  "amplitudeRelease",
+  (e: number) => hashStorage.update({ amplitudeRelease: e }),
+  (e: number) => (cubeBox.audioEngine.amplitudeRelease = e)
+);
 
-sl("swipeFrequency",
-  (e:number) => hashStorage.update({ swipeFrequency: e }),
-  (e:number) => cubeBox.swipeFrequency = e
-)
+sl(
+  "swipeFrequency",
+  (e: number) => hashStorage.update({ swipeFrequency: e }),
+  (e: number) => (cubeBox.swipeFrequency = e)
+);
 
-sl("swipeOctave",
-  (e:number) => hashStorage.update({ swipeOctave: e }),
-  (e:number) => cubeBox.swipeOctave = e
-)
+sl(
+  "swipeOctave",
+  (e: number) => hashStorage.update({ swipeOctave: e }),
+  (e: number) => (cubeBox.swipeOctave = e)
+);
 
-sl("chordVelocity",
-  (e:number) => hashStorage.update({ chordVelocity: e }),
-  (e:number) => cubeBox.chordVelocity = e
-)
+sl(
+  "chordVelocity",
+  (e: number) => hashStorage.update({ chordVelocity: e }),
+  (e: number) => (cubeBox.chordVelocity = e)
+);
 
-sl("swipeVelocity",
-  (e:number) => hashStorage.update({ swipeVelocity: e }),
-  (e:number) => cubeBox.swipeVelocity = e
-)
+sl(
+  "swipeVelocity",
+  (e: number) => hashStorage.update({ swipeVelocity: e }),
+  (e: number) => (cubeBox.swipeVelocity = e)
+);
 
-sl("sustain",
-  (e:boolean) => hashStorage.update({ sustain: e }),
-  (e:boolean) => cubeBox.audioEngine.sustain = e
-)
-
-
-
-
+sc(
+  "sustain",
+  (e: boolean) => hashStorage.update({ sustain: e }),
+  (e: boolean) => (cubeBox.audioEngine.sustain = e)
+);
 
 const route = (state: ControlValues) => {
   cubeBox.audioEngine.setMasterGain(state.masterGain);
@@ -206,7 +242,9 @@ const route = (state: ControlValues) => {
   sel("input[name='lfoAmount']").value = state.lfoAmount.toString();
 
   cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
-  sel("input[name='amplitudeRelease']").value = state.amplitudeRelease.toString();
+  sel(
+    "input[name='amplitudeRelease']"
+  ).value = state.amplitudeRelease.toString();
 
   cubeBox.swipeFrequency = state.swipeFrequency;
   sel("input[name='swipeFrequency']").value = state.swipeFrequency.toString();
@@ -226,4 +264,4 @@ const route = (state: ControlValues) => {
 
 // route once on page load
 route(hashStorage.state());
-window.addEventListener('hashchange', () => route(hashStorage.state()), false);
+window.addEventListener("hashchange", () => route(hashStorage.state()), false);
