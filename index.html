@@ -181,6 +181,9 @@
   </head>
   <body>
     <div class="settingsBar">
+      <div style='display: none'>
+        <input title="shows the controls" type="checkbox" name="show"/>
+      </div>
       <div>
 <h1 title="Color synth is a music box.
 by @topher6345
@@ -199,6 +202,14 @@ Copy the URL to share your patch.
         <span title='Sets the master volume for the whole synth'>master vol</span>
         <input  name="masterGain" type="range" min="0.0" max="1.0" step="0.01"></input>
       </div>
+      <div>
+        <span title="hides the controls">hide</span>
+        <input type="checkbox" name="hide"/>
+      </div>
+      <div>
+          <span title="Fullscreen">fullscreen</span>
+          <input type="checkbox" name="fullscreen"/>
+        </div>
       <div>
         <span title="Sets the cutoff frequency for the global lowpass filer">fltr</span>
         <input  name="setMasterFilterValue" type="range" type="range" min="0.0" max="1.0" step="0.01"></input>

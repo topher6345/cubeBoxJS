@@ -193,6 +193,60 @@ sl(
   (e: string) => cubeBox.audioEngine.setLfoFrequency(e)
 );
 
+sc(
+  "hide",
+  (e: boolean) => {
+    debugger;
+    sel(".settingsBar").hidden = true;
+  },
+  (e: boolean) => (cubeBox.audioEngine.sustain = e)
+);
+
+sel("input[name='hide']").addEventListener("change", () => {
+  document
+    .querySelectorAll(".settingsBar > div")
+    .forEach((e: HTMLElement) => (e.style.display = "none"));
+  (document.querySelector(
+    ".settingsBar > div:nth-child(1)"
+  ) as HTMLElement).style.display = "block";
+});
+
+sel("input[name='show']").addEventListener("change", () => {
+  document
+    .querySelectorAll(".settingsBar > div")
+    .forEach((e: HTMLElement) => (e.style.display = "block"));
+  (document.querySelector(
+    ".settingsBar > div:nth-child(1)"
+  ) as HTMLElement).style.display = "none";
+});
+
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+sc(
+  "fullscreen",
+  (e: boolean) => {
+    toggleFullScreen();
+  },
+  (e: boolean) => {}
+);
+
+sel("input[name='fullscreen']").addEventListener("change", () => {
+  document
+    .querySelectorAll(".settingsBar > div")
+    .forEach((e: HTMLElement) => (e.style.display = "none"));
+  (document.querySelector(
+    ".settingsBar > div:nth-child(1)"
+  ) as HTMLElement).style.display = "block";
+});
+
 const route = (state: ControlValues) => {
   cubeBox.audioEngine.setMasterGain(state.masterGain);
   sel("input[name='masterGain']").value = state.masterGain;
@@ -227,7 +281,6 @@ const route = (state: ControlValues) => {
   cubeBox.audioEngine.lfoWave = state.lfoWave;
   sel("select[name='lfoWave']").value = state.lfoWave;
 
-  debugger;
   cubeBox.audioEngine.amplitudeAttack = state.amplitudeAttack;
   sel("input[name='amplitudeAttack']").value = state.amplitudeAttack.toString();
 
