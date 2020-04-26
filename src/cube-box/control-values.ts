@@ -27,7 +27,7 @@ const INIT_CONTROL_VALUES: ControlValues = {
   masterGain: "1.0",
   setMasterFilterValue: "1.0",
   masterControlState: false,
-  setDecayTime: "2",
+  setDecayTime: "4",
   chordOctave: 3,
   setLfoFrequency: "0.1",
   filterEnvelopeQ: 0.1,
@@ -36,7 +36,7 @@ const INIT_CONTROL_VALUES: ControlValues = {
   lfoWave: "sine",
   amplitudeAttack: 0.25,
   setFilterEnvelopeSustain: "300",
-  oscialltorType: "sawtooth",
+  oscialltorType: "square",
   scale: "Lydian",
   setBlendMode: "source-over",
   lfoAmount: 2,
@@ -45,7 +45,7 @@ const INIT_CONTROL_VALUES: ControlValues = {
   swipeOctave: 3,
   chordVelocity: 1.0,
   swipeVelocity: 1.0,
-  sustain: true
+  sustain: true,
 };
 
 export class HashStorage {
@@ -79,7 +79,7 @@ export class HashStorage {
       return false;
     } else {
       window.location.hash = this.encode(updated);
-      console.log(_state)
+      console.log(_state);
       return updated;
     }
   }
