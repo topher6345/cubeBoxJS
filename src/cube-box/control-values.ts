@@ -36,7 +36,7 @@ const INIT_CONTROL_VALUES: ControlValues = {
   lfoWave: "sine",
   amplitudeAttack: 0.25,
   setFilterEnvelopeSustain: "300",
-  oscialltorType: "square",
+  oscialltorType: "triangle",
   scale: "Lydian",
   setBlendMode: "source-over",
   lfoAmount: 2,
