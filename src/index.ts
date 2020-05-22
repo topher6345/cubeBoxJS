@@ -154,7 +154,8 @@ sl(
 sl(
   "amplitudeRelease",
   (e: number) => hashStorage.update({ amplitudeRelease: e }),
-  (e: number) => (cubeBox.audioEngine.amplitudeRelease = e)
+  (e: number) =>
+    (cubeBox.audioEngine.amplitudeRelease = parseFloat(e.toString()))
 );
 
 sl(
@@ -301,7 +302,9 @@ const route = (state: ControlValues) => {
   cubeBox.audioEngine.lfoAmount = state.lfoAmount;
   sel("input[name='lfoAmount']").value = state.lfoAmount.toString();
 
-  cubeBox.audioEngine.amplitudeRelease = state.amplitudeRelease;
+  cubeBox.audioEngine.amplitudeRelease = parseFloat(
+    state.amplitudeRelease.toString()
+  );
   sel(
     "input[name='amplitudeRelease']"
   ).value = state.amplitudeRelease.toString();
