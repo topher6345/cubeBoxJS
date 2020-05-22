@@ -81,8 +81,8 @@ sc(
 
 sl(
   "chordOctave",
-  (e: number) => hashStorage.update({ chordOctave: e }),
-  (e: number) => (cubeBox.chordOctave = e)
+  (e: string) => hashStorage.update({ chordOctave: parseFloat(e) }),
+  (e: string) => (cubeBox.chordOctave = parseFloat(e))
 );
 
 sl(
