@@ -1,13 +1,13 @@
 {
   "name": "cubeboxjs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A music box. See colors blend as you hear the tones harmonize.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
     "start": "node server.js",
-    "build": "webpack",
+    "build": "webpack && cp index.html build/index.html && mv build/index.js build/build/index.js",
     "doc": "typedoc --out doc src",
     "visualize": "madge --image graph.svg src/index.tsx",
     "deploy": "gh-pages -d build",
@@ -35,7 +35,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "madge": "^3.4.4",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.11.0"
   },
   "engines": {
     "node": "8.16.1"
