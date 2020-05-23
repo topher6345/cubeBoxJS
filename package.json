@@ -10,6 +10,7 @@
     "build": "webpack",
     "doc": "typedoc --out doc src",
     "visualize": "madge --image graph.svg src/index.tsx",
+    "deploy": "gh-pages -d build",
     "heroku-postbuild": "webpack -p"
   },
   "repository": {
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/topher6345/cubeBoxJS#readme",
   "devDependencies": {
+    "gh-pages": "^2.2.0",
     "serialize-javascript": ">=2.1.1",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.0",
