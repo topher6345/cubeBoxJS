@@ -28,8 +28,12 @@ export default class CubeBox {
 
   private then: number;
 
-  constructor(canvas: HTMLCanvasElement, ctx: AudioContext) {
-    this.audioEngine = new AudioEngine(ctx);
+  constructor(
+    canvas: HTMLCanvasElement,
+    visualizerCanvas: HTMLCanvasElement,
+    ctx: AudioContext
+  ) {
+    this.audioEngine = new AudioEngine(ctx, visualizerCanvas);
     this.graphicsEngine = new GraphicsEngine(canvas);
     this.compositionEngine = new CompositionEngine(this.audioEngine);
     this.masterControlState = false;

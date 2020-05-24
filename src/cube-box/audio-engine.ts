@@ -32,8 +32,9 @@ export default class AudioEngine {
   public amplitudeRelease: number;
   public sustain: boolean;
   public amplitudeAttack: number;
+  private analyser: AnalyserNode;
 
-  constructor(ctx: AudioContext) {
+  constructor(ctx: AudioContext, visualizeCanvas: HTMLCanvasElement) {
     this.ctx = ctx;
 
     this.masterFilter = this.ctx.createBiquadFilter();
@@ -50,10 +51,19 @@ export default class AudioEngine {
 
     this.masterGain = <GainNode>this.ctx.createGain();
 
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.minDecibels = -90;
+    this.analyser.maxDecibels = -0;
+    this.analyser.smoothingTimeConstant = 0.85;
+    this.analyser.fftSize = 2048;
+
     this.masterFilter
       .connect(this.compressor)
       .connect(this.masterGain)
+      .connect(this.analyser)
       .connect(this.ctx.destination);
+
+    this.visualize(visualizeCanvas);
 
     this.lfoFreq = 0.1;
     this.lfoAmount = 2;
@@ -66,6 +76,52 @@ export default class AudioEngine {
     this.amplitudeAttack = 0.25;
     this.sustain = true;
     this.amplitudeRelease = 0.4;
+  }
+
+  visualize(canvas: HTMLCanvasElement) {
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    const canvasCtx: CanvasRenderingContext2D = canvas.getContext("2d");
+    const bufferLength = this.analyser.fftSize;
+    const dataArray = new Uint8Array(bufferLength);
+
+    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    const draw = () => {
+      requestAnimationFrame(draw);
+
+      this.analyser.getByteTimeDomainData(dataArray);
+
+      canvasCtx.fillStyle = "rgba(200, 200, 200, 0.4)";
+      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+      canvasCtx.lineWidth = 2;
+      canvasCtx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+
+      canvasCtx.beginPath();
+
+      const sliceWidth = (WIDTH * 1.0) / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = (v * HEIGHT) / 2;
+
+        if (i === 0) {
+          canvasCtx.moveTo(x, y);
+        } else {
+          canvasCtx.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      canvasCtx.lineTo(canvas.width, canvas.height / 2);
+      canvasCtx.stroke();
+    };
+
+    draw();
   }
 
   playTone(
@@ -124,7 +180,7 @@ export default class AudioEngine {
   }
 
   setMasterGain(input: string): void {
-    this.masterGain.gain.value = exponOver(input, 1.0, 0.0);
+    this.masterGain.gain.value = exponOver(input, 1.7, 0.0);
   }
 
   setMasterFilterValue(input: string): void {

@@ -177,6 +177,11 @@
         text-decoration: inherit;
         text-align: right;
       }
+
+      #visualizer {
+        width: 200px;
+        height: 40px;
+      }
     </style>
   </head>
   <body>
@@ -197,6 +202,9 @@ Copy the URL to share your patch.
       <div class="onOff">
         <span title="Turns the sound on or off.">On/Off</span>
         <input type="checkbox" name="masterControlState" autofocus/></input>
+      </div>
+      <div>
+        <canvas id='visualizer'></canvas>
       </div>
       <div>
         <span title='Sets the master volume for the whole synth'>master vol</span>

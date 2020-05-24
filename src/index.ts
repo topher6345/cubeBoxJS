@@ -4,7 +4,11 @@ import { ControlValues, HashStorage } from "./cube-box/control-values";
 
 const audioContext = new AudioContext();
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const cubeBox = new CubeBox(canvas, audioContext);
+
+const visualizerCanvas = document.getElementById(
+  "visualizer"
+) as HTMLCanvasElement;
+const cubeBox = new CubeBox(canvas, visualizerCanvas, audioContext);
 const hashStorage = new HashStorage();
 
 const sel = (a: string): HTMLInputElement => document.querySelector(a);
