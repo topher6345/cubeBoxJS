@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "madge": "^3.4.4",
+    "madge": "^4.0.1",
     "webpack-dev-server": "^3.11.0"
   },
   "engines": {
