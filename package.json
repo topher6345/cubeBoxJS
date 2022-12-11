@@ -33,7 +33,7 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "madge": "^3.4.4",
     "webpack-dev-server": "^3.11.0"
   },
