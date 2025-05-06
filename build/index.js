@@ -706,7 +706,7 @@ const INIT_CONTROL_VALUES = {
     setMasterFilterValue: "0.22",
     masterControlState: true,
     setDecayTime: "4",
-    chordOctave: 3,
+    chordOctave: 2,
     setLfoFrequency: "0.89",
     filterEnvelopeQ: 0.1,
     detune: "2",
