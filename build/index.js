@@ -702,28 +702,28 @@ function randArray(length) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const INIT_CONTROL_VALUES = {
-    masterGain: "1.0",
-    setMasterFilterValue: "1.0",
-    masterControlState: false,
+    masterGain: "0.34",
+    setMasterFilterValue: "0.22",
+    masterControlState: true,
     setDecayTime: "4",
     chordOctave: 3,
-    setLfoFrequency: "0.1",
+    setLfoFrequency: "0.89",
     filterEnvelopeQ: 0.1,
-    detune: 0,
+    detune: "2",
     setFilterEnvelopeStartFrequency: "18500",
     lfoWave: "sine",
-    amplitudeAttack: 0.25,
+    amplitudeAttack: 0.15,
     setFilterEnvelopeSustain: "300",
-    oscialltorType: "triangle",
+    oscialltorType: "sawtooth",
     scale: "Lydian",
     setBlendMode: "source-over",
-    lfoAmount: 2,
-    amplitudeRelease: 0.4,
-    swipeFrequency: 0.4,
-    swipeOctave: 3,
-    chordVelocity: 1.0,
-    swipeVelocity: 1.0,
-    sustain: true,
+    lfoAmount: "0.87",
+    amplitudeRelease: "2.29",
+    swipeFrequency: "2.2",
+    swipeOctave: "2",
+    chordVelocity: "0.97",
+    swipeVelocity: "0.88",
+    sustain: true
 };
 class HashStorage {
     constructor() {
